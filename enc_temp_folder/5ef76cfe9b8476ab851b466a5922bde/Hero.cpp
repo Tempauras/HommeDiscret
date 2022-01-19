@@ -57,8 +57,6 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);
-
-	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
 }
 
 void AHero::MoveForward(float Axis)
@@ -82,17 +80,5 @@ void AHero::MoveRight(float Axis)
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Axis);
-	}
-}
-
-void AHero::Zoom(float value)
-{
-	if (value)
-	{
-		float temp = CameraBoom->TargetArmLength + (value * -10);
-		if (temp < 810 && temp > 100)
-		{
-			CameraBoom->TargetArmLength = temp;
-		}
 	}
 }

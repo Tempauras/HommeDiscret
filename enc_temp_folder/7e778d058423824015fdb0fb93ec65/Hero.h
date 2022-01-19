@@ -35,7 +35,6 @@ public:
 
 	void MoveForward(float Axis);
 	void MoveRight(float Axis);
-	void Zoom(float value);
 
 	bool bDead;
 
