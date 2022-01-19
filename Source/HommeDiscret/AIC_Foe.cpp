@@ -11,11 +11,14 @@
 
 AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
 {
+   //Find the behavior tree with its relative path
     static ConstructorHelpers::FObjectFinder<UBehaviorTree> obj((TEXT("BehaviorTree'/Game/Blueprints/Characters/IA/BT_Foe.BT_Foe'")));
+    //If the searching is succeessed then btree take its object value
     if (obj.Succeeded())
     {
         btree = obj.Object;
     }
+    //Adding behavior tree component and blackboard component to our object 
     behavior_tree_component = object_initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorTree"));
     blackboard = object_initializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
 }
@@ -34,7 +37,6 @@ void AAIC_Foe::OnPossess(APawn* const pawn)
     if (blackboard)
     {
         blackboard->InitializeBlackboard(*btree->BlackboardAsset);
-
     }
 }
 
