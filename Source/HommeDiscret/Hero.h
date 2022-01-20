@@ -25,7 +25,7 @@ class HOMMEDISCRET_API AHero : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	AHero();
+	AHero(const FObjectInitializer& ObjectInitializer );
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		USpringArmComponent* CameraBoom;
@@ -37,11 +37,24 @@ public:
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
+	// Can't move if he's dead CQFD
 	bool bDead;
+
+	float GetHunger() const { return Hunger; }
+	void SetHunger( float val) { Hunger = val; }
+	float GetMaxHunger() const { return MaxHunger; }	
+	void SetMaxHunger(float val) { MaxHunger = val; }
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere)
+		class UWidgetComponent* HungerWidgetComp;
+
+	float Hunger;
+	float MaxHunger = 5;
 
 public:	
 	// Called every frame

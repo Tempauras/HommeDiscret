@@ -2,9 +2,11 @@
 
 
 #include "Hero.h"
+#include <Components/WidgetComponent.h>
+#include <HommeDiscret/HungerBar.h>
 
 // Sets default values
-AHero::AHero()
+AHero::AHero(const FObjectInitializer& ObjectInitializer)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	
@@ -28,12 +30,18 @@ AHero::AHero()
 
 	bDead = false;
 
+	HungerWidgetComp = ObjectInitializer.CreateDefaultSubobject<UWidgetComponent>( this, TEXT( "HealthBar" ) );
+	HungerWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
 }
 
 // Called when the game starts or when spawned
 void AHero::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UHungerBar* HungerBar = Cast<UHungerBar>(HungerWidgetComp->GetUserWidgetObject());
+	HungerBar->SetHero(this);
 	
 }
 
