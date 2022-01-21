@@ -14,4 +14,6 @@ class HOMMEDISCRET_API AAIFoe : public AAIController
 {
 	GENERATED_BODY()
 
+private:
+	UStaticMeshComponent* staticMesh;
 };

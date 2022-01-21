@@ -17,10 +17,15 @@ UCLASS(Blueprintable)
 class HOMMEDISCRET_API UBBTTask_FindRandomLocation : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
-	
+
+private:
+	UPROPERTY()
+		FVector origin;
 public :
 	UBBTTask_FindRandomLocation(FObjectInitializer const& object_initializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);
+
+	void BeginPlay();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))

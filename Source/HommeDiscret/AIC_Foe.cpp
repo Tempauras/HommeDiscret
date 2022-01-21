@@ -2,11 +2,12 @@
 
 
 #include "AIC_Foe.h"
+#include "NavigationPoint.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "UObject/ConstructorHelpers.h"
-#include "AIFoe.h"
+#include "Kismet/GameplayStatics.h"
 
 
 AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
@@ -25,8 +26,13 @@ AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
 
 
 void AAIC_Foe::BeginPlay()
-{
+{       
     Super::BeginPlay();
+    TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
+    TArray<AActor*> FoundEnemies;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundEnemies);
+    EntranceLocation = FoundEnemies[0]->GetActorLocation();
+    ExitLocation = FoundEnemies[1]->GetActorLocation();
     RunBehaviorTree(btree);
     behavior_tree_component->StartTree(*btree);
 }

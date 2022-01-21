@@ -20,6 +20,13 @@ public:
 	void OnPossess(APawn* const pawn) override;
 	class UBlackboardComponent* get_blackboard() const;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector EntranceLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector  ExitLocation;
+
 private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTreeComponent* behavior_tree_component;

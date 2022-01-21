@@ -16,6 +16,12 @@ public:
 	AFoe();
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+		bool HaveFood;
+	
+	UPROPERTY(VisibleAnywhere)
+		bool LostFood;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

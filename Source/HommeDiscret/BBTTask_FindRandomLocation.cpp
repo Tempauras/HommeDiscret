@@ -8,10 +8,20 @@
 //#include "BehaviorTree/Blackboard/Blackboard/BlackboardKeyType.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "BB_keys.h"
+#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
+#include "NavigationPoint.h"
 
 UBBTTask_FindRandomLocation::UBBTTask_FindRandomLocation(FObjectInitializer const& object_initializer)
 {
 	NodeName = TEXT("Find Random Location");
+}
+
+
+void UBBTTask_FindRandomLocation::BeginPlay()
+{
+	AActor* FoundActor;
+	FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), ANavigationPoint::StaticClass());
+	origin = FoundActor->GetActorLocation();
 }
 
 
@@ -20,10 +30,10 @@ EBTNodeResult::Type UBBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompon
 {
 	//get AI Controller and its NPC
 	auto const cont = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
-	auto const npc = cont->GetPawn();
+	//auto const npc = cont->GetPawn();
 
 	//obtain npc location to use as an origin location
-	FVector const origin = npc->GetActorLocation();
+	//FVector const origin = npc->GetActorLocation();
 	FNavLocation loc;
 
 	//get the navigation system and generate a random location on the NavMesh
