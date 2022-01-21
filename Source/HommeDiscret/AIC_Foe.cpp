@@ -31,8 +31,9 @@ void AAIC_Foe::BeginPlay()
     TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
     TArray<AActor*> FoundEnemies;
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundEnemies);
-    EntranceLocation = FoundEnemies[0]->GetActorLocation();
-    ExitLocation = FoundEnemies[1]->GetActorLocation();
+    EntranceLocation = FoundEnemies[1]->GetActorLocation();
+    ExitLocation = FoundEnemies[2]->GetActorLocation();
+    OriginLocation = FoundEnemies[0]->GetActorLocation();
     RunBehaviorTree(btree);
     behavior_tree_component->StartTree(*btree);
 }

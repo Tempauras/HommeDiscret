@@ -27,6 +27,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector  ExitLocation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadwrite)
+		FVector OriginLocation;
+
 private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTreeComponent* behavior_tree_component;

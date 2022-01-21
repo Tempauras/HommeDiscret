@@ -18,17 +18,12 @@ class HOMMEDISCRET_API UBBTTask_FindRandomLocation : public UBTTask_BlackboardBa
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY()
-		FVector origin;
 public :
 	UBBTTask_FindRandomLocation(FObjectInitializer const& object_initializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);
 
-	void BeginPlay();
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Search", meta = (AllowPrivateAccess = "true"))
-		float search_radius = 1500.0f;
+		float search_radius =2000.0f;
 
 };

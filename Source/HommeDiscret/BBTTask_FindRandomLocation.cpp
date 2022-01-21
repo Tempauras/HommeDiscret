@@ -17,14 +17,6 @@ UBBTTask_FindRandomLocation::UBBTTask_FindRandomLocation(FObjectInitializer cons
 }
 
 
-void UBBTTask_FindRandomLocation::BeginPlay()
-{
-	AActor* FoundActor;
-	FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), ANavigationPoint::StaticClass());
-	origin = FoundActor->GetActorLocation();
-}
-
-
 
 EBTNodeResult::Type UBBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory)
 {
@@ -39,7 +31,7 @@ EBTNodeResult::Type UBBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompon
 	//get the navigation system and generate a random location on the NavMesh
 	UNavigationSystemV1* const nav_sys = UNavigationSystemV1::GetCurrent(GetWorld());
 
-	if (nav_sys->GetRandomPointInNavigableRadius(origin, search_radius, loc, nullptr))
+	if (nav_sys->GetRandomPointInNavigableRadius(cont->OriginLocation, search_radius, loc, nullptr))
 	{
 		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, loc.Location);
 
