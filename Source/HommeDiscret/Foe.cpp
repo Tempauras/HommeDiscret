@@ -12,6 +12,8 @@ AFoe::AFoe()
 	HaveFood = false;
 	LostFood = false;
 	AIControllerClass = AAIC_Foe::StaticClass();
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
 }
 // Called when the game starts or when spawned
 void AFoe::BeginPlay()
