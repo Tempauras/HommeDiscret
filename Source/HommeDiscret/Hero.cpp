@@ -26,6 +26,8 @@ AHero::AHero()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	bDead = false;
+
 }
 
 // Called when the game starts or when spawned
@@ -47,5 +49,50 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);
+
+	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
 }
 
+void AHero::MoveForward(float Axis)
+{
+	if (!bDead)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(Direction, Axis);
+	}
+}
+
+void AHero::MoveRight(float Axis)
+{
+	if (!bDead)
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(Direction, Axis);
+	}
+}
+
+void AHero::Zoom(float value)
+{
+	if (value)
+	{
+		float temp = CameraBoom->TargetArmLength + (value * -10);
+		if (temp < 810 && temp > 100)
+		{
+			CameraBoom->TargetArmLength = temp;
+		}
+	}
+}
