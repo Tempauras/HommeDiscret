@@ -18,10 +18,10 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-		bool HaveFood;
+		bool HaveToDroppedFood;
 	
 	UPROPERTY(VisibleAnywhere)
-		bool LostFood;
+		bool HoldingFood;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
