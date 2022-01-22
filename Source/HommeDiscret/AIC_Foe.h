@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "AIC_Foe.generated.h"
 
 /**
@@ -27,6 +28,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FVector  ExitLocation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadwrite)
+		FVector OriginLocation;
+
 private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTreeComponent* behavior_tree_component;
@@ -36,4 +40,10 @@ private:
 
 	class UBlackboardComponent* blackboard;
 
+	class UAISenseConfig_Sight* sight_config;
+
+	UFUNCTION()
+		void on_target_detected(AActor* actor, FAIStimulus const stimulus);
+
+		void setup_perception_system();
 };

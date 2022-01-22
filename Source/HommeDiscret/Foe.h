@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "Foe.generated.h"
 
@@ -17,10 +18,10 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-		bool HaveFood;
+		bool HaveToDroppedFood;
 	
 	UPROPERTY(VisibleAnywhere)
-		bool LostFood;
+		bool HoldingFood;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

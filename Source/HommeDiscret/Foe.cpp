@@ -9,9 +9,11 @@ AFoe::AFoe()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	HaveFood = false;
-	LostFood = false;
+	HaveToDroppedFood = false;
+	HoldingFood = false;
 	AIControllerClass = AAIC_Foe::StaticClass();
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 // Called when the game starts or when spawned
 void AFoe::BeginPlay()
