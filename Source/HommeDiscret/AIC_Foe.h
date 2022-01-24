@@ -19,7 +19,7 @@ public:
 	AAIC_Foe(FObjectInitializer const& object_initializer = FObjectInitializer::Get());
 	void BeginPlay() override;
 	void OnPossess(APawn* const pawn) override;
-	class UBlackboardComponent* GetBlackboard() const;
+	class UBlackboardComponent* get_blackboard() const;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -33,17 +33,17 @@ public:
 
 private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
-	class UBehaviorTreeComponent* BehaviorTreeComponent;
+	class UBehaviorTreeComponent* behavior_tree_component;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
-	class UBehaviorTree* Btree;
+	class UBehaviorTree* btree;
 
-	class UBlackboardComponent* Blackboard;
+	class UBlackboardComponent* blackboard;
 
-	class UAISenseConfig_Sight* SightConfig;
+	class UAISenseConfig_Sight* sight_config;
 
 	UFUNCTION()
-		void OnTargetDetected(AActor* actor, FAIStimulus const stimulus);
+		void on_target_detected(AActor* actor, FAIStimulus const stimulus);
 
-		void SetUpPerceptionSystem();
+		void setup_perception_system();
 };

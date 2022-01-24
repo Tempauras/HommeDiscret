@@ -34,12 +34,12 @@ EBTNodeResult::Type UBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompone
 
 		if (nav_sys->GetRandomPointInNavigableRadius(playerLocation, search_radius, loc, nullptr))
 		{
-			cont->GetBlackboard()->SetValueAsVector(bb_keys::target_location, loc.Location);
+			cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, loc.Location);
 
 		}
 	}
 	else {
-		cont->GetBlackboard()->SetValueAsVector(bb_keys::target_location, playerLocation);
+		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, playerLocation);
 	}
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

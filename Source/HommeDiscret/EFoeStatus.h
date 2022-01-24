@@ -8,9 +8,8 @@
 	{
 		Entering UMETA(DisplayName = "Entering"),
 		Exiting UMETA(DisplayName = "Exiting"),
-		Chasing UMETA(DisplayName = "Chasing"),
-		NormalBehavior UMETA(DisplayName = "NormalBehavior"),
 		Patrolling UMETA(DisplayName = "Patrolling"),
+		Chasing UMETA(DisplayName = "Chasing"),
 		DroppingFood UMETA(DisplayName = "DroppingFood"),
 		RecoveringFood UMETA(DisplayName = "RecoveringFood"),
 	};

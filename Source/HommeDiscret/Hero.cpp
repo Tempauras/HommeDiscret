@@ -2,14 +2,10 @@
 
 
 #include "Hero.h"
-#include <Components/WidgetComponent.h>
-#include <HommeDiscret/HungerBar.h>
-#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "Runtime/Engine/Classes/Components/DecalComponent.h"
-#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
+#include "Food.h"
 
 // Sets default values
-AHero::AHero(const FObjectInitializer& ObjectInitializer)
+AHero::AHero()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 
@@ -37,10 +33,7 @@ AHero::AHero(const FObjectInitializer& ObjectInitializer)
 
 	bDead = false;
 
-	HungerWidgetComp = ObjectInitializer.CreateDefaultSubobject<UWidgetComponent>( this, TEXT( "HealthBar" ) );
-	HungerWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-
+	setup_stimulus();
 }
 
 // Called when the game starts or when spawned
@@ -53,14 +46,13 @@ void AHero::BeginPlay()
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 	}
-	UHungerBar* HungerBar = Cast<UHungerBar>(HungerWidgetComp->GetUserWidgetObject());
-	HungerBar->SetHero(this);
 }
 
 // Called every frame
 void AHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 // Called to bind functionality to input
@@ -74,10 +66,20 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHero::Interact);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);
 
 	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
+}
+
+void AHero::setup_stimulus()
+{
+	stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("stimulus"));
+	stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
+	stimulus->RegisterWithPerceptionSystem();
+
 }
 
 void AHero::MoveForward(float Axis)
@@ -115,25 +117,29 @@ void AHero::Zoom(float value)
 		}
 	}
 }
+
 void AHero::Interact()
 {
-	if (!bDead)
+	TArray<AActor*> OverlappedActors;
+	this->GetOverlappingActors(OverlappedActors);
+	for(AActor* OverlappedActor : OverlappedActors)
 	{
-		TArray<AActor*> OverlappedActors;
-		this->GetOverlappingActors(OverlappedActors);
-		for (AActor* OverlappedActor : OverlappedActors)
+		AFood* Food = Cast<AFood>(OverlappedActor);
+		if (Food != nullptr)
 		{
-			AFood* Food = Cast<AFood>(OverlappedActor);
-			if (Food != nullptr)
+			if (Food->bIsAblePickup)
 			{
-				if (Food->bIsAblePickup)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Interacting with food!"));
-					FoodMesh->SetStaticMesh(Food->StaticMesh->GetStaticMesh());
-					Food->Destroy();
-				}
+				UE_LOG(LogTemp, Warning, TEXT("Interacting with food!"));
+				FoodMesh->SetStaticMesh(Food->StaticMesh->GetStaticMesh());
+				Food->Destroy();
 			}
 		}
-		OverlappedActors.Empty();
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
+		}
 	}
+	OverlappedActors.Empty();
 }
+
+
