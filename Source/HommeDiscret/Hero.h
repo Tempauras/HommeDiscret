@@ -39,13 +39,10 @@ public:
 		UStaticMeshComponent* FoodMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Food")
-		AFood*  FoodRef;
+		bool  HoldingFood;
 
 	UPROPERTY(VisibleAnywhere, Category = "Food")
-		AFood* NextFood;
-
-	UPROPERTY(VisibleAnywhere, Category = "Food")
-		bool AreInteracting;
+		AFood* FoodRef;
 
 	//Movement + Zoom
 	void MoveForward(float Axis);
@@ -55,7 +52,6 @@ public:
 	//PickUp object
 	void DropObject();
 	void PickUpObject(AFood* newFood);
-	void DontInteract();
 	void Interact();
 	bool bDead;
 
@@ -69,9 +65,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION()
-	bool GetInteracting();
 
 private:
 	class UAIPerceptionStimuliSourceComponent* stimulus;

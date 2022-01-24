@@ -32,7 +32,7 @@ AHero::AHero()
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
 	FoodRef = nullptr;
-	AreInteracting = false;
+	HoldingFood = false;
 	bDead = false;
 
 	setup_stimulus();
@@ -69,8 +69,6 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHero::Interact);
-	//PlayerInputComponent->BindAction("Interact", IE_Released, this, &AHero::DontInteract);
-
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);
@@ -78,10 +76,6 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
 }
 
-bool AHero::GetInteracting()
-{
-	return AreInteracting;
-}
 
 void AHero::setup_stimulus()
 {
@@ -136,35 +130,32 @@ void AHero::DropObject()
 	FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f,0.0f));
 	//FoodRef->StaticMesh->SetSimulatePhysics(true);
 	FoodRef = nullptr;
+	HoldingFood = false;
+
 }
 
 void AHero::PickUpObject(AFood* newFood)
 {
-	FoodRef = newFood;
-	NextFood = nullptr;
-	FoodRef->StaticMesh->SetSimulatePhysics(false);
+	HoldingFood = true;
+	newFood->StaticMesh->SetSimulatePhysics(false);
 	FoodMesh->SetStaticMesh(newFood->StaticMesh->GetStaticMesh());
 	newFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z-150.0f));
 }
 
-void AHero::DontInteract()
-{
-	AreInteracting = false;
-}
-
 void AHero::Interact()
 {
-	if (NextFood != nullptr && FoodRef==nullptr)
+	if (FoodRef != nullptr)
 	{
-		PickUpObject(NextFood);
-	}
-	else 
-	{
-		if (FoodRef != nullptr)
+		if (!HoldingFood)
+		{
+			PickUpObject(FoodRef);
+		}
+		else 
 		{
 			DropObject();
 		}
 	}
+
 
 	/*if (FoodRef == nullptr)
 	{
