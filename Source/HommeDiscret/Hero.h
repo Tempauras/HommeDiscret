@@ -35,7 +35,7 @@ public:
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
-	// Can't move if he's dead CQFD
+	// Can't move if he's dead CQFD MON GARS
 	bool bDead;
 
 	float GetHunger() const { return Hunger; }
