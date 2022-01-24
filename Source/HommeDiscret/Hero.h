@@ -41,6 +41,7 @@ public:
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
+
 	void Interact();
 
 	bool bDead;
