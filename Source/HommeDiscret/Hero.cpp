@@ -2,14 +2,10 @@
 
 
 #include "Hero.h"
-#include <Components/WidgetComponent.h>
-#include <HommeDiscret/HungerBar.h>
-#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "Runtime/Engine/Classes/Components/DecalComponent.h"
-#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
+#include "Food.h"
 
 // Sets default values
-AHero::AHero(const FObjectInitializer& ObjectInitializer)
+AHero::AHero()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	
@@ -35,12 +31,10 @@ AHero::AHero(const FObjectInitializer& ObjectInitializer)
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
+
 	bDead = false;
 
-	HungerWidgetComp = ObjectInitializer.CreateDefaultSubobject<UWidgetComponent>( this, TEXT( "HealthBar" ) );
-	HungerWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
-
+	SetupStimulus();
 }
 
 // Called when the game starts or when spawned
@@ -53,14 +47,13 @@ void AHero::BeginPlay()
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 	}
-	UHungerBar* HungerBar = Cast<UHungerBar>(HungerWidgetComp->GetUserWidgetObject());
-	HungerBar->SetHero(this);
 }
 
 // Called every frame
 void AHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 // Called to bind functionality to input
@@ -74,10 +67,20 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHero::Interact);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);
 
 	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
+}
+
+void AHero::SetupStimulus()
+{
+	Stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("stimulus"));
+	Stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
+	Stimulus->RegisterWithPerceptionSystem();
+
 }
 
 void AHero::MoveForward(float Axis)
@@ -115,6 +118,7 @@ void AHero::Zoom(float value)
 		}
 	}
 }
+
 void AHero::Interact()
 {
 	if (!bDead)
@@ -137,3 +141,5 @@ void AHero::Interact()
 		OverlappedActors.Empty();
 	}
 }
+
+
