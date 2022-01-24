@@ -30,7 +30,6 @@ AHero::AHero()
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("FoodSocket"));
 
 	bDead = false;
 
@@ -41,7 +40,12 @@ AHero::AHero()
 void AHero::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (GetMesh()->DoesSocketExist("FoodSocket"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Exist!"));
+		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
+		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
+	}
 }
 
 // Called every frame
