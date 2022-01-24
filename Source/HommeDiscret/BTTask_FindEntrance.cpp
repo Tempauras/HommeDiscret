@@ -22,7 +22,7 @@ EBTNodeResult::Type UBTTask_FindEntrance::ExecuteTask(UBehaviorTreeComponent& ow
 	
 	if (cont!= nullptr)
 	{
-		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, cont->EntranceLocation);
+		cont->GetBlackboard()->SetValueAsVector(bb_keys::target_location, cont->EntranceLocation);
 	}
 
 	//finish with success

@@ -33,7 +33,7 @@ EBTNodeResult::Type UBBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompon
 
 	if (nav_sys->GetRandomPointInNavigableRadius(cont->OriginLocation, search_radius, loc, nullptr))
 	{
-		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, loc.Location);
+		cont->GetBlackboard()->SetValueAsVector(bb_keys::target_location, loc.Location);
 
 	}
 
