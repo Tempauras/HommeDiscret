@@ -30,7 +30,7 @@ AHero::AHero()
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-
+	FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("FoodSocket"));
 
 	bDead = false;
 
@@ -41,12 +41,7 @@ AHero::AHero()
 void AHero::BeginPlay()
 {
 	Super::BeginPlay();
-	if (GetMesh()->DoesSocketExist("FoodSocket"))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Exist!"));
-		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
-		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
-	}
+	
 }
 
 // Called every frame
@@ -121,25 +116,26 @@ void AHero::Zoom(float value)
 
 void AHero::Interact()
 {
-	if (!bDead)
+	TArray<AActor*> OverlappedActors;
+	this->GetOverlappingActors(OverlappedActors);
+	for(AActor* OverlappedActor : OverlappedActors)
 	{
-		TArray<AActor*> OverlappedActors;
-		this->GetOverlappingActors(OverlappedActors);
-		for (AActor* OverlappedActor : OverlappedActors)
+		AFood* Food = Cast<AFood>(OverlappedActor);
+		if (Food != nullptr)
 		{
-			AFood* Food = Cast<AFood>(OverlappedActor);
-			if (Food != nullptr)
+			if (Food->bIsAblePickup)
 			{
-				if (Food->bIsAblePickup)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Interacting with food!"));
-					FoodMesh->SetStaticMesh(Food->StaticMesh->GetStaticMesh());
-					Food->Destroy();
-				}
+				UE_LOG(LogTemp, Warning, TEXT("Interacting with food!"));
+				FoodMesh->SetStaticMesh(Food->StaticMesh->GetStaticMesh());
+				Food->Destroy();
 			}
 		}
-		OverlappedActors.Empty();
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
+		}
 	}
+	OverlappedActors.Empty();
 }
 
 
