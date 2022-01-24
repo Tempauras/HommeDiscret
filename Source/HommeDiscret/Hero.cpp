@@ -3,6 +3,11 @@
 
 #include "Hero.h"
 #include "Food.h"
+#include "Components/WidgetComponent.h"
+#include "HommeDiscret/HungerBar.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/Components/DecalComponent.h"
+#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
 
 // Sets default values
 AHero::AHero()
@@ -30,10 +35,13 @@ AHero::AHero()
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-
+	
 	bDead = false;
 
-	setup_stimulus();
+	HungerWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HungerBar"));
+	HungerWidgetComp->SetupAttachment(RootComponent); // Needs the include WidgetComponent.h
+
+	//setup_stimulus();
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +54,9 @@ void AHero::BeginPlay()
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 	}
+
+	UHungerBar* HungerBar = Cast<UHungerBar>(HungerWidgetComp->GetUserWidgetObject()); // Needs the include HungerBar.h
+	HungerBar->SetHero(this);
 }
 
 // Called every frame
