@@ -12,7 +12,7 @@
 AHero::AHero(const FObjectInitializer& ObjectInitializer)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	
+
 	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationPitch = false;
@@ -31,6 +31,10 @@ AHero::AHero(const FObjectInitializer& ObjectInitializer)
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
+	FoodMesh->SetSimulatePhysics(false);
+	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+
 	bDead = false;
 
 	HungerWidgetComp = ObjectInitializer.CreateDefaultSubobject<UWidgetComponent>( this, TEXT( "HealthBar" ) );
@@ -43,10 +47,14 @@ AHero::AHero(const FObjectInitializer& ObjectInitializer)
 void AHero::BeginPlay()
 {
 	Super::BeginPlay();
-
+	if (GetMesh()->DoesSocketExist("FoodSocket"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Exist!"));
+		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
+		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
+	}
 	UHungerBar* HungerBar = Cast<UHungerBar>(HungerWidgetComp->GetUserWidgetObject());
 	HungerBar->SetHero(this);
-	
 }
 
 // Called every frame
@@ -105,5 +113,27 @@ void AHero::Zoom(float value)
 		{
 			CameraBoom->TargetArmLength = temp;
 		}
+	}
+}
+void AHero::Interact()
+{
+	if (!bDead)
+	{
+		TArray<AActor*> OverlappedActors;
+		this->GetOverlappingActors(OverlappedActors);
+		for (AActor* OverlappedActor : OverlappedActors)
+		{
+			AFood* Food = Cast<AFood>(OverlappedActor);
+			if (Food != nullptr)
+			{
+				if (Food->bIsAblePickup)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Interacting with food!"));
+					FoodMesh->SetStaticMesh(Food->StaticMesh->GetStaticMesh());
+					Food->Destroy();
+				}
+			}
+		}
+		OverlappedActors.Empty();
 	}
 }
