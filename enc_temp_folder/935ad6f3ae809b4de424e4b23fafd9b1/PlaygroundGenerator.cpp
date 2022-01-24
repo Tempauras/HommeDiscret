@@ -66,11 +66,6 @@ void APlaygroundGenerator::SpawnPlayground()
 		GenerateRightWall();
 		GenerateLefttWall();
 
-		for (size_t i = 0; i < 4; i++)
-		{
-			PopulateMap(i, i * 3, i * 3)
-		}
-
 		for (size_t i = 0; i < CrateNumber; i++)
 		{
 			SpawnCrates(Crate);
@@ -118,7 +113,7 @@ void APlaygroundGenerator::GenerateBottomWall()
 	{
 		for (size_t j = 0; j < HorizontalTileNumber; j++)
 		{
-			if (((i == 0) && (j != RandomTileHideout)) || i != 0)
+			if ((i == 0) && j != RandomTileHideout)
 			{
 				AWall* SpawnedWall = GetWorld()->SpawnActor<AWall>(Wall, WallStartLocation, WallRotation, Params);
 				WallStartLocation.Y += SizeOfTile;
@@ -245,19 +240,6 @@ void APlaygroundGenerator::SpawnCrates(UClass* CrateToSpawn)
 			CrateList.Add(SpawnedCrate);
 		}
 	}
-}
-
-void APlaygroundGenerator::PopulateMap(int CurrentSquareNumber, int iStartingValue, int jStartingValue )
-{
-	TArray<AFloorTile*> ArrayToInsertInMap;
-	for (size_t i = 0 + iStartingValue; i < ((VerticalTileNumber / 3) + iStartingValue); i++)
-	{
-		for (size_t j = 0 ; j < ((HorizontalTileNumber / 3) + jStartingValue); j++)
-		{
-			ArrayToInsertInMap.Add(TileList[(i * VerticalTileNumber) + j]);
-		}
-	}
-	FloorTileMap.Add(CurrentSquareNumber, ArrayToInsertInMap);
 }
 
 /*void APlaygroundGenerator::SpawnItem(UClass* ItemToSpawn)

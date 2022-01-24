@@ -4,21 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "FloorTile.generated.h"
+#include "Crate.generated.h"
 
 UCLASS()
-class HOMMEDISCRET_API AFloorTile : public AActor
+class HOMMEDISCRET_API ACrate : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AFloorTile();
+	ACrate();
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* StaticMesh;
 
-	bool bIsHoldingCrate = false;
-	bool bIsHoldingTwoCrates = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,4 +24,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 };

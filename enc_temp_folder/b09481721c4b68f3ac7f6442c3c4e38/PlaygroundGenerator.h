@@ -37,7 +37,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int HorizontalTileNumber = 10;
 	/*Height of the wall*/
-	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "1", UIMax = "10"))
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
 		int HeightTileNumber = 1;
 
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration/Crates")
@@ -47,8 +47,6 @@ public:
 	TArray<AWall*> WallList;
 	TArray<ACrate*> CrateList;
 	AHideout* HideoutReferences;
-
-	TMap<int32, TArray<AFloorTile*>> FloorTileMap;
 
 	AFloorTile* HideoutEntranceFloorTile;
 	AFloorTile* EnemySpawnEntranceFloorTile;
@@ -83,8 +81,6 @@ public:
 		void DespawnPlayground();
 
 	void SpawnCrates(UClass* CrateToSpawn);
-
-	void PopulateMap(int CurrentSquareNumber, int iStartingValue, int jStartingValue);
 
 	/*void SpawnItem(UClass* ItemToSpawn);
 
