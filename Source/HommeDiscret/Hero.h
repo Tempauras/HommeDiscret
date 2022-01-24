@@ -12,8 +12,6 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 
-//#include "Blueprint/UserWidget.h"
-
 #include "GameFramework/Character.h"
 
 #include "Hero.generated.h"

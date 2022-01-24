@@ -4,6 +4,9 @@
 #include "Hero.h"
 #include <Components/WidgetComponent.h>
 #include <HommeDiscret/HungerBar.h>
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/Components/DecalComponent.h"
+#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
 
 // Sets default values
 AHero::AHero(const FObjectInitializer& ObjectInitializer)
@@ -33,6 +36,7 @@ AHero::AHero(const FObjectInitializer& ObjectInitializer)
 	HungerWidgetComp = ObjectInitializer.CreateDefaultSubobject<UWidgetComponent>( this, TEXT( "HealthBar" ) );
 	HungerWidgetComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
+
 }
 
 // Called when the game starts or when spawned
@@ -49,7 +53,6 @@ void AHero::BeginPlay()
 void AHero::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
