@@ -17,18 +17,16 @@ public:
 	AFoe();
 
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 		bool HaveToDroppedFood;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 		bool HoldingFood;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	bool GetHaveToDroppedFood();
-	bool GetHoldingFood();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

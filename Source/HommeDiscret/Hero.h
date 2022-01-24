@@ -57,7 +57,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	class UAIPerceptionStimuliSourceComponent* Stimulus;
+	class UAIPerceptionStimuliSourceComponent* stimulus;
 
-	void SetupStimulus();
+	void setup_stimulus();
 };
