@@ -31,10 +31,14 @@ AHero::AHero(const FObjectInitializer& ObjectInitializer)
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+<<<<<<< HEAD
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
+
+=======
+>>>>>>> main
 	bDead = false;
 
 	HungerWidgetComp = ObjectInitializer.CreateDefaultSubobject<UWidgetComponent>( this, TEXT( "HealthBar" ) );
@@ -47,14 +51,19 @@ AHero::AHero(const FObjectInitializer& ObjectInitializer)
 void AHero::BeginPlay()
 {
 	Super::BeginPlay();
+<<<<<<< HEAD
 	if (GetMesh()->DoesSocketExist("FoodSocket"))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Exist!"));
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 	}
+=======
+
 	UHungerBar* HungerBar = Cast<UHungerBar>(HungerWidgetComp->GetUserWidgetObject());
 	HungerBar->SetHero(this);
+	
+>>>>>>> main
 }
 
 // Called every frame
@@ -115,6 +124,8 @@ void AHero::Zoom(float value)
 		}
 	}
 }
+<<<<<<< HEAD
+
 void AHero::Interact()
 {
 	if (!bDead)
@@ -137,3 +148,7 @@ void AHero::Interact()
 		OverlappedActors.Empty();
 	}
 }
+
+
+=======
+>>>>>>> main
