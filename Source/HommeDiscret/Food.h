@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SphereComponent.h"
 #include "Food.generated.h"
 
 UCLASS()
@@ -16,8 +17,10 @@ public:
 	AFood();
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* StaticMesh;
+
 	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* ColliderBox;
+		USphereComponent* SphereCollider;
+
 	bool bIsAblePickup = false;
 
 protected:

@@ -11,6 +11,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Food.h"
 #include "Perception/AISense_Sight.h"
 
 //#include "Blueprint/UserWidget.h"
@@ -37,13 +38,25 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Food")
 		UStaticMeshComponent* FoodMesh;
 
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		AFood*  FoodRef;
+
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		AFood* NextFood;
+
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		bool AreInteracting;
+
+	//Movement + Zoom
 	void MoveForward(float Axis);
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
-
+	//PickUp object
+	void DropObject();
+	void PickUpObject(AFood* newFood);
+	void DontInteract();
 	void Interact();
-
 	bool bDead;
 
 protected:
@@ -56,6 +69,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION()
+	bool GetInteracting();
 
 private:
 	class UAIPerceptionStimuliSourceComponent* stimulus;

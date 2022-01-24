@@ -3,6 +3,7 @@
 
 #include "Food.h"
 #include "GameFramework/Character.h"
+#include "Hero.h"
 
 // Sets default values
 AFood::AFood()
@@ -13,16 +14,18 @@ AFood::AFood()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Static Mesh"));
 	RootComponent = StaticMesh;
 	
-	ColliderBox = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collider Box"));
-	ColliderBox->SetupAttachment(RootComponent);
+	SphereCollider = CreateDefaultSubobject<USphereComponent>(FName("SphereCollider"));
+	SphereCollider->SetupAttachment(RootComponent);
+	SphereCollider->InitSphereRadius(60.0f);
+	StaticMesh->SetSimulatePhysics(true);
 }
 
 // Called when the game starts or when spawned
 void AFood::BeginPlay()
 {
 	Super::BeginPlay();
-	ColliderBox->OnComponentBeginOverlap.AddDynamic(this, &AFood::CallbackComponentBeginOverlap);
-	ColliderBox->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);
+	SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &AFood::CallbackComponentBeginOverlap);
+	SphereCollider->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);
 }
 
 // Called every frame
@@ -33,11 +36,14 @@ void AFood::Tick(float DeltaTime)
 
 void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
-	ACharacter* Player = Cast<ACharacter>(OtherActor);
-	if (Player != nullptr)
+	AHero* Hero = Cast<AHero>(OtherActor);
+	if (Hero != nullptr)
 	{
-		bIsAblePickup = true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
+		if (Hero->NextFood == nullptr)
+		{
+			Hero->NextFood = this;
+		}
 	}
 }
 
