@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -10,10 +11,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Perception/AIPerceptionStimuliSourceComponent.h"
-#include "Perception/AISense_Sight.h"
-
-//#include "Blueprint/UserWidget.h"
 
 #include "GameFramework/Character.h"
 
@@ -26,7 +23,7 @@ class HOMMEDISCRET_API AHero : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	AHero();
+	AHero(const FObjectInitializer& ObjectInitializer );
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		USpringArmComponent* CameraBoom;
@@ -34,20 +31,28 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, Category = "Food")
-		UStaticMeshComponent* FoodMesh;
-
 	void MoveForward(float Axis);
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
-	void Interact();
-
+	// Can't move if he's dead CQFD
 	bool bDead;
+
+	float GetHunger() const { return Hunger; }
+	void SetHunger( float val) { Hunger = val; }
+	float GetMaxHunger() const { return MaxHunger; }	
+	void SetMaxHunger(float val) { MaxHunger = val; }
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere)
+		class UWidgetComponent* HungerWidgetComp;
+
+	float Hunger;
+	float MaxHunger = 5;
 
 public:	
 	// Called every frame
@@ -56,8 +61,4 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
-	class UAIPerceptionStimuliSourceComponent* Stimulus;
-
-	void SetupStimulus();
 };
