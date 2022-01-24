@@ -2,6 +2,7 @@
 
 
 #include "Hero.h"
+#include "Food.h"
 
 // Sets default values
 AHero::AHero()
@@ -25,6 +26,11 @@ AHero::AHero()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
+	FoodMesh->SetSimulatePhysics(false);
+	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), FName("FoodSocket"));
 
 	bDead = false;
 
@@ -55,6 +61,8 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHero::Interact);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);
@@ -105,3 +113,29 @@ void AHero::Zoom(float value)
 		}
 	}
 }
+
+void AHero::Interact()
+{
+	TArray<AActor*> OverlappedActors;
+	this->GetOverlappingActors(OverlappedActors);
+	for(AActor* OverlappedActor : OverlappedActors)
+	{
+		AFood* Food = Cast<AFood>(OverlappedActor);
+		if (Food != nullptr)
+		{
+			if (Food->bIsAblePickup)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Interacting with food!"));
+				FoodMesh->SetStaticMesh(Food->StaticMesh->GetStaticMesh());
+				Food->Destroy();
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
+		}
+	}
+	OverlappedActors.Empty();
+}
+
+

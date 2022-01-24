@@ -34,9 +34,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		UStaticMeshComponent* FoodMesh;
+
 	void MoveForward(float Axis);
 	void MoveRight(float Axis);
 	void Zoom(float value);
+
+	void Interact();
 
 	bool bDead;
 
