@@ -246,7 +246,7 @@ void APlaygroundGenerator::PlacePointOnGrid()
 				DrawDebugPoint(GetWorld(), RandomPointInSquare, 5.0f, FColor::Red, true);
 				DrawDebugCircle(GetWorld(), RandomPointInSquare, Radius, 48, FColor::Red, true, -1.f, 0, 2.5f, FVector(0.0f, 1.0f, 0.0f), FVector(1.0f, 0.0f, 0.0f), true);
 				float RandomYaw = FMath::FRandRange(0.f, 360.f);
-				//GetWorld()->SpawnActor<AActor>(Object, RandomPointInSquare, FRotator(0.0f, RandomYaw, 0.0f));
+				GetWorld()->SpawnActor<AActor>(Object, RandomPointInSquare, FRotator(0.0f, RandomYaw, 0.0f));
 			}
 			else
 			{

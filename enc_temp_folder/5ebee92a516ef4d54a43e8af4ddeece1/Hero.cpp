@@ -45,7 +45,6 @@ void AHero::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Exist!"));
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
-		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 	}
 }
 
