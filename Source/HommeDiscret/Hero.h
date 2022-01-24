@@ -31,18 +31,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		UStaticMeshComponent* FoodMesh;
+
 	void MoveForward(float Axis);
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
 	// Can't move if he's dead CQFD
 	bool bDead;
-
+/*
 	float GetHunger() const { return Hunger; }
 	void SetHunger( float val) { Hunger = val; }
 	float GetMaxHunger() const { return MaxHunger; }	
 	void SetMaxHunger(float val) { MaxHunger = val; }
-
+	*/
+	void Interact();
 
 protected:
 	// Called when the game starts or when spawned
