@@ -28,7 +28,7 @@ AHero::AHero()
 
 	bDead = false;
 
-	setup_stimulus();
+	SetupStimulus();
 }
 
 // Called when the game starts or when spawned
@@ -62,11 +62,11 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
 }
 
-void AHero::setup_stimulus()
+void AHero::SetupStimulus()
 {
-	stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("stimulus"));
-	stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
-	stimulus->RegisterWithPerceptionSystem();
+	Stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("stimulus"));
+	Stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
+	Stimulus->RegisterWithPerceptionSystem();
 
 }
 

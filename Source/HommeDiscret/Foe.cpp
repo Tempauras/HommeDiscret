@@ -21,6 +21,16 @@ void AFoe::BeginPlay()
 	Super::BeginPlay();
 }
 
+bool AFoe::GetHaveToDroppedFood()
+{
+	return HaveToDroppedFood;
+}
+
+bool AFoe::GetHoldingFood()
+{
+	return HoldingFood;
+}
+
 // Called every frame
 void AFoe::Tick(float DeltaTime)
 {
