@@ -25,12 +25,6 @@ void AFood::BeginPlay()
 	ColliderBox->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);
 }
 
-// Called every frame
-void AFood::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
 void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));

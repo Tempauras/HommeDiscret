@@ -6,8 +6,6 @@
 // Sets default values
 AFloorTile::AFloorTile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Static Mesh"));
 	RootComponent = StaticMesh;
@@ -20,10 +18,7 @@ void AFloorTile::BeginPlay()
 	
 }
 
-// Called every frame
-void AFloorTile::Tick(float DeltaTime)
+FVector AFloorTile::GetCoordinate()
 {
-	Super::Tick(DeltaTime);
-
+	return this->GetActorLocation();
 }
-
