@@ -10,6 +10,20 @@
 #include "Crate.h"
 #include "PlaygroundGenerator.generated.h"
 
+UENUM(BlueprintType)
+enum NearWhichWall
+{
+	BOTTOM UMETA(DisplayName = "Bottom Wall"),
+	TOP UMETA(DisplayName = "Top Wall"),
+	LEFT UMETA(DisplayName = "Left Wall"),
+	RIGHT UMETA(DisplayName = "Right Wall"),
+	TOP_LEFT_CORNER UMETA(DisplayName = "Top Left Corner"),
+	TOP_RIGHT_CORNER UMETA(DisplayName = "Top Right Corner"),
+	BOTTOM_LEFT_CORNER UMETA(DisplayName = "Bottom Left Corner"),
+	BOTTOM_RIGHT_CORNER UMETA(DisplayName = "Bottom Right Corner"),
+	NONE UMETA(DisplayName = "Not Near Wall")
+};
+
 
 UCLASS()
 class HOMMEDISCRET_API APlaygroundGenerator : public AActor
@@ -31,10 +45,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		float SizeOfTile = 200;
 	/*Set the number of vertical tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
-	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
+	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int VerticalTileNumber = 10;
 	/*Set the number of horizontal tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
-	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
+	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int HorizontalTileNumber = 10;
 	/*Height of the wall*/
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "1", UIMax = "10"))
@@ -42,15 +56,16 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration/Crates")
 		TSubclassOf<ACrate> Crate;
+	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration/Crates")
 		int CrateNumber;
+
 	TArray<AFloorTile*> TileList;
 	TArray<AWall*> WallList;
 	TArray<ACrate*> CrateList;
 	AHideout* HideoutReferences;
 
-	TMap<int32, TArray<AFloorTile*>> FloorTileMap;
+	int ActualCrateNumber = 0;
 
-	AFloorTile* HideoutEntranceFloorTile;
 	AFloorTile* EnemySpawnEntranceFloorTile;
 
 	int RandomTileHideout;
@@ -69,23 +84,20 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	//Generate the playground with the size specified in the VerticalTileNumber and HorizontalTileNumber. Doesn't do anything if the floor is already spawned.
-	UFUNCTION(CallInEditor, Category = "PlaygroundGeneration")
-		void SpawnPlayground();
+	//Generate the playground with the size specified in the VerticalTileNumber and HorizontalTileNumber.
+	void SpawnPlayground();
+	void DespawnPlayground();
 	
 	void GenerateTopWall();
 	void GenerateBottomWall();
 	void GenerateRightWall();
 	void GenerateLefttWall();
 
-	//Despawn the playground. Doesn't do anything if the floor isn't spawned.
-	UFUNCTION(CallInEditor, Category = "PlaygroundGeneration")
-		void DespawnPlayground();
 
-	void SpawnCrates(UClass* CrateToSpawn);
+	void SpawnCrates();
+	void FixHoles();
 
-	void PopulateMap(int CurrentSquareNumber, int iStartingValue, int jStartingValue);
-
+	NearWhichWall IsTileAtWall(int TileNumber);
 	/*void SpawnItem(UClass* ItemToSpawn);
 
 	void CreateGrid();
