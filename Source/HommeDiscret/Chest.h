@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "Food.h"
 #include "Chest.generated.h"
 
@@ -17,17 +17,14 @@ public:
 	// Sets default values for this actor's properties
 	AChest();
 
-	UPROPERTY(EditAnywhere, Category = "Mesh")
-		UStaticMeshComponent* GlobalStaticMesh;
-
-	UPROPERTY(EditAnywhere, Category = "Mesh")
+	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 		UStaticMeshComponent* BaseStaticMesh;
 
-	UPROPERTY(EditAnywhere, Category = "Mesh")
+	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 		UStaticMeshComponent* TopStaticMesh;
 
-	UPROPERTY(EditAnywhere, Category = "SphereCollision")
-		UCapsuleComponent* CapsuleCollision;
+	UPROPERTY(VisibleAnywhere)
+		USphereComponent* SphereCollision;
 
 	UPROPERTY(VisibleAnywhere)
 		int NumberFoodsContained;
@@ -39,12 +36,10 @@ protected:
 
 	void AddingFood(AFood* FoodToAdd);
 
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
 		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 };

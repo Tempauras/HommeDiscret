@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+#include "DrawDebugHelpers.h"
 #include "Chest.h"
 
 // Sets default values
@@ -9,16 +10,15 @@ AChest::AChest()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//GlobalStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Global Static Mesh"));
+	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT(" Sphere collision"));
+	SphereCollision->InitSphereRadius(80.0f);
+	SphereCollision->SetupAttachment(RootComponent);
+
 	BaseStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base StaticMesh"));
 	TopStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Top StaticMesh"));
-	CapsuleCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT(" Sphere collision"));
-
-	//GlobalStaticMesh->SetupAttachment(RootComponent);
 	BaseStaticMesh->SetupAttachment(RootComponent);
 	TopStaticMesh->SetupAttachment(BaseStaticMesh);
-	CapsuleCollision->SetupAttachment(RootComponent);
-	CapsuleCollision->InitCapsuleSize(80.0f,80.0f);
+
 	NumberFoodsContained = 0;
 }
 
@@ -26,14 +26,14 @@ AChest::AChest()
 void AChest::BeginPlay()
 {
 	Super::BeginPlay();
-	CapsuleCollision->OnComponentBeginOverlap.AddDynamic(this, &AChest::CallbackComponentBeginOverlap);
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AChest::CallbackComponentBeginOverlap);
 }
 
 // Called every frame
 void AChest::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	DrawDebugSphere(GetWorld(),GetActorLocation(),80.0f,20,FColor::Purple,false,-1,0,1); 
 }
 
 void AChest::AddingFood(AFood* FoodToAdd)
@@ -46,6 +46,7 @@ void AChest::AddingFood(AFood* FoodToAdd)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("You won !"));
 	}
 }
+
 
 void AChest::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
