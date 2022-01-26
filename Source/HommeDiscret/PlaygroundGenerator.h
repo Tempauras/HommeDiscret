@@ -6,7 +6,23 @@
 #include "GameFramework/Actor.h"
 #include "FloorTile.h"
 #include "Wall.h"
+#include "Hideout.h"
+#include "Crate.h"
 #include "PlaygroundGenerator.generated.h"
+
+UENUM(BlueprintType)
+enum NearWhichWall
+{
+	BOTTOM UMETA(DisplayName = "Bottom Wall"),
+	TOP UMETA(DisplayName = "Top Wall"),
+	LEFT UMETA(DisplayName = "Left Wall"),
+	RIGHT UMETA(DisplayName = "Right Wall"),
+	TOP_LEFT_CORNER UMETA(DisplayName = "Top Left Corner"),
+	TOP_RIGHT_CORNER UMETA(DisplayName = "Top Right Corner"),
+	BOTTOM_LEFT_CORNER UMETA(DisplayName = "Bottom Left Corner"),
+	BOTTOM_RIGHT_CORNER UMETA(DisplayName = "Bottom Right Corner"),
+	NONE UMETA(DisplayName = "Not Near Wall")
+};
 
 
 UCLASS()
@@ -18,68 +34,75 @@ public:
 	// Sets default values for this actor's properties
 	APlaygroundGenerator();
 	/*Reference the blueprint to generate the playground floor*/
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
 		TSubclassOf<AFloorTile> FloorTile;
 	/*Reference the blueprint to generate the playground wall*/
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
 		TSubclassOf<AWall> Wall;
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<AActor> Object;
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
+		TSubclassOf<AHideout> Hideout;
 	/*Size of the tile to align the creation correctly*/
 	UPROPERTY(VisibleAnywhere)
 		float SizeOfTile = 200;
 	/*Set the number of vertical tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
-	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
+	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int VerticalTileNumber = 10;
 	/*Set the number of horizontal tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
-	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
+	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int HorizontalTileNumber = 10;
-	/*Set the number of tile to create the wall. MinValue = 5; MaxValue = 10*/
-	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "5", UIMax = "10"))
-		int HeightTileNumber = 5;
+	/*Height of the wall*/
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "1", UIMax = "10"))
+		int HeightTileNumber = 1;
+
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration/Crates")
+		TSubclassOf<ACrate> Crate;
+	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration/Crates")
+		int CrateNumber;
+
 	TArray<AFloorTile*> TileList;
 	TArray<AWall*> WallList;
+	TArray<ACrate*> CrateList;
+	AHideout* HideoutReferences;
+
+	int ActualCrateNumber = 0;
+
+	AFloorTile* EnemySpawnEntranceFloorTile;
+
+	int RandomTileHideout;
+
 	FActorSpawnParameters Params;
 	bool FloorIsSet = false;
 	FVector BaseLocation;
 	FRotator BaseRotation;
-	size_t CounterVertical = 0;
-	size_t CounterHorizontal = 0;
 	float Offset;
-	float XCoordinateMax = VerticalTileNumber * SizeOfTile;
-	float YCoordinateMax = HorizontalTileNumber * SizeOfTile;
-	float XCoordinateMin = 0.0f;
-	float YCoordinateMin = 0.0f;
-	float GridHeight;
-	float RoomLength;
-	float RoomWidth;
-	float Radius;
-	FVector TopLeft;
-	FVector BottomRight;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AActor> Object;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	//Generate the maze with the size specified in the VerticalTileNumber and HorizontalTileNumber. Doesn't do anything if the floor is already spawned.
-	UFUNCTION(CallInEditor, Category = "PlaygroundGeneration")
-		void SpawnPlayground();
+	//Generate the playground with the size specified in the VerticalTileNumber and HorizontalTileNumber.
+	void SpawnPlayground();
+	void DespawnPlayground();
 	
 	void GenerateTopWall();
 	void GenerateBottomWall();
 	void GenerateRightWall();
 	void GenerateLefttWall();
 
-	//Despawn the maze. Doesn't do anything if the floor isn't spawned.
-	UFUNCTION(CallInEditor, Category = "PlaygroundGeneration")
-		void DespawnPlayground();
 
-	void SpawnItem(UClass* ItemToSpawn);
+	void SpawnCrates();
+	void FixHoles();
+
+	NearWhichWall IsTileAtWall(int TileNumber);
+	/*void SpawnItem(UClass* ItemToSpawn);
 
 	void CreateGrid();
 
 	FVector GetRandomPointInSquare(const FVector& UpperLeft, const FVector& LowerRight);
 
-	void PlacePointOnGrid();
+	void PlacePointOnGrid();*/
 };
