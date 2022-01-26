@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DrawDebugHelpers.h"
 #include "Chest.h"
 
 // Sets default values
@@ -10,8 +9,9 @@ AChest::AChest()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SphereRadius = 80.0f;
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT(" Sphere collision"));
-	SphereCollision->InitSphereRadius(80.0f);
+	SphereCollision->InitSphereRadius(SphereRadius);
 	SphereCollision->SetupAttachment(RootComponent);
 
 	BaseStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base StaticMesh"));
@@ -33,7 +33,7 @@ void AChest::BeginPlay()
 void AChest::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	DrawDebugSphere(GetWorld(),GetActorLocation(),80.0f,20,FColor::Purple,false,-1,0,1); 
+	//DrawDebugSphere(GetWorld(),GetActorLocation(), SphereRadius,20,FColor::Purple,false,-1,0,1);
 }
 
 void AChest::AddingFood(AFood* FoodToAdd)

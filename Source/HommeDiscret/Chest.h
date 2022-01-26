@@ -27,6 +27,9 @@ public:
 		USphereComponent* SphereCollision;
 
 	UPROPERTY(VisibleAnywhere)
+		float SphereRadius;
+
+	UPROPERTY(VisibleAnywhere)
 		int NumberFoodsContained;
 
 

@@ -28,6 +28,8 @@ protected:
 
 public:	
 	// Called every frame
+	bool GetHaveToDroppedFood();
+	bool GetHoldingFood();
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
