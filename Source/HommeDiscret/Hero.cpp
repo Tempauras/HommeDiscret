@@ -38,9 +38,6 @@ AHero::AHero()
 	
 	bDead = false;
 
-	HungerWidgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("HungerBar"));
-	HungerWidgetComp->SetupAttachment(RootComponent); // Needs the include WidgetComponent.h
-
 	//setup_stimulus();
 }
 
@@ -54,9 +51,6 @@ void AHero::BeginPlay()
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 	}
-
-	UHungerBar* HungerBar = Cast<UHungerBar>(HungerWidgetComp->GetUserWidgetObject()); // Needs the include HungerBar.h
-	HungerBar->SetHero(this);
 }
 
 // Called every frame

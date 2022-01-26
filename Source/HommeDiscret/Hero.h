@@ -46,21 +46,10 @@ public:
 	// Can't move if he's dead CQFD MON GARS
 	bool bDead;
 
-	float GetHunger() const { return Hunger; }
-	void SetHunger(float val) { Hunger = val; }
-	float GetMaxHunger() const { return MaxHunger; }
-	void SetMaxHunger(float val) { MaxHunger = val; }
-
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(VisibleAnywhere)
-		class UWidgetComponent* HungerWidgetComp;
-
-	float Hunger;
-	float MaxHunger = 5;
 
 public:	
 	// Called every frame
