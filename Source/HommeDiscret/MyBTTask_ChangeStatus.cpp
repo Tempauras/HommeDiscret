@@ -2,6 +2,7 @@
 
 
 #include "MyBTTask_ChangeStatus.h"
+#include "Foe.h"
 #include "AIC_Foe.h"
 
 UMyBTTask_ChangeStatus::UMyBTTask_ChangeStatus(FObjectInitializer const& object_initializer)
@@ -14,6 +15,24 @@ EBTNodeResult::Type UMyBTTask_ChangeStatus::ExecuteTask(UBehaviorTreeComponent& 
 {
 	auto const cont = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
 
+	if (status.GetValue() == EFoeStatus::NormalBehavior)
+	{
+		auto const foe = Cast<AFoe>(cont->GetCharacter());
+		if (foe->GetHaveToDroppedFood() == true)
+		{
+			if (foe->GetHoldingFood() == true)
+			{
+				status = EFoeStatus::RecoveringFood;
+			}
+			else
+			{
+				status = EFoeStatus::DroppingFood;
+			}
+		}
+		else {
+			status = EFoeStatus::Patrolling;
+		}
+	}
 	newStatus = (uint8)status.GetValue();
 	cont->get_blackboard()->SetValueAsEnum(bb_keys::foe_status, newStatus);
 	

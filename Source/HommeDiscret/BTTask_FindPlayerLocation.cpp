@@ -24,7 +24,7 @@ EBTNodeResult::Type UBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompone
 
 	//get player location to use as an origin
 	FVector const playerLocation = player->GetActorLocation();
-
+	/*
 	if (search_random)
 	{
 		FNavLocation loc;
@@ -38,9 +38,10 @@ EBTNodeResult::Type UBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompone
 
 		}
 	}
-	else {
+	else {*/
 		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, playerLocation);
-	}
+		cont->get_blackboard()->SetValueAsVector(bb_keys::LastPlayerLocation, playerLocation);
+	//}
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

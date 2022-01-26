@@ -30,11 +30,11 @@ EBTNodeResult::Type UBBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompon
 
 	//get the navigation system and generate a random location on the NavMesh
 	UNavigationSystemV1* const nav_sys = UNavigationSystemV1::GetCurrent(GetWorld());
+	UBlackboardComponent* BlackBoard = cont->get_blackboard();
 
-	if (nav_sys->GetRandomPointInNavigableRadius(cont->OriginLocation, search_radius, loc, nullptr))
+	if (nav_sys->GetRandomPointInNavigableRadius(BlackBoard->GetValueAsVector(bb_keys::target_location), search_radius, loc, nullptr))
 	{
-		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, loc.Location);
-
+		BlackBoard->SetValueAsVector(bb_keys::target_location, loc.Location);
 	}
 
 	//finish with success

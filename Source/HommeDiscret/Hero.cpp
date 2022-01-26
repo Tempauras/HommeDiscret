@@ -35,7 +35,9 @@ AHero::AHero()
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	
+
+	FoodRef = nullptr;
+	HoldingFood = false;
 	bDead = false;
 
 	//setup_stimulus();
@@ -78,6 +80,7 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
 }
+
 
 void AHero::setup_stimulus()
 {
@@ -123,8 +126,53 @@ void AHero::Zoom(float value)
 	}
 }
 
+void AHero::DropObject()
+{
+	FoodMesh->SetStaticMesh(nullptr);
+	FVector newPos =  FVector(this->GetActorLocation() + this->GetActorForwardVector()*100.0f);
+	newPos.Z = 170.0f;
+	FoodRef->SetActorLocation(newPos);
+	FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f,0.0f));
+	//FoodRef->StaticMesh->SetSimulatePhysics(true);
+	FoodRef = nullptr;
+	HoldingFood = false;
+
+}
+
+void AHero::PickUpObject(AFood* newFood)
+{
+	HoldingFood = true;
+	newFood->StaticMesh->SetSimulatePhysics(false);
+	FoodMesh->SetStaticMesh(newFood->StaticMesh->GetStaticMesh());
+	newFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z-150.0f));
+}
+
 void AHero::Interact()
 {
+	if (FoodRef != nullptr)
+	{
+		if (!HoldingFood)
+		{
+			PickUpObject(FoodRef);
+		}
+		else
+		{
+			DropObject();
+		}
+	}
+
+
+	/*if (FoodRef == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("WantsToInteract"));
+		AreInteracting = true;
+		FTimerHandle UnusedHandle;
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AHero::DontInteract, 1.0f, false,0.5f);
+	}
+	else {
+		DropObject();
+	}*/
+	/*
 	TArray<AActor*> OverlappedActors;
 	this->GetOverlappingActors(OverlappedActors);
 	for(AActor* OverlappedActor : OverlappedActors)
@@ -144,7 +192,5 @@ void AHero::Interact()
 			UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
 		}
 	}
-	OverlappedActors.Empty();
+	OverlappedActors.Empty();*/
 }
-
-

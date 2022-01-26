@@ -11,6 +11,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Food.h"
 #include "Perception/AISense_Sight.h"
 
 //#include "Blueprint/UserWidget.h"
@@ -37,13 +38,21 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Food")
 		UStaticMeshComponent* FoodMesh;
 
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		bool  HoldingFood;
+
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		AFood* FoodRef;
+
+	//Movement + Zoom
 	void MoveForward(float Axis);
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
+	//PickUp object
+	void DropObject();
+	void PickUpObject(AFood* newFood);
 	void Interact();
-
-	// Can't move if he's dead CQFD MON GARS
 	bool bDead;
 
 
@@ -51,7 +60,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
