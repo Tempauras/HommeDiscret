@@ -41,10 +41,11 @@ public:
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
-
 	void Interact();
 
+	// Can't move if he's dead CQFD MON GARS
 	bool bDead;
+
 
 protected:
 	// Called when the game starts or when spawned
