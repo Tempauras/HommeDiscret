@@ -3,6 +3,11 @@
 
 #include "Hero.h"
 #include "Food.h"
+#include "Components/WidgetComponent.h"
+#include "HommeDiscret/HungerBar.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+#include "Runtime/Engine/Classes/Components/DecalComponent.h"
+#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
 
 // Sets default values
 AHero::AHero()
@@ -35,7 +40,7 @@ AHero::AHero()
 	HoldingFood = false;
 	bDead = false;
 
-	setup_stimulus();
+	//setup_stimulus();
 }
 
 // Called when the game starts or when spawned
@@ -150,7 +155,7 @@ void AHero::Interact()
 		{
 			PickUpObject(FoodRef);
 		}
-		else 
+		else
 		{
 			DropObject();
 		}
@@ -189,5 +194,3 @@ void AHero::Interact()
 	}
 	OverlappedActors.Empty();*/
 }
-
-
