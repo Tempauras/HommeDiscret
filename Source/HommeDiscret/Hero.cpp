@@ -40,7 +40,7 @@ AHero::AHero()
 	IsHoldingFood = false;
 	bDead = false;
 
-	//setup_stimulus();
+	setup_stimulus();
 }
 
 // Called when the game starts or when spawned
@@ -70,8 +70,9 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
+	/*
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);*/
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHero::Interact);
 
