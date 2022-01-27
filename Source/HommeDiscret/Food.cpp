@@ -25,7 +25,7 @@ void AFood::BeginPlay()
 {
 	Super::BeginPlay();
 	SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &AFood::CallbackComponentBeginOverlap);
-	//SphereCollider->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);
+	SphereCollider->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);
 }
 
 void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -40,9 +40,17 @@ void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 		}
 	}
 }
-/*
+
 void AFood::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	bIsAblePickup = false;
-}*/
+	AHero* Hero = Cast<AHero>(OtherActor);
+	if (Hero != nullptr)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
+		if (Hero->HoldingFood==false)
+		{
+			Hero->FoodRef = nullptr;
+		}
+	}
+}
 

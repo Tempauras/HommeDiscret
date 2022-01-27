@@ -5,6 +5,7 @@
 
 namespace bb_keys
 {
+	TCHAR const* const SelfActor = TEXT("SelfActor");
 	TCHAR const* const target_location = TEXT("TargetLocation");
 	TCHAR const* const player_onSight = TEXT("PlayerOnSight");
 	TCHAR const* const foe_status = TEXT("FoeStatus");

@@ -20,12 +20,22 @@ UBTTask_FindPlayerDirection::UBTTask_FindPlayerDirection(FObjectInitializer cons
 EBTNodeResult::Type UBTTask_FindPlayerDirection::ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory)
 {
 	auto const cont = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
-	APawn* PawnFoe = cont->GetPawn();
 	UBlackboardComponent* Blackboard = cont->GetBlackboardComponent();
-	FVector FoeLocation = PawnFoe->GetActorLocation();
-	FVector newLocation  = PawnFoe->GetActorForwardVector() + ((Blackboard->GetValueAsVector(bb_keys::LastPlayerLocation) -FoeLocation)*DirectionLength).GetSafeNormal();
+	APawn* FoePawn = cont->GetPawn();
+	ACharacter* const player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	FVector const playerLocation = player->GetActorLocation();
+
+	//Finding Direction
+	FVector newLocation = playerLocation - Blackboard->GetValueAsVector(bb_keys::LastPlayerLocation);
+
+	//Adding origin location and distance
+	newLocation += FoePawn->GetActorLocation();
+	//newLocation = newLocation.GetSafeNormal();
+	DrawDebugSphere(GetWorld(), newLocation, 50.0f, 32, FColor::Magenta, false, 5.0f);
+
+
+	//DrawDebugLine(GetWorld(), FoePawn->GetActorLocation(), newLocation, FColor::Purple, true, 1.0f);
 	Blackboard->SetValueAsVector(bb_keys::target_location, newLocation);
-	DrawDebugLine(GetWorld(), FoeLocation, newLocation, FColor::Purple, true, -1.0f);
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
