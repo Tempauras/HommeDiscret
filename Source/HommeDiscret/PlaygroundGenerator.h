@@ -8,6 +8,7 @@
 #include "Wall.h"
 #include "Hideout.h"
 #include "Crate.h"
+#include "FoodSpot.h"
 #include "PlaygroundGenerator.generated.h"
 
 UENUM(BlueprintType)
@@ -59,9 +60,15 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration/Crates")
 		int CrateNumber;
 
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration/FoodSpot")
+		TSubclassOf<AFoodSpot> FoodSpot;
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration/FoodSpot", meta = (UIMin = "10"))
+		int NumberOfFoodSpot = 10;
+
 	TArray<AFloorTile*> TileList;
 	TArray<AWall*> WallList;
 	TArray<ACrate*> CrateList;
+	TArray<AFoodSpot*> FoodSpotList;
 	AHideout* HideoutReferences;
 
 	int ActualCrateNumber = 0;
@@ -75,6 +82,7 @@ public:
 	FVector BaseLocation;
 	FRotator BaseRotation;
 	float Offset;
+	float Radius = 35.f;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AActor> Object;
@@ -92,17 +100,13 @@ public:
 	void GenerateBottomWall();
 	void GenerateRightWall();
 	void GenerateLefttWall();
+	
+	void SpawnFoodSpot();
 
-
+	void SpawnCratesActor(UClass* Actor, AFloorTile* Tile, FRotator Rotation, FActorSpawnParameters Parameter);
 	void SpawnCrates();
 	void FixHoles();
 
 	NearWhichWall IsTileAtWall(int TileNumber);
-	/*void SpawnItem(UClass* ItemToSpawn);
-
-	void CreateGrid();
-
 	FVector GetRandomPointInSquare(const FVector& UpperLeft, const FVector& LowerRight);
-
-	void PlacePointOnGrid();*/
 };
