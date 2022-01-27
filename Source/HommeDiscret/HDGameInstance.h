@@ -23,7 +23,6 @@ protected:
 		class UHungerBar* HungerBar;
 
 public:
-
 	UHDGameInstance();
 
 	FORCEINLINE class UHungerBar* GetHungerBar() const { return HungerBar; }

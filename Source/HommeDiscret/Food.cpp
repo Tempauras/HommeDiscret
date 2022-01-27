@@ -35,9 +35,7 @@ void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
 		if (Hero->FoodRef == nullptr)
-		{
 			Hero->FoodRef = this;
-		}
 	}
 }
 
@@ -47,10 +45,8 @@ void AFood::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent
 	if (Hero != nullptr)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
-		if (Hero->HoldingFood==false)
-		{
+		if (Hero->IsHoldingFood == false)
 			Hero->FoodRef = nullptr;
-		}
 	}
 }
 
