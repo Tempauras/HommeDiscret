@@ -18,6 +18,7 @@ public:
 	UBTTask_FindPlayerDirection(FObjectInitializer const& object_initializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);	
 	
-	float DirectionLength = 100.0f;
+	UPROPERTY(EditAnywhere)
+		float DirectionLength = 100.0f;
 
 };

@@ -24,9 +24,17 @@ EBTNodeResult::Type UBTTask_FindPlayerDirection::ExecuteTask(UBehaviorTreeCompon
 	APawn* FoePawn = cont->GetPawn();
 	ACharacter* const player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	FVector const playerLocation = player->GetActorLocation();
-	FVector newLocation  = FoePawn->GetActorLocation() + ((Blackboard->GetValueAsVector(bb_keys::LastPlayerLocation)- playerLocation))*DirectionLength;
-	DrawDebugLine(GetWorld(), playerLocation, newLocation, FColor::Purple, true, -1.0f);
 
+	//Finding Direction
+	FVector newLocation = playerLocation - Blackboard->GetValueAsVector(bb_keys::LastPlayerLocation);
+
+	//Adding origin location and distance
+	newLocation += FoePawn->GetActorLocation();
+	//newLocation = newLocation.GetSafeNormal();
+	DrawDebugSphere(GetWorld(), newLocation, 50.0f, 32, FColor::Magenta, false, 5.0f);
+
+
+	//DrawDebugLine(GetWorld(), FoePawn->GetActorLocation(), newLocation, FColor::Purple, true, 1.0f);
 	Blackboard->SetValueAsVector(bb_keys::target_location, newLocation);
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

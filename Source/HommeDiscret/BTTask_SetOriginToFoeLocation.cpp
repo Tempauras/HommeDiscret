@@ -15,7 +15,7 @@ EBTNodeResult::Type UBTTask_SetOriginToFoeLocation::ExecuteTask(UBehaviorTreeCom
 {
 	AAIC_Foe* FoeController = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
 	auto const* CurrentFoe = FoeController->GetPawn();
-	FoeController->GetBlackboardComponent()->SetValueAsVector(bb_keys::target_location,CurrentFoe->GetActorLocation());
+	FoeController->GetBlackboardComponent()->SetValueAsVector(bb_keys::target_location,FoeController->GetBlackboardComponent()->GetValueAsVector(bb_keys::target_location));
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

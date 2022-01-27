@@ -21,8 +21,5 @@ public :
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Search")
-		bool search_random = false;
-
-	UPROPERTY(EditAnywhere, Category = "Search")
-		float search_radius = 300.0f;
+		bool first = true;
 };

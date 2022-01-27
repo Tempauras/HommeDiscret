@@ -25,26 +25,21 @@ EBTNodeResult::Type UBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompone
 
 	//get player location to use as an origin
 	FVector const playerLocation = player->GetActorLocation();
-	DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Red, false, 5.0f);
 
-	/*
-	if (search_random)
+	if (first)
 	{
-		FNavLocation loc;
-
-		//get the navigation system and generate a random location on the NavMesh
-		UNavigationSystemV1* const nav_sys = UNavigationSystemV1::GetCurrent(GetWorld());
-
-		if (nav_sys->GetRandomPointInNavigableRadius(playerLocation, search_radius, loc, nullptr))
-		{
-			cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, loc.Location);
-
-		}
-	}
-	else {*/
-		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, playerLocation);
 		cont->get_blackboard()->SetValueAsVector(bb_keys::LastPlayerLocation, playerLocation);
-	//}
+		DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Red, false, 5.0f);
+
+	}
+	else 
+	{
+		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, playerLocation);
+		DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Orange, false, 5.0f);
+
+	}
+
+
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
