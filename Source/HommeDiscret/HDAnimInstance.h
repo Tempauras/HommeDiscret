@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Hero.h"
+
 #include "HDAnimInstance.generated.h"
 
 /**
@@ -16,6 +18,7 @@ class HOMMEDISCRET_API UHDAnimInstance : public UAnimInstance
 
 public:
 	UHDAnimInstance();
+	AHero* Hero;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
 		float Speed;
@@ -23,5 +26,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
 		bool IsMoving;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		bool IsHolding;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		bool IsInHand;
+
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_End(UAnimNotify* Notify);
+
+
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+protected:
+	virtual void NativeBeginPlay() override;
 };

@@ -37,7 +37,7 @@ AHero::AHero()
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
 	FoodRef = nullptr;
-	HoldingFood = false;
+	IsHoldingFood = false;
 	bDead = false;
 
 	setup_stimulus();
@@ -136,13 +136,13 @@ void AHero::DropObject()
 	FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f,0.0f));
 	//FoodRef->StaticMesh->SetSimulatePhysics(true);
 	FoodRef = nullptr;
-	HoldingFood = false;
+	IsHoldingFood = false;
 
 }
 
 void AHero::PickUpObject(AFood* newFood)
 {
-	HoldingFood = true;
+	IsHoldingFood = true;
 	newFood->StaticMesh->SetSimulatePhysics(false);
 	FoodMesh->SetStaticMesh(newFood->StaticMesh->GetStaticMesh());
 	newFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z-150.0f));
@@ -152,7 +152,7 @@ void AHero::Interact()
 {
 	if (FoodRef != nullptr)
 	{
-		if (!HoldingFood)
+		if (!IsHoldingFood)
 		{
 			PickUpObject(FoodRef);
 		}

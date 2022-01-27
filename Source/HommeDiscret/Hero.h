@@ -39,7 +39,7 @@ public:
 		UStaticMeshComponent* FoodMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Food")
-		bool  HoldingFood;
+		bool  IsHoldingFood;
 
 	UPROPERTY(VisibleAnywhere, Category = "Food")
 		AFood* FoodRef;
