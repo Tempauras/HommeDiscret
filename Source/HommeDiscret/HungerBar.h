@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "HommeDiscret/Hero.h"
-
+#include "Chest.h"
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Food.h"
 #include "HungerBar.generated.h"
 
 /**
@@ -16,7 +16,10 @@ class HOMMEDISCRET_API UHungerBar : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	//UHungerBar();
 protected:
+
 	UPROPERTY(meta = (BindWidget))
 		class UProgressBar* HungerBar;
 	UPROPERTY(meta = (BindWidget))
@@ -24,4 +27,13 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* MaxHungerLabel;
 
+	/*
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AChest* ChestRef;*/
+	/*
+	int CMaxFoodsToWin;
+	int CNumberFoodsContained;*/
+
+	void NativeOnInitiliazed();
+	void RefreshChest(AFood &FoodToAdd);
 };
