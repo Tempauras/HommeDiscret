@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "HungerBar.h"
 #include "HDGameInstance.generated.h"
 
 /**
@@ -16,6 +17,7 @@ class HOMMEDISCRET_API UHDGameInstance : public UGameInstance
 	
 protected:
 	// Dynamic reference to the blueprint class
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<class UUserWidget> WBP_HungerBar;
 
 	// Internal reference to the blueprint for gameplay logic
@@ -25,7 +27,7 @@ protected:
 public:
 
 	UHDGameInstance();
-
+	virtual void Init();
 	FORCEINLINE class UHungerBar* GetHungerBar() const { return HungerBar; }
 
 public:

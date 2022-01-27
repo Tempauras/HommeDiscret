@@ -23,9 +23,12 @@ void UHDGameInstance::LoadHungerBar()
 {
 	if (WBP_HungerBar == nullptr) return;
 
-	HungerBar = CreateWidget<UHungerBar>(this, WBP_HungerBar);
-	if (HungerBar == nullptr) return;
-
+	HungerBar = Cast<UHungerBar>(CreateWidget<UHungerBar>(this, WBP_HungerBar));
+	if (HungerBar == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
+		return;
+	}
 	HungerBar->AddToViewport();
 
 	// Set the reference to the interface object
@@ -41,4 +44,9 @@ void UHDGameInstance::OnStartGamePath()
 void UHDGameInstance::OnStartGame()
 {
 	//StartGame();
+}
+
+void UHDGameInstance::Init()
+{
+	//UE_LOG(LogTemp, Warning, TEXT("We founded class %s"), *HungerBar->GetName());
 }
