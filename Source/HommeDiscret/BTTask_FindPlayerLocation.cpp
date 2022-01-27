@@ -9,6 +9,7 @@
 #include "BB_keys.h"
 #include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
 #include "GameFramework/Character.h"
+#include "DrawDebugHelpers.h"
 
 
 UBTTask_FindPlayerLocation::UBTTask_FindPlayerLocation(FObjectInitializer const& object_initializer)
@@ -24,6 +25,8 @@ EBTNodeResult::Type UBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompone
 
 	//get player location to use as an origin
 	FVector const playerLocation = player->GetActorLocation();
+	DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Red, false, 5.0f);
+
 	/*
 	if (search_random)
 	{

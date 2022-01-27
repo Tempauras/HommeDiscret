@@ -20,12 +20,14 @@ UBTTask_FindPlayerDirection::UBTTask_FindPlayerDirection(FObjectInitializer cons
 EBTNodeResult::Type UBTTask_FindPlayerDirection::ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory)
 {
 	auto const cont = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
-	APawn* PawnFoe = cont->GetPawn();
 	UBlackboardComponent* Blackboard = cont->GetBlackboardComponent();
-	FVector FoeLocation = PawnFoe->GetActorLocation();
-	FVector newLocation  = PawnFoe->GetActorForwardVector() + ((Blackboard->GetValueAsVector(bb_keys::LastPlayerLocation) -FoeLocation)*DirectionLength).GetSafeNormal();
+	APawn* FoePawn = cont->GetPawn();
+	ACharacter* const player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	FVector const playerLocation = player->GetActorLocation();
+	FVector newLocation  = FoePawn->GetActorLocation() + ((Blackboard->GetValueAsVector(bb_keys::LastPlayerLocation)- playerLocation))*DirectionLength;
+	DrawDebugLine(GetWorld(), playerLocation, newLocation, FColor::Purple, true, -1.0f);
+
 	Blackboard->SetValueAsVector(bb_keys::target_location, newLocation);
-	DrawDebugLine(GetWorld(), FoeLocation, newLocation, FColor::Purple, true, -1.0f);
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
