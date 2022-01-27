@@ -72,6 +72,7 @@ void APlaygroundGenerator::SpawnPlayground()
 			ActualCrateNumber++;
 		}
 		FixHoles();
+		SpawnFoodSpot();
 	}
 }
 
@@ -230,14 +231,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile - VerticalTileNumber]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("LEFT | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::RIGHT:
@@ -247,14 +241,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile - VerticalTileNumber]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("RIGHT | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::BOTTOM:
@@ -264,14 +251,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile + VerticalTileNumber]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("BOTTOM | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::TOP:
@@ -281,14 +261,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile - VerticalTileNumber]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("TOP | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::TOP_LEFT_CORNER:
@@ -298,14 +271,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile - VerticalTileNumber + 1]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("TOP LEFT CORNER | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::TOP_RIGHT_CORNER:
@@ -315,14 +281,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile - VerticalTileNumber - 1]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("TOP RIGHT CORNER | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::BOTTOM_LEFT_CORNER:
@@ -332,14 +291,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile + VerticalTileNumber + 1]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("BOTTOM LEFT CORNER | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::BOTTOM_RIGHT_CORNER:
@@ -349,14 +301,7 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile + VerticalTileNumber - 1]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("BOTTOM RIGHT CORNER | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
 	case NearWhichWall::NONE:
@@ -371,16 +316,35 @@ void APlaygroundGenerator::SpawnCrates()
 			(!TileList[RandomTile - VerticalTileNumber - 1]->bIsHoldingCrate))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("NONE | SPAWNCRATE"));
-			ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[RandomTile]->GetCoordinate(), FRotator::ZeroRotator, Params);
-			TileList[RandomTile]->bIsHoldingCrate = true;
-
-			if (SpawnedCrate != nullptr)
-			{
-				SpawnedCrate->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
-				CrateList.Add(SpawnedCrate);
-			}
+			SpawnCratesActor(Crate, TileList[RandomTile], FRotator::ZeroRotator, Params);
 		}
 		break;
+	}
+}
+void APlaygroundGenerator::SpawnFoodSpot()
+{
+	int CurrentFoodSpotSpawned = 0;
+	while (CurrentFoodSpotSpawned < NumberOfFoodSpot)
+	{
+		int RandomTile = FMath::FRandRange(0, (VerticalTileNumber * HorizontalTileNumber) - 1);
+		UE_LOG(LogTemp, Warning, TEXT("Random = %d"), RandomTile);
+		if (!(TileList[RandomTile]->bIsHoldingCrate) && 
+			(!TileList[RandomTile]->bIsHoldingFoodSpot))
+		{
+			FVector UpperLeftTile(TileList[RandomTile]->GetCoordinate().X + Offset - Radius, TileList[RandomTile]->GetCoordinate().Y - Offset - Radius, TileList[RandomTile]->GetCoordinate().Z);
+			FVector LowerRightTile(TileList[RandomTile]->GetCoordinate().X - Offset + Radius, TileList[RandomTile]->GetCoordinate().Y + Offset + Radius, TileList[RandomTile]->GetCoordinate().Z);
+			FVector RandomPointInTile = GetRandomPointInSquare(UpperLeftTile, LowerRightTile);
+
+			AFoodSpot* SpawnedFoodSpot = GetWorld()->SpawnActor<AFoodSpot>(FoodSpot, RandomPointInTile, FRotator::ZeroRotator, Params);
+			TileList[RandomTile]->bIsHoldingFoodSpot = true;
+
+			if (SpawnedFoodSpot != nullptr)
+			{
+				SpawnedFoodSpot->AttachToActor(TileList[RandomTile], FAttachmentTransformRules::KeepWorldTransform);
+				FoodSpotList.Add(SpawnedFoodSpot);
+			}
+			CurrentFoodSpotSpawned++;
+		}
 	}
 }
 
@@ -399,14 +363,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber - VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("LEFT | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::RIGHT:
@@ -415,14 +372,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber - VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("RIGHT | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::BOTTOM:
@@ -431,14 +381,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber + VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("BOTTOM | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::TOP:
@@ -447,14 +390,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber - VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("TOP| FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::TOP_LEFT_CORNER:
@@ -462,14 +398,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber - VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("TOP LEFT CORNER | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::TOP_RIGHT_CORNER:
@@ -477,14 +406,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber - VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("TOP RIGHT CORNER | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::BOTTOM_LEFT_CORNER:
@@ -492,14 +414,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber + VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("BOTTOM LEFT CORNER | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::BOTTOM_RIGHT_CORNER:
@@ -507,14 +422,7 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber + VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("BOTTOM RIGHT CORNER | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			case NearWhichWall::NONE:
@@ -524,18 +432,22 @@ void APlaygroundGenerator::FixHoles()
 					(TileList[CurrentTileNumber - VerticalTileNumber]->bIsHoldingCrate))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("NONE | FIX HOLE"));
-					ACrate* SpawnedCrate = GetWorld()->SpawnActor<ACrate>(Crate, TileList[CurrentTileNumber]->GetCoordinate(), FRotator::ZeroRotator, Params);
-					TileList[CurrentTileNumber]->bIsHoldingCrate = true;
-
-					if (SpawnedCrate != nullptr)
-					{
-						SpawnedCrate->AttachToActor(TileList[CurrentTileNumber], FAttachmentTransformRules::KeepWorldTransform);
-						CrateList.Add(SpawnedCrate);
-					}
+					SpawnCratesActor(Crate, TileList[CurrentTileNumber], FRotator::ZeroRotator, Params);
 				}
 				break;
 			}
 		}
+	}
+}
+
+void APlaygroundGenerator::SpawnCratesActor(UClass* Actor, AFloorTile* Tile, FRotator Rotation, FActorSpawnParameters Parameter)
+{
+	ACrate* SpawnedActor = GetWorld()->SpawnActor<ACrate>(Crate, Tile->GetCoordinate(), Rotation, Parameter);
+	Tile->bIsHoldingCrate = true;
+	if (SpawnedActor != nullptr)
+	{
+		SpawnedActor->AttachToActor(Tile, FAttachmentTransformRules::KeepWorldTransform);
+		CrateList.Add(SpawnedActor);
 	}
 }
 
@@ -592,43 +504,16 @@ NearWhichWall APlaygroundGenerator::IsTileAtWall(int TileNumber)
 	return NearWall;
 }
 
-/*void APlaygroundGenerator::SpawnItem(UClass* ItemToSpawn)
-{
-	float XCoordinate = FMath::FRandRange(XCoordinateMin, XCoordinateMax);
-	float YCoordinate = FMath::FRandRange(YCoordinateMin, YCoordinateMax);
-
-	float Yaw = FMath::FRandRange(0.0f, 360.0f);
-
-	FVector SpawnLocation(XCoordinate, YCoordinate, 0.0f);
-	FRotator SpawnRotation(0.0f, Yaw, 0.0f);
-
-	GetWorld()->SpawnActor<AActor>(ItemToSpawn, SpawnLocation, SpawnRotation);
-}
-
-void APlaygroundGenerator::CreateGrid()
-{
-	for (int32 i = 0; i < VerticalTileNumber + 1; i++)
-	{
-		FVector Start = TopLeft + FVector(i * SizeOfTile, 0.0f, GridHeight);
-		FVector End = Start + FVector(0.0f, RoomLength, GridHeight);
-		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, true, -1.0f, 0, 5.0f);
-	}
-	for (int32 i = 0; i < HorizontalTileNumber + 1; i++)
-	{
-		FVector Start = TopLeft + FVector(0.0f, i * SizeOfTile, GridHeight);
-		FVector End = Start + FVector(RoomWidth, 0.0f, GridHeight);
-		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, true, -1.0f, 0, 5.0f);
-	}
-}
-
 FVector APlaygroundGenerator::GetRandomPointInSquare(const FVector& UpperLeft, const FVector& LowerRight)
 {
 	float RandomX = FMath::FRandRange(UpperLeft.X, LowerRight.X);
 	float RandomY = FMath::FRandRange(UpperLeft.Y, LowerRight.Y);
 
+	UE_LOG(LogTemp, Warning, TEXT("X = %f, Y = %f"), RandomX, RandomY);
+
 	return FVector(RandomX, RandomY, 0.0f);
 }
-
+/*
 void APlaygroundGenerator::PlacePointOnGrid()
 {
 	bool FirstBlockPassed = false;

@@ -4,16 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MyActor.generated.h"
+#include "FoodSpot.generated.h"
 
 UCLASS()
-class HOMMEDISCRET_API AMyActor : public AActor
+class HOMMEDISCRET_API AFoodSpot : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AMyActor();
+	AFoodSpot();
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* StaticMesh;
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* PlateMesh;
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* FoodMesh;
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* CollisionBox;
 
 protected:
 	// Called when the game starts or when spawned

@@ -17,10 +17,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* StaticMesh;
 
-	int NumberOfCrateNearby = 0;
-
 	bool bIsHoldingCrate = false;
 	bool bIsHoldingTwoCrates = false;
+	bool bIsHoldingFoodSpot = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
