@@ -25,7 +25,6 @@ protected:
 		class UHungerBar* HungerBar;
 
 public:
-
 	UHDGameInstance();
 	virtual void Init();
 	FORCEINLINE class UHungerBar* GetHungerBar() const { return HungerBar; }
