@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Kismet/GameplayStatics.h"
+#include "HDGameInstance.h"
 #include "Chest.h"
 
 // Sets default values
@@ -8,6 +9,8 @@ AChest::AChest()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	//HDGameInstance* GameInstanceRef = Cast<HDGameInstance>(GEngine->GetWorld()->GetGameInstance());
+	//Hungerbar = GameInstanceRef->Hungerbar;
 
 	SphereRadius = 80.0f;
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT(" Sphere collision"));
@@ -27,6 +30,7 @@ void AChest::BeginPlay()
 {
 	Super::BeginPlay();
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AChest::CallbackComponentBeginOverlap);
+	MaxFoodsToWin = 5;
 }
 
 // Called every frame
@@ -40,7 +44,7 @@ void AChest::AddingFood(AFood* FoodToAdd)
 {
 	NumberFoodsContained++;
 	FoodToAdd->Destroy();
-	if (NumberFoodsContained >= 5)
+	if (NumberFoodsContained >= MaxFoodsToWin)
 	{
 		//Win Call GameMode
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("You won !"));
@@ -56,5 +60,15 @@ void AChest::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompon
 	{
 		AddingFood(Food);
 	}
+}
+
+int AChest::GetNumberFoodsContained()
+{
+	return NumberFoodsContained;
+}
+
+int AChest::GetMaxFoodsToWin()
+{
+	return MaxFoodsToWin;
 }
 

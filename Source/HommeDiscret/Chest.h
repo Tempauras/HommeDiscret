@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "Food.h"
+//#include "HungerBar.h"
 #include "Chest.generated.h"
 
 UCLASS()
@@ -26,18 +27,25 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* SphereCollision;
 
+	/*UPROPERTY(VisibleAnywhere)
+		UHungerBar* Hungerbar;*/
+
 	UPROPERTY(VisibleAnywhere)
 		float SphereRadius;
 
 	UPROPERTY(VisibleAnywhere)
 		int NumberFoodsContained;
 
+	UPROPERTY(VisibleAnywhere)
+		int MaxFoodsToWin;
+
+
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void AddingFood(AFood* FoodToAdd);
 
 public:	
 	// Called every frame
@@ -45,4 +53,13 @@ public:
 
 	UFUNCTION()
 		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void AddingFood(AFood* FoodToAdd);
+
+	int GetNumberFoodsContained();
+
+	int GetMaxFoodsToWin();
+
+
 };
