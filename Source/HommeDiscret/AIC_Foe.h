@@ -33,17 +33,17 @@ public:
 
 private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
-	class UBehaviorTreeComponent* behavior_tree_component;
+	class UBehaviorTreeComponent* BehaviorTreeComponent;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
-	class UBehaviorTree* btree;
+	class UBehaviorTree* Btree;
 
-	class UBlackboardComponent* blackboard;
+	class UBlackboardComponent* Blackboard;
 
-	class UAISenseConfig_Sight* sight_config;
+	class UAISenseConfig_Sight* SightConfig;
 
 	UFUNCTION()
-		void on_target_detected(AActor* actor, FAIStimulus const stimulus);
+		void OnTargetDetected(AActor* actor, FAIStimulus const stimulus);
 
-		void setup_perception_system();
+		void SetupPerceptionSystem();
 };
