@@ -12,15 +12,15 @@ AChest::AChest()
 	//HDGameInstance* GameInstanceRef = Cast<HDGameInstance>(GEngine->GetWorld()->GetGameInstance());
 	//Hungerbar = GameInstanceRef->Hungerbar;
 
+	BaseStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base StaticMesh"));
+	RootComponent = BaseStaticMesh;
+	TopStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Top StaticMesh"));
+	TopStaticMesh->SetupAttachment(BaseStaticMesh);
+
 	SphereRadius = 80.0f;
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT(" Sphere collision"));
 	SphereCollision->InitSphereRadius(SphereRadius);
 	SphereCollision->SetupAttachment(RootComponent);
-
-	BaseStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base StaticMesh"));
-	TopStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Top StaticMesh"));
-	BaseStaticMesh->SetupAttachment(RootComponent);
-	TopStaticMesh->SetupAttachment(BaseStaticMesh);
 
 	NumberFoodsContained = 0;
 }
