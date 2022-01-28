@@ -84,9 +84,6 @@ public:
 	float Offset;
 	float Radius = 35.f;
 
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<AActor> Object;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -101,9 +98,12 @@ public:
 	void GenerateRightWall();
 	void GenerateLefttWall();
 	
-	void SpawnFoodSpot();
+	
 
 	void SpawnCratesActor(UClass* Actor, AFloorTile* Tile, FRotator Rotation, FActorSpawnParameters Parameter);
+	void SpawnFoodSpotActor(UClass* Actor, AFloorTile* Tile, FRotator Rotation, FVector Coordinate, FActorSpawnParameters Parameter, int CurrentFoodSpotSpawned);
+
+	void SpawnFoodSpot();
 	void SpawnCrates();
 	void FixHoles();
 

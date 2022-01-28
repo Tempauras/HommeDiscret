@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Chest.h"
 #include "Hideout.generated.h"
 
 UCLASS()
@@ -54,16 +55,22 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* TileArch;
 
+	UPROPERTY(VisibleAnywhere)
+		UChildActorComponent* PlayerStart;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AChest> Chest;
+		
+
 	float SizeOfMesh = 200.f;
 	float Offset = 100.f;
 	float YawRotation = 90.f;
+	FActorSpawnParameters Params;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };
