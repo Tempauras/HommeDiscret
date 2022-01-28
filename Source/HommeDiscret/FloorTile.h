@@ -18,7 +18,7 @@ public:
 		UStaticMeshComponent* StaticMesh;
 
 	bool bIsHoldingCrate = false;
-	bool bIsHoldingTwoCrates = false;
+	bool bIsHoldingMultipleCrates = false;
 	bool bIsHoldingFoodSpot = false;
 protected:
 	// Called when the game starts or when spawned
