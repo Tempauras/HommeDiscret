@@ -75,19 +75,22 @@ AHideout::AHideout()
 	TileArch->SetupAttachment(RootComponent);
 	TileArch->SetRelativeLocation(FVector(RootComponent->GetRelativeLocation().X, RootComponent->GetRelativeLocation().Y - Offset, RootComponent->GetRelativeLocation().Z));
 	TileArch->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+
+	PlayerStart = CreateDefaultSubobject<UChildActorComponent>(FName("Player Start"));
+	PlayerStart->SetupAttachment(RootComponent);
+	PlayerStart->SetRelativeLocation(FVector(RootComponent->GetRelativeLocation().X - (SizeOfMesh * 2), RootComponent->GetRelativeLocation().Y + SizeOfMesh, RootComponent->GetRelativeLocation().Z + Offset));
+
+	Params.Owner = this;
 }
 
 // Called when the game starts or when spawned
 void AHideout::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AHideout::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	AChest* SpawnedChest = GetWorld()->SpawnActor<AChest>(Chest, FVector(RootComponent->GetComponentLocation().X, RootComponent->GetComponentLocation().Y - (SizeOfMesh * 2), RootComponent->GetComponentLocation().Z + 40), FRotator::ZeroRotator, Params);
+	if (SpawnedChest != nullptr)
+	{
+		SpawnedChest->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+	}
 }
 
