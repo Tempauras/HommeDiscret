@@ -3,9 +3,13 @@
 #include "CoreMinimal.h"
 #include "UObject/Class.h"
 
+/*
+UCLASS(Blueprintable)
+class */
 UENUM(BlueprintType, Category = "")
 enum class EFoeStatus : uint8
 {
+		Waiting UMETA(DisplayName = "Waiting"),
 		Entering UMETA(DisplayName = "Entering"),
 		Exiting UMETA(DisplayName = "Exiting"),
 		NormalBehavior UMETA(DisplayName = "NormalBehavior"),

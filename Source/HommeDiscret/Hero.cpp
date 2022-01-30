@@ -3,11 +3,17 @@
 
 #include "Hero.h"
 #include "Food.h"
-#include "Components/WidgetComponent.h"
-#include "HommeDiscret/HungerBar.h"
+#include "FoodSpot.h"
+#include "Foe.h"
+#include "Chest.h"
+#include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "Runtime/Engine/Classes/Components/DecalComponent.h"
-#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AHero::AHero()
@@ -23,6 +29,9 @@ AHero::AHero()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
 
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
+	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
+	CollisionSphere->SetupAttachment(RootComponent);
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 300.0f;
@@ -36,11 +45,13 @@ AHero::AHero()
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
+	FoodSpotNearby = nullptr;
 	FoodRef = nullptr;
 	IsHoldingFood = false;
+	ChestNearby = nullptr;
 	bDead = false;
 
-	setup_stimulus();
+	SetupStimulus();
 }
 
 // Called when the game starts or when spawned
@@ -52,7 +63,10 @@ void AHero::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Exist!"));
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
+		//SetupSphereTrace();
 	}
+	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHero::CallbackComponentBeginOverlap);
+	CollisionSphere->OnComponentEndOverlap.AddDynamic(this, &AHero::CallbackComponentEndOverlap);
 }
 
 // Called every frame
@@ -81,14 +95,87 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Zoom", this, &AHero::Zoom);
 }
 
-
-void AHero::setup_stimulus()
+void AHero::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("stimulus"));
-	stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
-	stimulus->RegisterWithPerceptionSystem();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Overlap %s"),*OtherActor->GetName()));
+	if (OtherActor->IsA(AFood::StaticClass()))
+	{
+		if (!IsHoldingFood)
+		{
+			FoodRef = Cast<AFood>(OtherActor);
+		}
+	}
+	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
+	{
+		AFoodSpot* FoodSpot = Cast<AFoodSpot>(OtherActor);
+		if (!IsHoldingFood)
+		{
+			if (FoodSpot->FoodRef != nullptr)
+			{
+				FoodSpotNearby = FoodSpot;
+				AFood* FoodSpotFood = Cast<AFood>(FoodSpot->FoodRef);
+				if(FoodSpotFood!=nullptr)
+				{
+					FoodRef = FoodSpotFood;
+				}
+			}
+		}
+		else
+		{
+			if (FoodSpot->FoodRef == nullptr)
+			{
+				FoodSpotNearby = FoodSpot;
+			}
+		}
 
+	}
+	else if (OtherActor->IsA(AChest::StaticClass()))
+	{
+		if (IsHoldingFood)
+		{
+			AChest* Chest = Cast<AChest>(OtherActor);
+			ChestNearby = Chest;
+		}
+	}
 }
+
+void AHero::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor->IsA(AFood::StaticClass()))
+	{
+		if (!IsHoldingFood)
+		{
+			FoodRef = nullptr;
+		}
+
+	}
+	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
+	{
+		//AFoodSpot* FoodSpot = Cast<AFoodSpot>(OtherActor);
+		FoodSpotNearby = nullptr;
+		if (!IsHoldingFood)
+		{
+			FoodRef = nullptr;
+		}
+	}
+	else if (OtherActor->IsA(AChest::StaticClass()))
+	{
+		ChestNearby = nullptr;
+		/*
+		if (IsHoldingFood)
+		{
+			ChestNearby = nullptr;
+		}*/
+	}
+}
+
+void AHero::SetupStimulus()
+{
+	Stimulus = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("stimulus"));
+	Stimulus->RegisterForSense(TSubclassOf<UAISense_Sight>());
+	Stimulus->RegisterWithPerceptionSystem();
+}
+
 
 void AHero::MoveForward(float Axis)
 {
@@ -128,27 +215,52 @@ void AHero::Zoom(float value)
 
 void AHero::DropObject()
 {
-	FoodMesh->SetStaticMesh(nullptr);
-	FVector newPos =  FVector(this->GetActorLocation() + this->GetActorForwardVector()*100.0f);
-	newPos.Z = 170.0f;
-	FoodRef->SetActorLocation(newPos);
-	FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f,0.0f));
-	//FoodRef->StaticMesh->SetSimulatePhysics(true);
-	FoodRef = nullptr;
+	
+	if (ChestNearby==nullptr && FoodSpotNearby==nullptr)
+	{
+		FVector newPos = FVector(this->GetActorLocation() + this->GetActorForwardVector() * 100.0f);
+		newPos.Z = 170.0f;
+		FoodRef->SetActorLocation(newPos);
+		FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));
+	}
+	else if (FoodSpotNearby != nullptr && ChestNearby == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in fs this : %s"), *FoodRef->GetName()));
+		FoodSpotNearby->FillFoodSpot(FoodRef);
+	}
+	else if(FoodSpotNearby == nullptr && ChestNearby != nullptr)
+	{
+		ChestNearby->AddingFood();
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in chest this : %s"), *FoodRef->GetName()));
+		FoodRef->Destroy();
+	}
 	IsHoldingFood = false;
-
+	FoodMesh->SetStaticMesh(nullptr);
 }
 
-void AHero::PickUpObject(AFood* newFood)
+
+void AHero::PickUpObject(AFood* NewFood)
 {
+	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
+	FoodRef = NewFood;
 	IsHoldingFood = true;
-	newFood->StaticMesh->SetSimulatePhysics(false);
-	FoodMesh->SetStaticMesh(newFood->StaticMesh->GetStaticMesh());
-	newFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z-150.0f));
+	if (FoodSpotNearby == nullptr)
+	{
+		//IsHoldingFood = true;
+		NewFood->StaticMesh->SetSimulatePhysics(false);
+		NewFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 150.0f));
+	}
+	else 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to take in fs this : %s"), *FoodRef->GetName()));
+		FoodSpotNearby->EmptyFoodSpot();
+	}
 }
+
 
 void AHero::Interact()
 {
+	
 	if (FoodRef != nullptr)
 	{
 		if (!IsHoldingFood)
@@ -160,37 +272,4 @@ void AHero::Interact()
 			DropObject();
 		}
 	}
-
-
-	/*if (FoodRef == nullptr)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("WantsToInteract"));
-		AreInteracting = true;
-		FTimerHandle UnusedHandle;
-		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AHero::DontInteract, 1.0f, false,0.5f);
-	}
-	else {
-		DropObject();
-	}*/
-	/*
-	TArray<AActor*> OverlappedActors;
-	this->GetOverlappingActors(OverlappedActors);
-	for(AActor* OverlappedActor : OverlappedActors)
-	{
-		AFood* Food = Cast<AFood>(OverlappedActor);
-		if (Food != nullptr)
-		{
-			if (Food->bIsAblePickup)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Interacting with food!"));
-				FoodMesh->SetStaticMesh(Food->StaticMesh->GetStaticMesh());
-				Food->Destroy();
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Interacting!"));
-		}
-	}
-	OverlappedActors.Empty();*/
 }

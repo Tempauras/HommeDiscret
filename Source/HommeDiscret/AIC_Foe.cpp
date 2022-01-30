@@ -13,6 +13,7 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "BB_keys.h"
+#include "FoodSpot.h"
 #include "GameFramework/Character.h"
 
 
@@ -37,11 +38,12 @@ void AAIC_Foe::BeginPlay()
 {       
     Super::BeginPlay();
     TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
-    TArray<AActor*> FoundEnemies;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundEnemies);
-    EntranceLocation = FoundEnemies[1]->GetActorLocation();
-    ExitLocation = FoundEnemies[2]->GetActorLocation();
-    OriginLocation = FoundEnemies[0]->GetActorLocation();
+    TArray<AActor*> FoundNavigationP;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundNavigationP);
+    EntranceLocation = FoundNavigationP[1]->GetActorLocation();
+    ExitLocation = FoundNavigationP[2]->GetActorLocation();
+    OriginLocation = FoundNavigationP[0]->GetActorLocation();
+    FindFoodSpots();
     RunBehaviorTree(Btree);
     BehaviorTreeComponent->StartTree(*Btree);
 }
@@ -59,6 +61,8 @@ UBlackboardComponent* AAIC_Foe::get_blackboard() const
 {
     return Blackboard;
 }
+
+
 
 void AAIC_Foe::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
@@ -87,3 +91,14 @@ void AAIC_Foe::SetupPerceptionSystem()
      GetPerceptionComponent()->ConfigureSense(*SightConfig);
 }
 
+void AAIC_Foe::FindFoodSpots()
+{
+    TSubclassOf<AActor> ClassToFind = AFoodSpot::StaticClass();
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoodSpots);
+}
+
+AFoodSpot* AAIC_Foe::GetFoodSpot()
+{
+    int RandomIndex = rand() % FoodSpots.Max();
+    return Cast<AFoodSpot>(FoodSpots[RandomIndex]);
+}

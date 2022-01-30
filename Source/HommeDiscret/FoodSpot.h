@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "FoodSpot.generated.h"
 
+class AFood;
+class USphereComponent;
 UCLASS()
 class HOMMEDISCRET_API AFoodSpot : public AActor
 {
@@ -21,13 +23,31 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* FoodMesh;
 	UPROPERTY(VisibleAnywhere)
-		UStaticMeshComponent* CollisionBox;
+		USphereComponent* CollisionSphere;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CollisionSphereRadius=100.0f;
+	
+	UWorld* CurrentWorld;
+	FVector SpawnLocation;
+	FActorSpawnParameters SpawnInfo;
+	FRotator SpawnRotation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<AActor> FoodClass;
+
+	UPROPERTY(VisibleAnywhere)
+		AFood* FoodRef;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
+	void FillFoodSpot(AFood* NewFood);
+	void EmptyFoodSpot();
+	void InstantiateFoodSpot();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

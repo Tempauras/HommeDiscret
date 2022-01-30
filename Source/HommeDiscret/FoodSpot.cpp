@@ -2,7 +2,7 @@
 
 
 #include "FoodSpot.h"
-
+#include "Food.h"
 // Sets default values
 AFoodSpot::AFoodSpot()
 {
@@ -18,15 +18,49 @@ AFoodSpot::AFoodSpot()
 	FoodMesh->SetupAttachment(PlateMesh);
 	FoodMesh->SetRelativeLocation(PlateMesh->GetRelativeLocation());
 
-	CollisionBox = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Box"));
-	CollisionBox->SetupAttachment(RootComponent);
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(FName("Collision Sphere"));
+	CollisionSphere->SetupAttachment(RootComponent);
+	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
 }
 
 // Called when the game starts or when spawned
 void AFoodSpot::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CurrentWorld = GetWorld();
+	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 150.0f);
+    SpawnRotation = this->GetActorRotation();
+	if (FoodClass != nullptr)
+	{
+		InstantiateFoodSpot();
+	}
+
+}
+
+void AFoodSpot::FillFoodSpot(AFood* NewFood)
+{
+	NewFood->StaticMesh->SetSimulatePhysics(false);
+	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
+	FoodRef = NewFood;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fill %s"),*FoodRef->GetName()));
+}
+
+void AFoodSpot::EmptyFoodSpot()
+{
+	FoodMesh->SetStaticMesh(nullptr);
+	FoodRef = nullptr;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,TEXT("Empty"));
+
+}
+
+void AFoodSpot::InstantiateFoodSpot()
+{
+	AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
+	AFood* FoodActor = Cast<AFood>(Actor);
+	FillFoodSpot(FoodActor);
+	/*FoodActor->StaticMesh->SetSimulatePhysics(false);
+	FoodMesh->SetStaticMesh(FoodActor->StaticMesh->GetStaticMesh());
+	FoodRef = FoodActor;*/
 }
 
 // Called every frame

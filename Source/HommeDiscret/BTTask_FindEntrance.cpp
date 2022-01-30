@@ -3,9 +3,7 @@
 
 #include "BTTask_FindEntrance.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Runtime/NavigationSystem/Public/NavigationSystem.h"
 #include "AIC_Foe.h"
-//#include "BehaviorTree/Blackboard/Blackboard/BlackboardKeyType.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "BB_keys.h"
 

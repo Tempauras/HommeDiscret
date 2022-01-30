@@ -4,22 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
-#include "Food.h"
 #include "Perception/AISense_Sight.h"
-
-//#include "Blueprint/UserWidget.h"
-
 #include "GameFramework/Character.h"
-
 #include "Hero.generated.h"
 
+
+class AFoodSpot;
+class AFood;
+class AChest;
+class USpringArmComponent;
+class USphereComponent;
+class UStaticMeshComponent;
 UCLASS()
 class HOMMEDISCRET_API AHero : public ACharacter
 {
@@ -29,20 +28,32 @@ public:
 	// Sets default values for this character's properties
 	AHero();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	UPROPERTY(VisibleAnywhere)
+		USphereComponent* CollisionSphere;
+
+	UPROPERTY(VisibleAnywhere)
+		float CollisionSphereRadius = 200.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		UCameraComponent* FollowCamera;
 
 	UPROPERTY(VisibleAnywhere, Category = "Food")
 		UStaticMeshComponent* FoodMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Food")
-		bool  IsHoldingFood;
+		bool  IsHoldingFood;;
 
 	UPROPERTY(VisibleAnywhere, Category = "Food")
 		AFood* FoodRef;
+
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		AChest* ChestNearby;
+
+	UPROPERTY(VisibleAnywhere, Category = "Food")
+		AFoodSpot* FoodSpotNearby;
 
 	//Movement + Zoom
 	void MoveForward(float Axis);
@@ -51,7 +62,7 @@ public:
 
 	//PickUp object
 	void DropObject();
-	void PickUpObject(AFood* newFood);
+	void PickUpObject(AFood* NewFood);
 	void Interact();
 	bool bDead;
 
@@ -61,6 +72,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+
+	UFUNCTION()
+		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -68,7 +86,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	class UAIPerceptionStimuliSourceComponent* stimulus;
 
-	void setup_stimulus();
+	class UAIPerceptionStimuliSourceComponent* Stimulus;
+	void SetupStimulus();
 };
