@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "Foe.generated.h"
 
+class AFood;
 UCLASS()
 class HOMMEDISCRET_API AFoe : public ACharacter
 {
@@ -17,6 +18,9 @@ public:
 	AFoe();
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+		AFood* FoodRef;
+
 	UPROPERTY(VisibleAnywhere)
 		bool HaveToDroppedFood;
 	

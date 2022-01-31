@@ -10,6 +10,7 @@
 /**
  * 
  */
+class AFoodSpot;
 UCLASS()
 class HOMMEDISCRET_API AAIC_Foe : public AAIController
 {
@@ -31,19 +32,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadwrite)
 		FVector OriginLocation;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TArray<AActor*> FoodSpots;
+
+	AFoodSpot* GetFoodSpot();
+
+
 private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
-	class UBehaviorTreeComponent* behavior_tree_component;
+	class UBehaviorTreeComponent* BehaviorTreeComponent;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
-	class UBehaviorTree* btree;
+	class UBehaviorTree* Btree;
 
-	class UBlackboardComponent* blackboard;
+	class UBlackboardComponent* Blackboard;
 
-	class UAISenseConfig_Sight* sight_config;
+	class UAISenseConfig_Sight* SightConfig;
 
 	UFUNCTION()
-		void on_target_detected(AActor* actor, FAIStimulus const stimulus);
-
-		void setup_perception_system();
+		void OnTargetDetected(AActor* actor, FAIStimulus const stimulus);
+		void SetupPerceptionSystem();
+		void FindFoodSpots();
 };

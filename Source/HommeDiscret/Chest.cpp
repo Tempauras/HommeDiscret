@@ -1,7 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/GameplayStatics.h"
-#include "HDGameInstance.h"
 #include "Chest.h"
 
 // Sets default values
@@ -9,8 +7,6 @@ AChest::AChest()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	//HDGameInstance* GameInstanceRef = Cast<HDGameInstance>(GEngine->GetWorld()->GetGameInstance());
-	//Hungerbar = GameInstanceRef->Hungerbar;
 
 	BaseStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base StaticMesh"));
 	RootComponent = BaseStaticMesh;
@@ -29,7 +25,6 @@ AChest::AChest()
 void AChest::BeginPlay()
 {
 	Super::BeginPlay();
-	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AChest::CallbackComponentBeginOverlap);
 	MaxFoodsToWin = 5;
 }
 
@@ -40,10 +35,11 @@ void AChest::Tick(float DeltaTime)
 	//DrawDebugSphere(GetWorld(),GetActorLocation(), SphereRadius,20,FColor::Purple,false,-1,0,1);
 }
 
-void AChest::AddingFood(AFood* FoodToAdd)
+
+
+void AChest::AddingFood()
 {
 	NumberFoodsContained++;
-	FoodToAdd->Destroy();
 	if (NumberFoodsContained >= MaxFoodsToWin)
 	{
 		//Win Call GameMode
@@ -52,15 +48,6 @@ void AChest::AddingFood(AFood* FoodToAdd)
 }
 
 
-void AChest::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
-	AFood* Food = Cast<AFood>(OtherActor);
-	if (Food != nullptr)
-	{
-		AddingFood(Food);
-	}
-}
 
 int AChest::GetNumberFoodsContained()
 {
@@ -71,4 +58,3 @@ int AChest::GetMaxFoodsToWin()
 {
 	return MaxFoodsToWin;
 }
-

@@ -3,7 +3,7 @@
 
 #include "Food.h"
 #include "GameFramework/Character.h"
-#include "Hero.h"
+//#include "Hero.h"
 
 // Sets default values
 AFood::AFood()
@@ -30,23 +30,28 @@ void AFood::BeginPlay()
 
 void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	/*
 	AHero* Hero = Cast<AHero>(OtherActor);
 	if (Hero != nullptr)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
 		if (Hero->FoodRef == nullptr)
+		{
 			Hero->FoodRef = this;
-	}
+		}
+	}*/
 }
 
 void AFood::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	/*
 	AHero* Hero = Cast<AHero>(OtherActor);
 	if (Hero != nullptr)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
 		if (Hero->IsHoldingFood == false)
+		{
 			Hero->FoodRef = nullptr;
-	}
+		}
+	}*/
 }
-

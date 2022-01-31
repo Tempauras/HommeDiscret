@@ -13,6 +13,7 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "BB_keys.h"
+#include "FoodSpot.h"
 #include "GameFramework/Character.h"
 
 
@@ -24,12 +25,12 @@ AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
     //If the searching is succeessed then btree take its object value
     if (obj.Succeeded())
     {
-        btree = obj.Object;
+        Btree = obj.Object;
     }
     //Adding behavior tree component and blackboard component to our object 
-    behavior_tree_component = object_initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorTree"));
-    blackboard = object_initializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
-    setup_perception_system();
+    BehaviorTreeComponent = object_initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorTree"));
+    Blackboard = object_initializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
+    SetupPerceptionSystem();
 }
 
 
@@ -37,30 +38,33 @@ void AAIC_Foe::BeginPlay()
 {       
     Super::BeginPlay();
     TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
-    TArray<AActor*> FoundEnemies;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundEnemies);
-    EntranceLocation = FoundEnemies[1]->GetActorLocation();
-    ExitLocation = FoundEnemies[2]->GetActorLocation();
-    OriginLocation = FoundEnemies[0]->GetActorLocation();
-    RunBehaviorTree(btree);
-    behavior_tree_component->StartTree(*btree);
+    TArray<AActor*> FoundNavigationP;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundNavigationP);
+    EntranceLocation = FoundNavigationP[1]->GetActorLocation();
+    ExitLocation = FoundNavigationP[2]->GetActorLocation();
+    OriginLocation = FoundNavigationP[0]->GetActorLocation();
+    FindFoodSpots();
+    RunBehaviorTree(Btree);
+    BehaviorTreeComponent->StartTree(*Btree);
 }
 
 void AAIC_Foe::OnPossess(APawn* const pawn)
 {
     Super::OnPossess(pawn);
-    if (blackboard)
+    if (Blackboard)
     {
-        blackboard->InitializeBlackboard(*btree->BlackboardAsset);
+        Blackboard->InitializeBlackboard(*Btree->BlackboardAsset);
     }
 }
 
 UBlackboardComponent* AAIC_Foe::get_blackboard() const 
 {
-    return blackboard;
+    return Blackboard;
 }
 
-void AAIC_Foe::on_target_detected(AActor* actor, FAIStimulus const stimulus)
+
+
+void AAIC_Foe::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
     if (auto const ch = Cast<AHero>(actor))
     {
@@ -69,22 +73,32 @@ void AAIC_Foe::on_target_detected(AActor* actor, FAIStimulus const stimulus)
 }
 
 
-void AAIC_Foe::setup_perception_system()
+void AAIC_Foe::SetupPerceptionSystem()
 {
-    sight_config = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+    SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
     SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
-    sight_config->SightRadius = 500.0f;
-    sight_config->LoseSightRadius = sight_config->SightRadius + 25.0f;
-    sight_config->PeripheralVisionAngleDegrees = 90.0f;
-    sight_config->SetMaxAge(5.0f);
-    sight_config->AutoSuccessRangeFromLastSeenLocation = 520.0f;
-    sight_config->DetectionByAffiliation.bDetectEnemies =
-    sight_config->DetectionByAffiliation.bDetectFriendlies =
-    sight_config->DetectionByAffiliation.bDetectNeutrals = true;
+    SightConfig->SightRadius = 500.0f;
+    SightConfig->LoseSightRadius = SightConfig->SightRadius + 25.0f;
+    SightConfig->PeripheralVisionAngleDegrees = 90.0f;
+    SightConfig->SetMaxAge(5.0f);
+    SightConfig->AutoSuccessRangeFromLastSeenLocation = 520.0f;
+    SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+    SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+    SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
      // add sight configuration component to perception component
-     GetPerceptionComponent()->SetDominantSense(*sight_config->GetSenseImplementation());
-     GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAIC_Foe::on_target_detected);
-     GetPerceptionComponent()->ConfigureSense(*sight_config);
-
+     GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+     GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AAIC_Foe::OnTargetDetected);
+     GetPerceptionComponent()->ConfigureSense(*SightConfig);
 }
 
+void AAIC_Foe::FindFoodSpots()
+{
+    TSubclassOf<AActor> ClassToFind = AFoodSpot::StaticClass();
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoodSpots);
+}
+
+AFoodSpot* AAIC_Foe::GetFoodSpot()
+{
+    int RandomIndex = rand() % FoodSpots.Max();
+    return Cast<AFoodSpot>(FoodSpots[RandomIndex]);
+}
