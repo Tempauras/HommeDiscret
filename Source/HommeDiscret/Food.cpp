@@ -3,7 +3,6 @@
 
 #include "Food.h"
 #include "GameFramework/Character.h"
-//#include "Hero.h"
 
 // Sets default values
 AFood::AFood()
@@ -24,13 +23,28 @@ AFood::AFood()
 void AFood::BeginPlay()
 {
 	Super::BeginPlay();
-	SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &AFood::CallbackComponentBeginOverlap);
-	SphereCollider->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);
+	/*SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &AFood::CallbackComponentBeginOverlap);
+	SphereCollider->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);*/
 }
 
+void AFood::Hide()
+{
+	this->StaticMesh->SetSimulatePhysics(false);
+	this->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - UnderFloorPosition));
+}
+
+void AFood::Show(FVector DropActorPos, FVector DropActorForward)
+{
+	FVector newPos = FVector(DropActorPos + DropActorForward * InFrontPosition);
+	newPos.Z = UnderFloorPosition;
+	this->SetActorLocation(newPos);
+	this->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));
+}
+
+/*
 void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*
+	
 	AHero* Hero = Cast<AHero>(OtherActor);
 	if (Hero != nullptr)
 	{
@@ -39,12 +53,13 @@ void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 		{
 			Hero->FoodRef = this;
 		}
-	}*/
-}
+	}
+}*/
 
+/*
 void AFood::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	/*
+	
 	AHero* Hero = Cast<AHero>(OtherActor);
 	if (Hero != nullptr)
 	{
@@ -53,5 +68,5 @@ void AFood::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent
 		{
 			Hero->FoodRef = nullptr;
 		}
-	}*/
-}
+	}
+}*/

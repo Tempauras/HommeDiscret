@@ -60,7 +60,7 @@ void AHero::BeginPlay()
 	Super::BeginPlay();
 	if (GetMesh()->DoesSocketExist("FoodSocket"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Exist!"));
+		//UE_LOG(LogTemp, Warning, TEXT("Exist!"));
 		FoodMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("FoodSocket"));
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 		//SetupSphereTrace();
@@ -218,10 +218,12 @@ void AHero::DropObject()
 	
 	if (ChestNearby==nullptr && FoodSpotNearby==nullptr)
 	{
+		/*
 		FVector newPos = FVector(this->GetActorLocation() + this->GetActorForwardVector() * 100.0f);
 		newPos.Z = 170.0f;
 		FoodRef->SetActorLocation(newPos);
-		FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));
+		FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));*/
+		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
 	}
 	else if (FoodSpotNearby != nullptr && ChestNearby == nullptr)
 	{
@@ -234,6 +236,7 @@ void AHero::DropObject()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in chest this : %s"), *FoodRef->GetName()));
 		FoodRef->Destroy();
 	}
+	FoodRef = nullptr;
 	IsHoldingFood = false;
 	FoodMesh->SetStaticMesh(nullptr);
 }
@@ -241,20 +244,21 @@ void AHero::DropObject()
 
 void AHero::PickUpObject(AFood* NewFood)
 {
-	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
-	FoodRef = NewFood;
-	IsHoldingFood = true;
 	if (FoodSpotNearby == nullptr)
 	{
+		NewFood->Hide();
 		//IsHoldingFood = true;
-		NewFood->StaticMesh->SetSimulatePhysics(false);
-		NewFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 150.0f));
+		/*NewFood->StaticMesh->SetSimulatePhysics(false);
+		NewFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 150.0f));*/
 	}
 	else 
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to take in fs this : %s"), *FoodRef->GetName()));
 		FoodSpotNearby->EmptyFoodSpot();
 	}
+	FoodRef = NewFood;
+	IsHoldingFood = true;
+	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
 }
 
 
