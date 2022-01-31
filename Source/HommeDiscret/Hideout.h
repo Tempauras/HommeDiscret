@@ -55,6 +55,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* TileArch;
 
+	UPROPERTY(VisibleAnywhere)
+		UChildActorComponent* PlayerStart;
+
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AChest> Chest;
 		
@@ -69,4 +72,5 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+
 };

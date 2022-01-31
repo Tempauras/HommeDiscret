@@ -39,7 +39,8 @@ void AFoodSpot::BeginPlay()
 
 void AFoodSpot::FillFoodSpot(AFood* NewFood)
 {
-	NewFood->StaticMesh->SetSimulatePhysics(false);
+	//NewFood->StaticMesh->SetSimulatePhysics(false);
+	NewFood->Hide();
 	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
 	FoodRef = NewFood;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fill %s"),*FoodRef->GetName()));
@@ -50,7 +51,6 @@ void AFoodSpot::EmptyFoodSpot()
 	FoodMesh->SetStaticMesh(nullptr);
 	FoodRef = nullptr;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,TEXT("Empty"));
-
 }
 
 void AFoodSpot::InstantiateFoodSpot()
