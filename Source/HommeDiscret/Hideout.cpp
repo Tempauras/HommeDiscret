@@ -76,10 +76,6 @@ AHideout::AHideout()
 	TileArch->SetRelativeLocation(FVector(RootComponent->GetRelativeLocation().X, RootComponent->GetRelativeLocation().Y - Offset, RootComponent->GetRelativeLocation().Z));
 	TileArch->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
 
-	PlayerStart = CreateDefaultSubobject<UChildActorComponent>(FName("Player Start"));
-	PlayerStart->SetupAttachment(RootComponent);
-	PlayerStart->SetRelativeLocation(FVector(RootComponent->GetRelativeLocation().X - (SizeOfMesh * 2), RootComponent->GetRelativeLocation().Y + SizeOfMesh, RootComponent->GetRelativeLocation().Z + Offset));
-
 	Params.Owner = this;
 }
 
