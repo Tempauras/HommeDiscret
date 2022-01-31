@@ -6,7 +6,7 @@
 /*
 UCLASS(Blueprintable)
 class */
-UENUM(BlueprintType, Category = "",Blueprintable)
+UENUM(BlueprintType, Category = "")
 enum class EFoeStatus : uint8
 {
 		Waiting UMETA(DisplayName = "Waiting"),

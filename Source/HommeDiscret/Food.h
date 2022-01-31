@@ -22,13 +22,6 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* SphereCollider;
 
-	UPROPERTY(VisibleAnywhere)
-		float UnderFloorPosition = 170.0f;
-
-	UPROPERTY(VisibleAnywhere)
-		float InFrontPosition = 100.0f;
-
-
 	//bool bIsAblePickup = false;
 
 protected:
@@ -36,12 +29,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	void Hide();
-	void Show(FVector DropActorPos, FVector DropActorForward);
-	
-	/*UFUNCTION()
+	UFUNCTION()
 		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
 		void CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	*/
 };
