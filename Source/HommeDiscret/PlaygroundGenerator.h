@@ -9,6 +9,7 @@
 #include "Hideout.h"
 #include "Crate.h"
 #include "FoodSpot.h"
+#include "FoeSpawnerRoom.h"
 #include "PlaygroundGenerator.generated.h"
 
 UENUM(BlueprintType)
@@ -42,15 +43,17 @@ public:
 		TSubclassOf<AWall> Wall;
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
 		TSubclassOf<AHideout> Hideout;
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
+		TSubclassOf<AFoeSpawnerRoom> FoeSpawnerRoom;
 	/*Size of the tile to align the creation correctly*/
 	UPROPERTY(VisibleAnywhere)
 		float SizeOfTile = 200;
 	/*Set the number of vertical tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
 	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
-		int VerticalTileNumber = 10;
+		int VerticalTileNumber = 15;
 	/*Set the number of horizontal tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
 	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
-		int HorizontalTileNumber = 10;
+		int HorizontalTileNumber = 15;
 	/*Height of the wall*/
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "1", UIMax = "10"))
 		int HeightTileNumber = 1;
@@ -59,6 +62,8 @@ public:
 		TSubclassOf<ACrate> Crate;
 	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration/Crates")
 		int CrateNumber;
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration/Crates", meta = (UIMin = "20", UIMax = "50"))
+		int ChanceToSpawnTwoCrates = 20;
 
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration/FoodSpot")
 		TSubclassOf<AFoodSpot> FoodSpot;
@@ -70,19 +75,21 @@ public:
 	TArray<ACrate*> CrateList;
 	TArray<AFoodSpot*> FoodSpotList;
 	AHideout* HideoutReferences;
+	AFoeSpawnerRoom* FoeSpawnerRoomReferences;
 
 	int ActualCrateNumber = 0;
 
 	AFloorTile* EnemySpawnEntranceFloorTile;
 
 	int RandomTileHideout;
+	int RandomTileFoeRoom;
 
 	FActorSpawnParameters Params;
 	bool FloorIsSet = false;
 	FVector BaseLocation;
 	FRotator BaseRotation;
 	float Offset;
-	float Radius = 35.f;
+	float Radius = 40.f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -100,7 +107,7 @@ public:
 	
 	
 
-	void SpawnCratesActor(UClass* Actor, AFloorTile* Tile, FRotator Rotation, FActorSpawnParameters Parameter);
+	void SpawnCratesActor(UClass* Actor, AFloorTile* Tile, FRotator Rotation, FActorSpawnParameters Parameter, int Height = 1);
 	void SpawnFoodSpotActor(UClass* Actor, AFloorTile* Tile, FRotator Rotation, FVector Coordinate, FActorSpawnParameters Parameter, int CurrentFoodSpotSpawned);
 
 	void SpawnFoodSpot();
