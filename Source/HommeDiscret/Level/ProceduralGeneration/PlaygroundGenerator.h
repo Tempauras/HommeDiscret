@@ -7,8 +7,8 @@
 #include "FloorTile.h"
 #include "Wall.h"
 #include "Hideout.h"
-#include "Crate.h"
-#include "FoodSpot.h"
+#include "HommeDiscret/Level/Props/Crate.h"
+#include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "FoeSpawnerRoom.h"
 #include "PlaygroundGenerator.generated.h"
 

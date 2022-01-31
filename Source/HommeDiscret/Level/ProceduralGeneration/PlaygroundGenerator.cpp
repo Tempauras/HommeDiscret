@@ -3,7 +3,6 @@
 
 #include "PlaygroundGenerator.h"
 #include "DrawDebugHelpers.h"
-#include "StealthGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -88,8 +87,6 @@ void APlaygroundGenerator::SpawnPlayground()
 		SpawnFoodSpot();
 
 		GetWorld()->GetFirstPlayerController()->GetPawn()->SetActorLocation(HideoutReferences->GetActorLocation());
-		//AStealthGameMode* MyGM = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-		//MyGM->SetPlayerStart(HideoutReferences->GetPlayerStart());
 	}
 }
 

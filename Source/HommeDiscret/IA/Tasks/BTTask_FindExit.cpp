@@ -4,10 +4,10 @@
 #include "BTTask_FindExit.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/NavigationSystem/Public/NavigationSystem.h"
-#include "AIC_Foe.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
 //#include "BehaviorTree/Blackboard/Blackboard/BlackboardKeyType.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "BB_keys.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
 
 
 UBTTask_FindExit::UBTTask_FindExit(FObjectInitializer const& object_initializer)

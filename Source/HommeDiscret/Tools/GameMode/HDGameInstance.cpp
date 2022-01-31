@@ -2,7 +2,7 @@
 
 
 #include "HDGameInstance.h"
-#include "HommeDiscret/HungerBar.h"
+#include "HommeDiscret/Tools/HungerBar.h"
 #include "Components/WidgetComponent.h"
 
 UHDGameInstance::UHDGameInstance()

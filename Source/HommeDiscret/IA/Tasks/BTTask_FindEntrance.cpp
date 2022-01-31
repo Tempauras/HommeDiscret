@@ -3,9 +3,9 @@
 
 #include "BTTask_FindEntrance.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "AIC_Foe.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "BB_keys.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
 
 
 UBTTask_FindEntrance::UBTTask_FindEntrance(FObjectInitializer const& object_initializer)

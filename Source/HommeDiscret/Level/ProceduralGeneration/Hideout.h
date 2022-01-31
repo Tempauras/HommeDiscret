@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Chest.h"
+#include "HommeDiscret/Level/Props/Chest.h"
 #include "Hideout.generated.h"
 
 UCLASS()
