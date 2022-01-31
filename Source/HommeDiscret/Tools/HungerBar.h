@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "Chest.h"
+#include "HommeDiscret/Level/Props/Chest.h"
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Food.h"
+#include "HommeDiscret/Level/Props/Food.h"
 #include "HungerBar.generated.h"
 
 /**

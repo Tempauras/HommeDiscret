@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "HungerBar.h"
+#include "HommeDiscret/Tools/HungerBar.h"
 #include "HDGameInstance.generated.h"
 
 /**

@@ -2,8 +2,8 @@
 
 
 #include "BTTask_SetOriginToRandom.h"
-#include "BB_keys.h"
-#include "AIC_Foe.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_SetOriginToRandom::UBTTask_SetOriginToRandom(FObjectInitializer const& object_initializer)

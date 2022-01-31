@@ -2,9 +2,9 @@
 
 
 #include "BTTask_PickUpFood.h"
-#include "HommeDiscret/AIC_Foe.h"
-#include "HommeDiscret/BB_keys.h"
-#include "HommeDiscret/Foe.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
+#include "HommeDiscret/IA/Foe.h"
 
 UBTTask_PickUpFood::UBTTask_PickUpFood(FObjectInitializer const& object_initializer)
 {

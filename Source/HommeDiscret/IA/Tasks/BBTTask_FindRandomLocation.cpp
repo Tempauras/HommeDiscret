@@ -4,12 +4,12 @@
 #include "BBTTask_FindRandomLocation.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/NavigationSystem/Public/NavigationSystem.h"
-#include "AIC_Foe.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
 //#include "BehaviorTree/Blackboard/Blackboard/BlackboardKeyType.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "BB_keys.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
 #include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
-#include "NavigationPoint.h"
+#include "HommeDiscret/IA/NavigationPoint.h"
 
 UBBTTask_FindRandomLocation::UBBTTask_FindRandomLocation(FObjectInitializer const& object_initializer)
 {
