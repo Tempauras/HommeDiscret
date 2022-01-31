@@ -35,7 +35,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MyAnim")
 		void AnimNotify_End(UAnimNotify* Notify);
 
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_Begin(UAnimNotify* Notify);
 
+	UCharacterMovementComponent* MovementPtr;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 protected:

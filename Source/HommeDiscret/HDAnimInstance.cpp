@@ -17,6 +17,7 @@ void UHDAnimInstance::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	Hero = Cast<AHero>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	MovementPtr = Cast<UCharacterMovementComponent>(Hero->GetCharacterMovement());
 }
 
 void UHDAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -41,5 +42,14 @@ void UHDAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UHDAnimInstance::AnimNotify_End(UAnimNotify* Notify)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("end"));
 	IsInHand = true;
+	MovementPtr->MaxWalkSpeed = Hero->HeroSpeed;
+}
+
+void UHDAnimInstance::AnimNotify_Begin(UAnimNotify* Notify)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("begin"));
+	IsInHand = true;
+	MovementPtr->MaxWalkSpeed = 1;
 }
