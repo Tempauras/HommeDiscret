@@ -44,11 +44,11 @@ void UHDAnimInstance::AnimNotify_End(UAnimNotify* Notify)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("end"));
 	MovementPtr->MaxWalkSpeed = Hero->HeroSpeed;
-	IsInHand = true;
 }
 
 void UHDAnimInstance::AnimNotify_Begin(UAnimNotify* Notify)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("begin"));
+	IsInHand = true;
 	MovementPtr->MaxWalkSpeed = 0;
 }
