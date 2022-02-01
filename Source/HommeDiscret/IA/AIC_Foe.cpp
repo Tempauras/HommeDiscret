@@ -40,9 +40,9 @@ void AAIC_Foe::BeginPlay()
     TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
     TArray<AActor*> FoundNavigationP;
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundNavigationP);
-    /*EntranceLocation = FoundNavigationP[1]->GetActorLocation();
+    EntranceLocation = FoundNavigationP[0]->GetActorLocation();
     ExitLocation = FoundNavigationP[2]->GetActorLocation();
-    OriginLocation = FoundNavigationP[0]->GetActorLocation();*/
+    OriginLocation = FoundNavigationP[1]->GetActorLocation();
     FindFoodSpots();
     RunBehaviorTree(Btree);
     BehaviorTreeComponent->StartTree(*Btree);

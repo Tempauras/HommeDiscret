@@ -20,8 +20,7 @@ public:
 	AFoe();
 
 protected:
-	UPROPERTY(VisibleAnywhere)
-		AFood* FoodRef;
+
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* CollisionSphere;
@@ -29,11 +28,20 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		UCapsuleComponent* CollisionCylinder;
 
-	UPROPERTY(VisibleAnywhere, Category = "Food")
+	UPROPERTY(VisibleAnywhere)
+		float CollisionSphereRadius = 200.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Food")
 		UStaticMeshComponent* FoodMesh;
 
 	UPROPERTY(VisibleAnywhere)
-		float CollisionSphereRadius=100.0f;
+		UWorld* CurrentWorld;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<AActor> FoodClass;
+
+	FActorSpawnParameters SpawnInfo;
+	FVector SpawnLocation;
+	FRotator SpawnRotation;
 
 	UPROPERTY(VisibleAnywhere)
 		bool HaveToDroppedFood;
@@ -41,13 +49,17 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		bool AreInteracing;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool IsHoldingFood;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		AFood* FoodRef;
+
 
 	UFUNCTION()
 		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -57,7 +69,11 @@ public:
 
 	void SetAreInteracting(bool NewInteract);
 	void PickUpFood();
-	void DropFood();
+	FVector DropFood();
+	AFood* GetFoodRef();
+	void SetFoodRef(AFood* NewFood);
+
+	void InstantiateFood();
 
 	// Called every frame
 	bool GetHaveToDroppedFood();
