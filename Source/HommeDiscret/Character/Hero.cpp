@@ -2,10 +2,10 @@
 
 
 #include "Hero.h"
-#include "Food.h"
-#include "FoodSpot.h"
-#include "Foe.h"
-#include "Chest.h"
+#include "HommeDiscret/Level/Props/Food.h"
+#include "HommeDiscret/Level/Props/FoodSpot.h"
+#include "HommeDiscret/IA/Foe.h"
+#include "HommeDiscret/Level/Props/Chest.h"
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"

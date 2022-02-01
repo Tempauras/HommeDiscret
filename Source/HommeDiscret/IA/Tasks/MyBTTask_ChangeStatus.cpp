@@ -2,8 +2,8 @@
 
 
 #include "MyBTTask_ChangeStatus.h"
-#include "Foe.h"
-#include "AIC_Foe.h"
+#include "HommeDiscret/IA/Foe.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
 
 UMyBTTask_ChangeStatus::UMyBTTask_ChangeStatus(FObjectInitializer const& object_initializer)
 {

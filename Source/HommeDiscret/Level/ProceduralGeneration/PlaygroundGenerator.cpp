@@ -3,6 +3,7 @@
 
 #include "PlaygroundGenerator.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlaygroundGenerator::APlaygroundGenerator()
@@ -84,6 +85,8 @@ void APlaygroundGenerator::SpawnPlayground()
 		}
 		FixHoles();
 		SpawnFoodSpot();
+
+		GetWorld()->GetFirstPlayerController()->GetPawn()->SetActorLocation(HideoutReferences->GetActorLocation());
 	}
 }
 

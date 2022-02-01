@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "Hero.h"
+#include "HommeDiscret/Character/Hero.h"
 
 #include "HDAnimInstance.generated.h"
 

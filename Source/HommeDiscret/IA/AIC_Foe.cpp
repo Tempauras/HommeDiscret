@@ -2,7 +2,7 @@
 
 
 #include "AIC_Foe.h"
-#include "Hero.h"
+#include "HommeDiscret/Character/Hero.h"
 #include "NavigationPoint.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
@@ -12,8 +12,8 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AIPerceptionComponent.h"
-#include "BB_keys.h"
-#include "FoodSpot.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
+#include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "GameFramework/Character.h"
 
 

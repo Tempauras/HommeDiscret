@@ -3,10 +3,10 @@
 
 #include "BTTask_FindFoodLocation.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "HommeDiscret/AIC_Foe.h"
-#include "HommeDiscret/Food.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
+#include "HommeDiscret/Level/Props/Food.h"
 #include "Kismet/GameplayStatics.h"
-#include "HommeDiscret/BB_keys.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
 
 UBTTask_FindFoodLocation::UBTTask_FindFoodLocation(FObjectInitializer const& object_initializer)
 {

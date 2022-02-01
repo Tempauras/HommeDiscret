@@ -4,8 +4,8 @@
 #include "Foe.h"
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Food.h"
-#include "FoodSpot.h"
+#include "HommeDiscret/Level/Props/Food.h"
+#include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "AIC_Foe.h"
 
 // Sets default values

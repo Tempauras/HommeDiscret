@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Chest.h"
+#include "HommeDiscret/Level/Props/Chest.h"
 #include "Hideout.generated.h"
 
 UCLASS()
@@ -55,9 +55,6 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* TileArch;
 
-	UPROPERTY(VisibleAnywhere)
-		UChildActorComponent* PlayerStart;
-
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AChest> Chest;
 		
@@ -72,5 +69,4 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-
 };

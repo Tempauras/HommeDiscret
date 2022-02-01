@@ -2,8 +2,8 @@
 
 
 #include "BTTask_SetOriginToFoeLocation.h"
-#include "AIC_Foe.h"
-#include "BB_keys.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
+#include "HommeDiscret/IA/Tasks/BB_keys.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_SetOriginToFoeLocation::UBTTask_SetOriginToFoeLocation(FObjectInitializer const& object_initializer)
