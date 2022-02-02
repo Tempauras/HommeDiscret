@@ -21,7 +21,6 @@ AFoe::AFoe()
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
 	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
 	CollisionSphere->SetupAttachment(RootComponent);
-	CollisionCylinder = Cast<UCapsuleComponent>(GetComponentByClass(UCapsuleComponent::StaticClass()));
 
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
@@ -57,14 +56,21 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			AFood* NewFood = Cast<AFood>(OtherActor);
 			if (NewFood != nullptr)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Foe Is near %s"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Foe Is near %s"));
 				FoodRef = NewFood;
 			}
 		}
 	}
 	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
 	{
-
+		if (IsHoldingFood)
+		{
+			AFoodSpot* NewFoodSpot = Cast<AFoodSpot>(OtherActor);
+			if (NewFoodSpot->FoodRef == nullptr)
+			{
+				FoodSpotNearby = NewFoodSpot;
+			}
+		}
 	}
 }
 
@@ -79,13 +85,12 @@ void AFoe::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	}
 	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
 	{
-
+		FoodSpotNearby = nullptr;
+		/*if (IsHoldingFood)
+		{
+			FoodSpotNearby = nullptr;
+		}*/
 	}
-}
-
-void AFoe::SetAreInteracting(bool NewInteract)
-{
-	AreInteracing = NewInteract;
 }
 
 void AFoe::PickUpFood()
@@ -99,33 +104,35 @@ void AFoe::PickUpFood()
 	}
 }
 
-FVector AFoe::DropFood()
+FVector AFoe::DropFoodOnTheFloor()
 {
 	FVector NewVector;
 	if (FoodRef != nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Drops %s"), *FoodRef->GetName()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Drops %s"), *FoodRef->GetName()));
 		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
-		//FoodRef = nullptr;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("Test foodRef %s"), *FoodRef->GetName()));
+		NewVector = FoodRef->GetActorLocation();
+		NewVector.X=NewVector.X+CollisionSphere->GetScaledSphereRadius() - 5.0f;
+		FoodRef = nullptr;
 		IsHoldingFood = false;
 		FoodMesh->SetStaticMesh(nullptr);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("Test foodRef %s"), *FoodRef->GetName()));
-		NewVector = FoodRef->GetActorLocation();
-		//NewVector.X=NewVector.X+CollisionSphere->GetScaledSphereRadius() - 5.0f;
-		SetFoodRef(nullptr);
 	}
 	return NewVector;
 }
 
-AFood* AFoe::GetFoodRef()
+bool AFoe::DropFoodInFoodSpot()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("Test foodRef %s"), *FoodRef->GetName()));
-	return this->FoodRef;
-}
-
-void AFoe::SetFoodRef(AFood* NewFood)
-{
-	FoodRef = NewFood;
+	bool Return = false;
+	if (FoodSpotNearby != nullptr)
+	{
+		FoodSpotNearby->FillFoodSpot(FoodRef);
+		FoodRef = nullptr;
+		IsHoldingFood = false;
+		FoodMesh->SetStaticMesh(nullptr);
+		Return = true;
+	}
+	return Return;
 }
 
 void AFoe::InstantiateFood()
@@ -141,10 +148,8 @@ void AFoe::InstantiateFood()
 				FoodRef = NewFood;
 				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
 				PickUpFood();
+				HaveToDroppedFood = true;
 			}
-		}
-		else 
-		{
 		}
 	}
 }
