@@ -58,9 +58,13 @@ void AFoodSpot::InstantiateFoodSpot()
 	AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
 	AFood* FoodActor = Cast<AFood>(Actor);
 	FillFoodSpot(FoodActor);
-	/*FoodActor->StaticMesh->SetSimulatePhysics(false);
-	FoodMesh->SetStaticMesh(FoodActor->StaticMesh->GetStaticMesh());
-	FoodRef = FoodActor;*/
+}
+
+FVector AFoodSpot::GetRealLocation()
+{
+	FVector NewVector = this->GetActorLocation();
+	NewVector.X = NewVector.X + CollisionSphere->GetScaledSphereRadius() - 5.0f;
+	return NewVector;
 }
 
 // Called every frame

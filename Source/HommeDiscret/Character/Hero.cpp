@@ -151,12 +151,11 @@ void AHero::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent
 	}
 	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
 	{
-		//AFoodSpot* FoodSpot = Cast<AFoodSpot>(OtherActor);
 		FoodSpotNearby = nullptr;
-		if (!IsHoldingFood)
+		/*if (!IsHoldingFood)
 		{
 			FoodRef = nullptr;
-		}
+		}*/
 	}
 	else if (OtherActor->IsA(AChest::StaticClass()))
 	{

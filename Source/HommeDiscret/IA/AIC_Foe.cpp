@@ -97,8 +97,9 @@ void AAIC_Foe::FindFoodSpots()
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoodSpots);
 }
 
-AFoodSpot* AAIC_Foe::GetFoodSpot()
+AFoodSpot* AAIC_Foe::GetOneRandomFoodSpot()
 {
     int RandomIndex = rand() % FoodSpots.Max();
-    return Cast<AFoodSpot>(FoodSpots[RandomIndex]);
+    AFoodSpot* NewFoodSpot = Cast<AFoodSpot>(FoodSpots[RandomIndex]);
+    return NewFoodSpot;
 }
