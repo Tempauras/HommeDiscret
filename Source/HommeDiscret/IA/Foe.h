@@ -62,7 +62,7 @@ public:
 	UFUNCTION()
 		void CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	void PickUpFood();
+	bool PickUpFood();
 	FVector DropFoodOnTheFloor();
 	bool DropFoodInFoodSpot();
 	void InstantiateFood();

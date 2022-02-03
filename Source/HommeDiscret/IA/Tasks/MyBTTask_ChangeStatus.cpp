@@ -20,7 +20,7 @@ EBTNodeResult::Type UMyBTTask_ChangeStatus::ExecuteTask(UBehaviorTreeComponent& 
 		auto const foe = Cast<AFoe>(cont->GetCharacter());
 		if (foe->GetHaveToDroppedFood() == true)
 		{
-			if (foe->GetHoldingFood() == true)
+			if (!foe->GetHoldingFood())
 			{
 				status = EFoeStatus::RecoveringFood;
 			}

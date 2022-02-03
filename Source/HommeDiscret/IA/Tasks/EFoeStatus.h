@@ -9,7 +9,6 @@ class */
 UENUM(BlueprintType, Category = "",Blueprintable)
 enum class EFoeStatus : uint8
 {
-		Waiting UMETA(DisplayName = "Waiting"),
 		Entering UMETA(DisplayName = "Entering"),
 		Exiting UMETA(DisplayName = "Exiting"),
 		NormalBehavior UMETA(DisplayName = "NormalBehavior"),
@@ -17,4 +16,4 @@ enum class EFoeStatus : uint8
 		Chasing UMETA(DisplayName = "Chasing"),
 		DroppingFood UMETA(DisplayName = "DroppingFood"),
 		RecoveringFood UMETA(DisplayName = "RecoveringFood"),
-	};
+};

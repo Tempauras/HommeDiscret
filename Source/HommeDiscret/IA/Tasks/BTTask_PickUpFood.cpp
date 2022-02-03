@@ -18,8 +18,13 @@ EBTNodeResult::Type UBTTask_PickUpFood::ExecuteTask(UBehaviorTreeComponent& owne
 
 	AFoe* Foe = Cast<AFoe>(FoeController->GetCharacter());
 
-	Foe->PickUpFood();
-
-	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
-	return EBTNodeResult::Succeeded;
+	bool HavePickedUpFood = Foe->PickUpFood();
+	EBTNodeResult::Type HaveSucceeded = EBTNodeResult::Succeeded;
+	if (HavePickedUpFood == false)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Task have failed !!!"));
+		HaveSucceeded = EBTNodeResult::Failed;
+	}
+	FinishLatentTask(owner_comp, HaveSucceeded);
+	return HaveSucceeded;
 }

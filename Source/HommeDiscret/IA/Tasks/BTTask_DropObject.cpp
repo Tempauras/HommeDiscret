@@ -23,8 +23,10 @@ EBTNodeResult::Type UBTTask_DropObject::ExecuteTask(UBehaviorTreeComponent& owne
 	AFoe* Foe = Cast<AFoe>(FoeController->GetCharacter());
 	UBlackboardComponent* Blackboard = FoeController->GetBlackboardComponent();
 	FVector LastFoodLocation = Foe->DropFoodOnTheFloor();
-	Blackboard->SetValueAsVector(bb_keys::LastFoodLocation, LastFoodLocation);
-
+	if (LastFoodLocation.IsZero() == false)
+	{
+		Blackboard->SetValueAsVector(bb_keys::LastFoodLocation, LastFoodLocation);
+	}
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

@@ -93,20 +93,23 @@ void AFoe::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	}
 }
 
-void AFoe::PickUpFood()
+bool AFoe::PickUpFood()
 {
+	bool Return = false;
 	if (FoodRef != nullptr)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
 		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
 		FoodRef->Hide();
 		IsHoldingFood = true;
+		Return = true;
 	}
+	return Return;
 }
 
 FVector AFoe::DropFoodOnTheFloor()
 {
-	FVector NewVector;
+	FVector NewVector = FVector(0, 0, 0);
 	if (FoodRef != nullptr)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Drops %s"), *FoodRef->GetName()));
