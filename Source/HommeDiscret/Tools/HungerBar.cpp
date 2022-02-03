@@ -5,9 +5,15 @@
 #include <Components/ProgressBar.h>
 #include <Components/TextBlock.h>
 #include "Delegates/DelegateSignatureImpl.inl"
+#include <Runtime/ApplicationCore/Private/IOS/IOSAppDelegate.cpp>
+
+void UHungerBar::OnFoodStocked()
+{
+}
 
 void UHungerBar::NativeOnInitiliazed()
 {
+	Super::OnInitialized();
 	/*
 	if (ChestRef != nullptr)
 	{
@@ -19,7 +25,8 @@ void UHungerBar::NativeOnInitiliazed()
 }
 
 void UHungerBar::RefreshChest(AFood &FoodToAdd)
-{ 
+{
+	HungerBar_OnFoodStocked.Broadcast();
 	//CNumberFoodsContained = ChestRef->GetNumberFoodsContained();
 	/*CurrentHungerLabel->SetText(FText::AsCultureInvariant(FString::FromInt(CurrentH)));
 	MaxHungerLabel->SetText(FText::AsCultureInvariant(FString::FromInt(MaxH)));

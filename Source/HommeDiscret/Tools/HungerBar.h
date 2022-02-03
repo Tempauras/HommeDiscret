@@ -27,6 +27,11 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* MaxHungerLabel;
 
+	UFUNCTION()
+		void OnFoodStocked();
+
+	DECLARE_DELEGATE(FHungerBar);
+	FHungerBar HungerBar_OnFoodStocked;
 	/*
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AChest* ChestRef;*/
