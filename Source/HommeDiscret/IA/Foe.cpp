@@ -126,12 +126,17 @@ bool AFoe::DropFoodInFoodSpot()
 	bool Return = false;
 	if (FoodSpotNearby != nullptr)
 	{
-		FoodSpotNearby->FillFoodSpot(FoodRef);
-		FoodRef = nullptr;
-		IsHoldingFood = false;
-		FoodMesh->SetStaticMesh(nullptr);
-		Return = true;
+		bool Success = FoodSpotNearby->FillFoodSpot(FoodRef);
+		if (Success == true)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
+			IsHoldingFood = false;
+			FoodMesh->SetStaticMesh(nullptr);
+			FoodRef = nullptr;
+			Return = true;
+		}
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %d"), Return));
 	return Return;
 }
 

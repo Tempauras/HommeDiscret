@@ -99,7 +99,8 @@ void AAIC_Foe::FindFoodSpots()
 
 AFoodSpot* AAIC_Foe::GetOneRandomFoodSpot()
 {
-    int RandomIndex = rand() % FoodSpots.Max();
-    AFoodSpot* NewFoodSpot = Cast<AFoodSpot>(FoodSpots[RandomIndex]);
+    int RandomIndex = rand() % FoodSpots.Num();
+    AActor* NewActor = FoodSpots[RandomIndex];
+    AFoodSpot* NewFoodSpot = Cast<AFoodSpot>(NewActor);
     return NewFoodSpot;
 }

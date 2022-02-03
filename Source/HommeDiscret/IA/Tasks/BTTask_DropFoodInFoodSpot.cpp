@@ -17,8 +17,9 @@ EBTNodeResult::Type UBTTask_DropFoodInFoodSpot::ExecuteTask(UBehaviorTreeCompone
 	UBlackboardComponent* Blackboard = FoeController->GetBlackboardComponent();
 	bool HaveDroppedFood = Foe->DropFoodInFoodSpot();
 	EBTNodeResult::Type HaveSucceeded = EBTNodeResult::Succeeded;
-	if (!HaveDroppedFood)
-	{
+	if (HaveDroppedFood==false)
+	{	
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Task have failed !!!"));
 		HaveSucceeded = EBTNodeResult::Failed;
 	}
 	FinishLatentTask(owner_comp, HaveSucceeded);
