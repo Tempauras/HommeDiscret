@@ -44,9 +44,10 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	void FillFoodSpot(AFood* NewFood);
+	bool FillFoodSpot(AFood* NewFood);
 	void EmptyFoodSpot();
 	void InstantiateFoodSpot();
+	FVector GetRealLocation();
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

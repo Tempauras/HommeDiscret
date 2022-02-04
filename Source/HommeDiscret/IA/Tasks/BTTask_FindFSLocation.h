@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class HOMMEDISCRET_API UBTTask_FindFSLocation : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()

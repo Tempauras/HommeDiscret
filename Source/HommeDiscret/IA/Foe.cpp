@@ -14,7 +14,6 @@ AFoe::AFoe()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	//HaveToDroppedFood = false;
-	IsHoldingFood = false;
 	AIControllerClass = AAIC_Foe::StaticClass();
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -22,11 +21,12 @@ AFoe::AFoe()
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
 	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
 	CollisionSphere->SetupAttachment(RootComponent);
-	CollisionCylinder = Cast<UCapsuleComponent>(GetComponentByClass(UCapsuleComponent::StaticClass()));
 
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+
+	IsHoldingFood = false;
 }
 // Called when the game starts or when spawned
 void AFoe::BeginPlay()
@@ -41,6 +41,10 @@ void AFoe::BeginPlay()
 	}
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AFoe::CallbackComponentBeginOverlap);
 	CollisionSphere->OnComponentEndOverlap.AddDynamic(this, &AFoe::CallbackComponentEndOverlap);
+	CurrentWorld=GetWorld();
+	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 300.0f);
+	SpawnRotation = this->GetActorRotation();
+	InstantiateFood();
 }
 
 void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -52,13 +56,21 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			AFood* NewFood = Cast<AFood>(OtherActor);
 			if (NewFood != nullptr)
 			{
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Foe Is near %s"));
 				FoodRef = NewFood;
 			}
 		}
 	}
 	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
 	{
-
+		if (IsHoldingFood)
+		{
+			AFoodSpot* NewFoodSpot = Cast<AFoodSpot>(OtherActor);
+			if (NewFoodSpot->FoodRef == nullptr)
+			{
+				FoodSpotNearby = NewFoodSpot;
+			}
+		}
 	}
 }
 
@@ -73,31 +85,81 @@ void AFoe::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	}
 	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
 	{
-
+		FoodSpotNearby = nullptr;
+		/*if (IsHoldingFood)
+		{
+			FoodSpotNearby = nullptr;
+		}*/
 	}
 }
 
-void AFoe::SetAreInteracting(bool NewInteract)
+bool AFoe::PickUpFood()
 {
-	AreInteracing = NewInteract;
-}
-
-void AFoe::PickUpFood()
-{
+	bool Return = false;
 	if (FoodRef != nullptr)
 	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
+		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
 		FoodRef->Hide();
 		IsHoldingFood = true;
-		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
+		Return = true;
 	}
+	return Return;
 }
 
-void AFoe::DropFood()
+FVector AFoe::DropFoodOnTheFloor()
 {
-	FoodRef->Show(this->GetActorLocation(),this->GetActorForwardVector());
-	FoodRef=nullptr;
-	IsHoldingFood = false;
-	FoodMesh->SetStaticMesh(nullptr);
+	FVector NewVector = FVector(0, 0, 0);
+	if (FoodRef != nullptr)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Drops %s"), *FoodRef->GetName()));
+		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("Test foodRef %s"), *FoodRef->GetName()));
+		NewVector = FoodRef->GetActorLocation();
+		NewVector.X=NewVector.X+CollisionSphere->GetScaledSphereRadius() - 5.0f;
+		FoodRef = nullptr;
+		IsHoldingFood = false;
+		FoodMesh->SetStaticMesh(nullptr);
+	}
+	return NewVector;
+}
+
+bool AFoe::DropFoodInFoodSpot()
+{
+	bool Return = false;
+	if (FoodSpotNearby != nullptr)
+	{
+		bool Success = FoodSpotNearby->FillFoodSpot(FoodRef);
+		if (Success == true)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
+			IsHoldingFood = false;
+			FoodMesh->SetStaticMesh(nullptr);
+			FoodRef = nullptr;
+			Return = true;
+		}
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %d"), Return));
+	return Return;
+}
+
+void AFoe::InstantiateFood()
+{
+	if (!IsHoldingFood)
+	{
+		AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
+		if (Actor != nullptr)
+		{
+			AFood* NewFood = Cast<AFood>(Actor);
+			if (NewFood != nullptr)
+			{
+				FoodRef = NewFood;
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
+				PickUpFood();
+				HaveToDroppedFood = true;
+			}
+		}
+	}
 }
 
 bool AFoe::GetHaveToDroppedFood()

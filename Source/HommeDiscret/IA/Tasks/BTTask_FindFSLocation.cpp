@@ -19,9 +19,9 @@ EBTNodeResult::Type UBTTask_FindFSLocation::ExecuteTask(UBehaviorTreeComponent& 
 {
 	auto const FoeController = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
 	
-	AFoodSpot* NewFoodSpot = FoeController->GetFoodSpot();
-	FoeController->get_blackboard()->SetValueAsVector(bb_keys::target_location,NewFoodSpot->GetActorLocation());
-	
+	AFoodSpot* NewFoodSpot = FoeController->GetOneRandomFoodSpot();
+	FVector NewTargetLocation = NewFoodSpot->GetRealLocation();
+	FoeController->get_blackboard()->SetValueAsVector(bb_keys::target_location,NewTargetLocation);
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

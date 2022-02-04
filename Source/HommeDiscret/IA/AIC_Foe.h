@@ -35,8 +35,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		TArray<AActor*> FoodSpots;
 
-	AFoodSpot* GetFoodSpot();
-
+	AFoodSpot* GetOneRandomFoodSpot();
 
 private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))

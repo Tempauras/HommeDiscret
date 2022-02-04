@@ -9,9 +9,12 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class HOMMEDISCRET_API UBTTask_DropObject : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
+
+	UBTTask_DropObject(FObjectInitializer const& object_initializer);
+	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);
 	
 };
