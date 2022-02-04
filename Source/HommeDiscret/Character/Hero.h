@@ -55,6 +55,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Food")
 		AFoodSpot* FoodSpotNearby;
 
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
+		int HeroSpeed;
+
 	//Movement + Zoom
 	void MoveForward(float Axis);
 	void MoveRight(float Axis);
