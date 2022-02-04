@@ -11,4 +11,6 @@ namespace bb_keys
 	TCHAR const* const foe_status = TEXT("FoeStatus");
 	TCHAR const* const LastPlayerLocation = TEXT("LastPlayerLocation");
 	TCHAR const* const LastFoodLocation = TEXT("LastFoodLocation");
+	TCHAR const* const ExitLocation = TEXT("ExitLocation");
+	TCHAR const* const HaveToDroppedFood = TEXT("HaveToDroppedFood");	
 }

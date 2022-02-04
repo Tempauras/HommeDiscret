@@ -18,8 +18,8 @@ void AFoeSpawner::BeginPlay()
 	Super::BeginPlay();
 	Loc = this->GetActorLocation();
 	Rot = this->GetActorRotation();
-	//SpawnFoe(true);
-	SpawnFoe(false);
+	SpawnFoe(true);
+	//SpawnFoe(false);
 
 }
 
