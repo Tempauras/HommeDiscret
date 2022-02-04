@@ -50,6 +50,7 @@ AHero::AHero()
 	IsHoldingFood = false;
 	ChestNearby = nullptr;
 	bDead = false;
+	HeroSpeed = 400;
 
 	SetupStimulus();
 }
