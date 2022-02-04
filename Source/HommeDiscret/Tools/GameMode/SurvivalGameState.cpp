@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "StealthGameModeInGameState.h"
+#include "SurvivalGameState.h"
 
-AStealthGameModeInGameState::AStealthGameModeInGameState() :
+ASurvivalGameState::ASurvivalGameState() :
 	FoodCountInChest(0),
 	FoodCountOnFoodSpot(0)
 {

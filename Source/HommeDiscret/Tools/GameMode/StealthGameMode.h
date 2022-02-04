@@ -3,9 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameModeBase.h"
-#include "StealthGameModeInGameState.h"
+#include "SurvivalGameState.h"
+#include "MainMenuGameState.h"
 #include "StealthGameMode.generated.h"
+
+UENUM(BlueprintType)
+enum GameStates
+{
+	MAINMENU UMETA(DisplayName = "Main Menu"),
+	SURVIVAL UMETA(DisplayName = "Survival"),
+	SCORING UMETA(DisplayName = "Score")
+};
 
 /**
  * 
@@ -14,10 +25,24 @@ UCLASS()
 class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+	//Call when the game start
+	virtual void BeginPlay() override;
+
 public:
-	UPROPERTY(EditAnywhere)
-		AStealthGameModeInGameState* InGameGameState;
+	UPROPERTY()
+		ASurvivalGameState* SurvivalGameState;
+
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> PlayerHUDClass;
+	UPROPERTY()
+		UUserWidget* CurrentWidget;
+	//The number of food that are needed for the player to be declared the winner. Defaults = 5
+	UPROPERTY(EditAnywhere, Category = "Victory Condition")
+		int32 NumberOfFoodInChestForVictory = 5;
+
 public:
 	AStealthGameMode();
 
@@ -35,6 +60,9 @@ public:
 	/*Increment the value of food on food spot*/
 	UFUNCTION(Category = "Food")
 		virtual void IncrementFoodOnFoodSpot();
+	//Decrement the value of food on food spot
 	UFUNCTION(Category = "Food")
 		virtual void DecrementFoodOnFoodSpot();
+	UFUNCTION(Category = "Victory Condition")
+		virtual bool PlayerWon();
 };

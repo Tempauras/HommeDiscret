@@ -10,7 +10,6 @@ ACrate::ACrate()
 	PrimaryActorTick.bCanEverTick = true;
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Static Mesh"));
 	RootComponent = StaticMesh;
-
 }
 
 // Called when the game starts or when spawned

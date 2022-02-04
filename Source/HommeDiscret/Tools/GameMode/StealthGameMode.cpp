@@ -2,18 +2,41 @@
 
 #include "StealthGameMode.h"
 
-
 AStealthGameMode::AStealthGameMode()
 {
-	GameStateClass = AStealthGameModeInGameState::StaticClass();
-	InGameGameState = GetGameState<AStealthGameModeInGameState>();
+}
+
+
+void AStealthGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	SurvivalGameState = GetGameState<ASurvivalGameState>();
+	FInputModeGameOnly InputType;
+	InputType.SetConsumeCaptureMouseDown(true);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	if (PC)
+	{
+		PC->bShowMouseCursor = false;
+		PC->bEnableClickEvents = false;
+		PC->bEnableMouseOverEvents = false;
+	}
+	//Load UI
+	if (PlayerHUDClass != nullptr)
+	{
+		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		if (CurrentWidget != nullptr)
+		{
+			CurrentWidget->AddToViewport();
+		}
+	}
 }
 
 int32 AStealthGameMode::GetFoodInChest() const
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		return InGameGameState->FoodCountInChest;
+		return SurvivalGameState->FoodCountInChest;
 	}
 	else
 	{
@@ -23,9 +46,9 @@ int32 AStealthGameMode::GetFoodInChest() const
 
 int32 AStealthGameMode::GetFoodOnFoodSpot() const
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		return InGameGameState->FoodCountOnFoodSpot;
+		return SurvivalGameState->FoodCountOnFoodSpot;
 	}
 	else
 	{
@@ -35,26 +58,40 @@ int32 AStealthGameMode::GetFoodOnFoodSpot() const
 
 void AStealthGameMode::IncreaseFoodInChest(int32 FoodValue)
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		InGameGameState->FoodCountInChest += FoodValue;
+		SurvivalGameState->FoodCountInChest += FoodValue;
 		DecrementFoodOnFoodSpot();
+		PlayerWon();
 	}
 }
 
 void AStealthGameMode::IncrementFoodOnFoodSpot()
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		InGameGameState->FoodCountOnFoodSpot++;
+		SurvivalGameState->FoodCountOnFoodSpot++;
 	}
 }
 
 void AStealthGameMode::DecrementFoodOnFoodSpot()
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		InGameGameState->FoodCountOnFoodSpot--;
+		SurvivalGameState->FoodCountOnFoodSpot--;
+	}
+}
+
+bool AStealthGameMode::PlayerWon()
+{
+	if (SurvivalGameState->FoodCountInChest == NumberOfFoodInChestForVictory)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Won!"));
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
