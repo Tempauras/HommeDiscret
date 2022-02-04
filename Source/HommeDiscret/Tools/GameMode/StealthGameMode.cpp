@@ -2,18 +2,24 @@
 
 #include "StealthGameMode.h"
 
-
 AStealthGameMode::AStealthGameMode()
 {
 	GameStateClass = AStealthGameModeInGameState::StaticClass();
-	InGameGameState = GetGameState<AStealthGameModeInGameState>();
+	SurvivalGameState = GetGameState<AStealthGameModeInGameState>();
+}
+
+
+void AStealthGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	ChangeUI(GameStates::SURVIVAL);
 }
 
 int32 AStealthGameMode::GetFoodInChest() const
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		return InGameGameState->FoodCountInChest;
+		return SurvivalGameState->FoodCountInChest;
 	}
 	else
 	{
@@ -23,9 +29,9 @@ int32 AStealthGameMode::GetFoodInChest() const
 
 int32 AStealthGameMode::GetFoodOnFoodSpot() const
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		return InGameGameState->FoodCountOnFoodSpot;
+		return SurvivalGameState->FoodCountOnFoodSpot;
 	}
 	else
 	{
@@ -35,26 +41,66 @@ int32 AStealthGameMode::GetFoodOnFoodSpot() const
 
 void AStealthGameMode::IncreaseFoodInChest(int32 FoodValue)
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		InGameGameState->FoodCountInChest += FoodValue;
+		SurvivalGameState->FoodCountInChest += FoodValue;
 		DecrementFoodOnFoodSpot();
 	}
 }
 
 void AStealthGameMode::IncrementFoodOnFoodSpot()
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		InGameGameState->FoodCountOnFoodSpot++;
+		SurvivalGameState->FoodCountOnFoodSpot++;
 	}
 }
 
 void AStealthGameMode::DecrementFoodOnFoodSpot()
 {
-	if (InGameGameState != nullptr)
+	if (SurvivalGameState != nullptr)
 	{
-		InGameGameState->FoodCountOnFoodSpot--;
+		SurvivalGameState->FoodCountOnFoodSpot--;
+	}
+}
+
+void AStealthGameMode::ChangeUI(GameStates GameStateEnum)
+{
+	switch (GameStateEnum)
+	{
+	case MAINMENU:
+		if (PlayerHUDClassMainMenu != nullptr)
+		{
+			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClassMainMenu);
+			if (CurrentWidget != nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("CurrentWidget is set to main menu"));
+				CurrentWidget->AddToViewport();
+			}
+		}
+		break;
+	case SURVIVAL:
+		if (PlayerHUDClassSurvival != nullptr)
+		{
+			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClassSurvival);
+			if (CurrentWidget != nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("CurrentWidget is set to survival"));
+				CurrentWidget->AddToViewport();
+			}
+		}
+		break;
+	case SCORING:
+		if (PlayerHUDClassScoring != nullptr)
+		{
+			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClassScoring);
+			if (CurrentWidget != nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("CurrentWidget is set to survival to scoring"));
+				CurrentWidget->AddToViewport();
+			}
+		}
+		break;
 	}
 }
 

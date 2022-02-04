@@ -15,6 +15,10 @@ public class HommeDiscret : ModuleRules
 			"HeadMountedDisplay",
 			"AIModule",
 			"GameplayTasks",
-			"NavigationSystem"});
+			"NavigationSystem",
+			"UMG"});
+
+		PrivateDependencyModuleNames.AddRange(new string[] { "Slate",
+			"SlateCore"});
 	}
 }

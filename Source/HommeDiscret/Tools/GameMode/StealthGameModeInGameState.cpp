@@ -9,3 +9,12 @@ AStealthGameModeInGameState::AStealthGameModeInGameState() :
 {
 
 }
+
+bool AStealthGameModeInGameState::IsGameWon()
+{
+	if (FoodCountInChest == NumberOfFoodInChestForVictory)
+	{
+		return true;
+	}
+	return false;
+}

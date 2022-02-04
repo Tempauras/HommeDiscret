@@ -3,9 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameModeBase.h"
 #include "StealthGameModeInGameState.h"
 #include "StealthGameMode.generated.h"
+
+UENUM(BlueprintType)
+enum GameStates
+{
+	MAINMENU UMETA(DisplayName = "Main Menu"),
+	SURVIVAL UMETA(DisplayName = "Survival"),
+	SCORING UMETA(DisplayName = "Score")
+};
 
 /**
  * 
@@ -14,10 +24,32 @@ UCLASS()
 class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+	//Call when the game start
+	virtual void BeginPlay() override;
+
 public:
-	UPROPERTY(EditAnywhere)
-		AStealthGameModeInGameState* InGameGameState;
+	UPROPERTY()
+		AStealthGameModeInGameState* SurvivalGameState;
+	/*UPROPERTY(EditAnywhere, Category = "Game State")
+		TSubclassOf<AGameStateBase> SurvivalGameStateClass;
+	UPROPERTY()
+		AStealthGameModeInGameState* SurvivalGameState;
+	UPROPERTY(EditAnywhere, Category = "Game State")
+		TSubclassOf<AGameStateBase> SurvivalGameStateClass;
+	UPROPERTY()
+		AStealthGameModeInGameState* SurvivalGameState;*/
+
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> PlayerHUDClassSurvival;
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> PlayerHUDClassMainMenu;
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> PlayerHUDClassScoring;
+	UPROPERTY()
+		UUserWidget* CurrentWidget;
 public:
 	AStealthGameMode();
 
@@ -35,6 +67,10 @@ public:
 	/*Increment the value of food on food spot*/
 	UFUNCTION(Category = "Food")
 		virtual void IncrementFoodOnFoodSpot();
+	//Decrement the value of food on food spot
 	UFUNCTION(Category = "Food")
 		virtual void DecrementFoodOnFoodSpot();
+	//Change the UI to fit the current game state
+	UFUNCTION(Category = "UI")
+		virtual void ChangeUI(GameStates GameStateEnum);
 };
