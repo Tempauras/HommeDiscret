@@ -8,6 +8,7 @@
 #include "Foe.generated.h"
 
 class AFood;
+class AFoodSpot;
 class UCapsuleComponent;
 class USphereComponent;
 UCLASS()
@@ -20,51 +21,54 @@ public:
 	AFoe();
 
 protected:
-	UPROPERTY(VisibleAnywhere)
-		AFood* FoodRef;
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* CollisionSphere;
 
 	UPROPERTY(VisibleAnywhere)
-		UCapsuleComponent* CollisionCylinder;
+		float CollisionSphereRadius = 200.0f;
 
-	UPROPERTY(VisibleAnywhere, Category = "Food")
+	//Food Parameters
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Food")
 		UStaticMeshComponent* FoodMesh;
 
-	UPROPERTY(VisibleAnywhere)
-		float CollisionSphereRadius=100.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		AFood* FoodRef;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		AFoodSpot* FoodSpotNearby;
 
 	UPROPERTY(VisibleAnywhere)
 		bool HaveToDroppedFood;
 
-	UPROPERTY(VisibleAnywhere)
-		bool AreInteracing;
-
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool IsHoldingFood;
 
-	// Called when the game starts or when spawned
+	//Food spawn parameters
+	UPROPERTY(VisibleAnywhere)
+		UWorld* CurrentWorld;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<AActor> FoodClass;
+
+	FActorSpawnParameters SpawnInfo;
+	FVector SpawnLocation;
+	FRotator SpawnRotation;
+
 	virtual void BeginPlay() override;
 
 public:	
-
 	UFUNCTION()
 		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 	UFUNCTION()
 		void CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	void SetAreInteracting(bool NewInteract);
-	void PickUpFood();
-	void DropFood();
-
-	// Called every frame
+	bool PickUpFood();
+	FVector DropFoodOnTheFloor();
+	bool DropFoodInFoodSpot();
+	void InstantiateFood();
 	bool GetHaveToDroppedFood();
 	bool GetHoldingFood();
+
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };

@@ -37,13 +37,18 @@ void AFoodSpot::BeginPlay()
 
 }
 
-void AFoodSpot::FillFoodSpot(AFood* NewFood)
+bool AFoodSpot::FillFoodSpot(AFood* NewFood)
 {
-	//NewFood->StaticMesh->SetSimulatePhysics(false);
-	NewFood->Hide();
-	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
-	FoodRef = NewFood;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fill %s"),*FoodRef->GetName()));
+	bool Return = false;
+	if (NewFood != nullptr)
+	{
+		FoodRef = NewFood;
+		FoodRef->Hide();
+		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fill %s"), *FoodRef->GetName()));
+		Return = true;
+	}
+	return Return; 
 }
 
 void AFoodSpot::EmptyFoodSpot()
@@ -58,9 +63,13 @@ void AFoodSpot::InstantiateFoodSpot()
 	AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
 	AFood* FoodActor = Cast<AFood>(Actor);
 	FillFoodSpot(FoodActor);
-	/*FoodActor->StaticMesh->SetSimulatePhysics(false);
-	FoodMesh->SetStaticMesh(FoodActor->StaticMesh->GetStaticMesh());
-	FoodRef = FoodActor;*/
+}
+
+FVector AFoodSpot::GetRealLocation()
+{
+	FVector NewVector = this->GetActorLocation();
+	NewVector.X = NewVector.X + CollisionSphere->GetScaledSphereRadius() - 5.0f;
+	return NewVector;
 }
 
 // Called every frame

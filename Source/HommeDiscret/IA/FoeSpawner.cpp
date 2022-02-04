@@ -27,6 +27,8 @@ void AFoeSpawner::SpawnFoe()
 	{
 		FActorSpawnParameters SpawnParams;
 		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AFoe>(ActorToSpawn, Loc, Rot, SpawnParams);
+		AFoe* NewFoe = Cast<AFoe>(SpawnedActorRef);
+		NewFoe->InstantiateFood();
 	}
 }
 
