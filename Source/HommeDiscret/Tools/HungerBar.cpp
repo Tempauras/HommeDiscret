@@ -2,34 +2,29 @@
 
 
 #include "HungerBar.h"
-#include <Components/ProgressBar.h>
-#include <Components/TextBlock.h>
-#include "Delegates/DelegateSignatureImpl.inl"
-#include <Runtime/ApplicationCore/Private/IOS/IOSAppDelegate.cpp>
+#include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
+#include <Runtime/Engine/Classes/Kismet/GameplayStatics.h>
+
+
+void UHungerBar::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	Chest = Cast<AChest>(UGameplayStatics::GetActorOfClass(GetWorld(), AChest::StaticClass()));
+	Chest->HungerBar_OnFoodStocked.AddUObject(this, &UHungerBar::OnFoodStocked); //see above in wiki
+}
 
 void UHungerBar::OnFoodStocked()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Called"));
 }
 
-void UHungerBar::NativeOnInitiliazed()
+void UHungerBar ::NativeOnInitiliazed()
 {
 	Super::OnInitialized();
-	/*
-	if (ChestRef != nullptr)
-	{
-		//ChestRef->AddingFood.AddUFunction(this, UHungerBar::RefreshChest);
-		//CMaxFoodsToWin = ChestRef->GetMaxFoodsToWin();
 
-		//MaxHungerLabel->SetText(FText::AsCultureInvariant(FString::FromInt(CMaxFoodsToWin)));
-	}*/
+	Chest = Cast<AChest>(UGameplayStatics::GetActorOfClass(GetWorld(), AChest::StaticClass()));
+	Chest->HungerBar_OnFoodStocked.AddUObject(this, &UHungerBar::OnFoodStocked); //see above in wiki
 }
 
-void UHungerBar::RefreshChest(AFood &FoodToAdd)
-{
-	HungerBar_OnFoodStocked.Broadcast();
-	//CNumberFoodsContained = ChestRef->GetNumberFoodsContained();
-	/*CurrentHungerLabel->SetText(FText::AsCultureInvariant(FString::FromInt(CurrentH)));
-	MaxHungerLabel->SetText(FText::AsCultureInvariant(FString::FromInt(MaxH)));
-
-	HungerBar->SetPercent((float)CurrentH / CMaxFoodsToWin);*/
-}

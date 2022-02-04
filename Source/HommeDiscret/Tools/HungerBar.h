@@ -17,28 +17,20 @@ class HOMMEDISCRET_API UHungerBar : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	//UHungerBar();
-protected:
+	UFUNCTION()
+		void OnFoodStocked();
 
+protected:
 	UPROPERTY(meta = (BindWidget))
 		class UProgressBar* HungerBar;
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* CurrentHungerLabel;
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* MaxHungerLabel;
-
-	UFUNCTION()
-		void OnFoodStocked();
-
-	DECLARE_DELEGATE(FHungerBar);
-	FHungerBar HungerBar_OnFoodStocked;
-	/*
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AChest* ChestRef;*/
-	/*
-	int CMaxFoodsToWin;
-	int CNumberFoodsContained;*/
+	UPROPERTY(VisibleAnywhere)
+		AChest* Chest;
 
 	void NativeOnInitiliazed();
-	void RefreshChest(AFood &FoodToAdd);
+
+	virtual void NativeConstruct() override;
 };
