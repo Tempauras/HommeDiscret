@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
+#include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "SurvivalGameState.generated.h"
 
 /**
@@ -25,4 +26,7 @@ public:
 	//The number of food spot that can be occupied at any time. Defaults = 5;
 	UPROPERTY(EditAnywhere, Category = "Food Spot Spec")
 		int32 MaxNumberOfFoodSpotOccupied = 5;
+
+	UPROPERTY()
+		TArray<AFoodSpot*> FoodSpotList;
 };

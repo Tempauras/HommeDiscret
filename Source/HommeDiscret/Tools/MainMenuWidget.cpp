@@ -8,6 +8,7 @@
 
 void UMainMenuWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
 	if (PC)
 	{

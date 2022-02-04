@@ -22,5 +22,7 @@ void AMainMenuGameMode::BeginPlay()
 			CurrentWidget->AddToViewport();
 		}
 	}
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeUIOnly::FInputModeUIOnly());
+	FInputModeUIOnly InputType;
+	InputType.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
 }

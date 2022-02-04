@@ -4,6 +4,7 @@
 #include "PlaygroundGenerator.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "HommeDiscret/Tools/GameMode/SurvivalGameState.h"
 
 // Sets default values
 APlaygroundGenerator::APlaygroundGenerator()
@@ -87,6 +88,11 @@ void APlaygroundGenerator::SpawnPlayground()
 		SpawnFoodSpot();
 
 		GetWorld()->GetFirstPlayerController()->GetPawn()->SetActorLocation(HideoutReferences->GetActorLocation());
+		ASurvivalGameState* GS = Cast<ASurvivalGameState>(UGameplayStatics::GetGameState(GetWorld()));
+		if (GS != nullptr)
+		{
+			GS->FoodSpotList = FoodSpotList;
+		}
 	}
 }
 
