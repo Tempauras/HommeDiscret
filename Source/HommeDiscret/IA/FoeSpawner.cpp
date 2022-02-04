@@ -18,17 +18,22 @@ void AFoeSpawner::BeginPlay()
 	Super::BeginPlay();
 	Loc = this->GetActorLocation();
 	Rot = this->GetActorRotation();
-	SpawnFoe();
+	//SpawnFoe(true);
+	SpawnFoe(false);
+
 }
 
-void AFoeSpawner::SpawnFoe()
+void AFoeSpawner::SpawnFoe(bool HaveFood)
 {
 	if (ActorToSpawn != nullptr)
 	{
 		FActorSpawnParameters SpawnParams;
 		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AFoe>(ActorToSpawn, Loc, Rot, SpawnParams);
 		AFoe* NewFoe = Cast<AFoe>(SpawnedActorRef);
-		NewFoe->InstantiateFood();
+		if (HaveFood)
+		{
+			NewFoe->InstantiateFood();
+		}
 	}
 }
 

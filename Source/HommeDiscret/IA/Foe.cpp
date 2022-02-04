@@ -25,7 +25,9 @@ AFoe::AFoe()
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-
+	FoodRef = nullptr;
+	FoodSpotNearby = nullptr;
+	HaveToDroppedFood = false;
 	IsHoldingFood = false;
 }
 // Called when the game starts or when spawned
@@ -44,7 +46,7 @@ void AFoe::BeginPlay()
 	CurrentWorld=GetWorld();
 	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 300.0f);
 	SpawnRotation = this->GetActorRotation();
-	InstantiateFood();
+	//InstantiateFood();
 }
 
 void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -145,20 +147,27 @@ bool AFoe::DropFoodInFoodSpot()
 
 void AFoe::InstantiateFood()
 {
-	if (!IsHoldingFood)
+	if (FoodClass != nullptr)
 	{
-		AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
-		if (Actor != nullptr)
+		if (!IsHoldingFood)
 		{
-			AFood* NewFood = Cast<AFood>(Actor);
-			if (NewFood != nullptr)
+			AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
+			if (Actor != nullptr)
 			{
-				FoodRef = NewFood;
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
-				PickUpFood();
-				HaveToDroppedFood = true;
+				AFood* NewFood = Cast<AFood>(Actor);
+				if (NewFood != nullptr)
+				{
+					FoodRef = NewFood;
+					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
+					PickUpFood();
+					HaveToDroppedFood = true;
+				}
 			}
 		}
+	}
+	else 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("FoodClass is not defined"));
 	}
 }
 

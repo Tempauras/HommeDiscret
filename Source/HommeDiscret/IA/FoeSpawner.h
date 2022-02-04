@@ -27,7 +27,7 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void SpawnFoe();
+	void SpawnFoe(bool HaveFood);
 
 public:	
 	// Called every frame
