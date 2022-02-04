@@ -30,6 +30,4 @@ protected:
 public:
 	UFUNCTION()
 		void OnStartClick();
-	UFUNCTION()
-		void OnCloseClick();
 };

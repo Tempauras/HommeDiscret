@@ -789,39 +789,7 @@ NearWhichWall APlaygroundGenerator::IsTileAtWall(int TileNumber)
 FVector APlaygroundGenerator::GetRandomPointInSquare(const FVector& UpperLeft, const FVector& LowerRight)
 {
 	float RandomX = FMath::FRandRange(LowerRight.X, UpperLeft.X);
-	UE_LOG(LogTemp, Warning, TEXT("LowerRight X = %f UpperLeft X = %f"), UpperLeft.X, LowerRight.X);
 	float RandomY = FMath::FRandRange(UpperLeft.Y, LowerRight.Y);
-	UE_LOG(LogTemp, Warning, TEXT("UpperLeft Y = %f LowerRight Y = %f"), UpperLeft.Y, LowerRight.Y);
-
-	UE_LOG(LogTemp, Warning, TEXT("RandX = %f RandY = %f"), RandomX, RandomY);
 
 	return FVector(RandomX, RandomY, 0.0f);
 }
-
-/*
-void APlaygroundGenerator::PlacePointOnGrid()
-{
-	bool FirstBlockPassed = false;
-	for (int32 i = 0; i < VerticalTileNumber; i++)
-	{
-		for (int32 j = 0; j < HorizontalTileNumber; j++)
-		{
-			if (FirstBlockPassed)
-			{
-				FVector UpperLeft(i * SizeOfTile + Radius, j * SizeOfTile + Radius, 0.0f);
-				FVector LowerRight(i * SizeOfTile + SizeOfTile - Radius, j * SizeOfTile + SizeOfTile - Radius, 0.0f);
-				FVector RandomPointInSquare = GetRandomPointInSquare(UpperLeft, LowerRight);
-
-				//DrawDebugPoint(GetWorld(), RandomPointInSquare, 5.0f, FColor::Red, true);
-				//DrawDebugCircle(GetWorld(), RandomPointInSquare, Radius, 48, FColor::Red, true, -1.f, 0, 2.5f, FVector(0.0f, 1.0f, 0.0f), FVector(1.0f, 0.0f, 0.0f), true);
-				float RandomYaw = FMath::FRandRange(0.f, 360.f);
-				GetWorld()->SpawnActor<AActor>(Object, RandomPointInSquare, FRotator(0.0f, RandomYaw, 0.0f));
-			}
-			else
-			{
-				FirstBlockPassed = true;
-			}
-		}
-	}
-}*/
-

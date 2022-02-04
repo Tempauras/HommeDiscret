@@ -48,10 +48,10 @@ public:
 	/*Size of the tile to align the creation correctly*/
 	UPROPERTY(VisibleAnywhere)
 		float SizeOfTile = 200;
-	/*Set the number of vertical tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
+	/*Set the number of vertical tile to create to fill the playground.*/
 	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int VerticalTileNumber = 15;
-	/*Set the number of horizontal tile to create to fill the playground. MinValue = 10; MaxValue = 15*/
+	/*Set the number of horizontal tile to create to fill the playground.*/
 	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int HorizontalTileNumber = 15;
 	/*Height of the wall*/

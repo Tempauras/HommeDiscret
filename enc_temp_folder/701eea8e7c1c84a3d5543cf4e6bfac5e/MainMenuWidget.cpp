@@ -8,30 +8,14 @@
 
 void UMainMenuWidget::NativeConstruct()
 {
-	APlayerController* PC = GetWorld()->GetFirstPlayerController();
-	if (PC)
-	{
-		PC->bShowMouseCursor = true;
-		PC->bEnableClickEvents = true;
-		PC->bEnableMouseOverEvents = true;
-	}
-	GEngine->GameViewport->Viewport->LockMouseToViewport(true);
 	if (StartButton)
 	{
 		StartButton->OnClicked.AddDynamic(this, &UMainMenuWidget::OnStartClick);
 	}
-	if (CloseButton)
-	{
-		CloseButton->OnClicked.AddDynamic(this, &UMainMenuWidget::OnCloseClick);
-	}
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeUIOnly::FInputModeUIOnly());
 }
 
 void UMainMenuWidget::OnStartClick()
 {
 	UGameplayStatics::OpenLevel(GetWorld(), FName("InGameLevel"));
-}
-
-void UMainMenuWidget::OnCloseClick()
-{
-	GetWorld()->GetFirstPlayerController()->ConsoleCommand("quit");
 }

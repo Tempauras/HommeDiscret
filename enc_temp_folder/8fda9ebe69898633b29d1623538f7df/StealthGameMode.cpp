@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "StealthGameMode.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 
 AStealthGameMode::AStealthGameMode()
 {
@@ -10,17 +11,6 @@ AStealthGameMode::AStealthGameMode()
 void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	SurvivalGameState = GetGameState<ASurvivalGameState>();
-	FInputModeGameOnly InputType;
-	InputType.SetConsumeCaptureMouseDown(true);
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
-	APlayerController* PC = GetWorld()->GetFirstPlayerController();
-	if (PC)
-	{
-		PC->bShowMouseCursor = false;
-		PC->bEnableClickEvents = false;
-		PC->bEnableMouseOverEvents = false;
-	}
 	//Load UI
 	if (PlayerHUDClass != nullptr)
 	{
@@ -62,7 +52,6 @@ void AStealthGameMode::IncreaseFoodInChest(int32 FoodValue)
 	{
 		SurvivalGameState->FoodCountInChest += FoodValue;
 		DecrementFoodOnFoodSpot();
-		PlayerWon();
 	}
 }
 
@@ -79,19 +68,6 @@ void AStealthGameMode::DecrementFoodOnFoodSpot()
 	if (SurvivalGameState != nullptr)
 	{
 		SurvivalGameState->FoodCountOnFoodSpot--;
-	}
-}
-
-bool AStealthGameMode::PlayerWon()
-{
-	if (SurvivalGameState->FoodCountInChest == NumberOfFoodInChestForVictory)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Won!"));
-		return true;
-	}
-	else
-	{
-		return false;
 	}
 }
 

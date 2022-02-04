@@ -32,6 +32,7 @@ class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 public:
 	UPROPERTY()
 		ASurvivalGameState* SurvivalGameState;
+		AMainMenuGameState* MainMenuGameState;
 
 
 protected:
@@ -63,6 +64,4 @@ public:
 	//Decrement the value of food on food spot
 	UFUNCTION(Category = "Food")
 		virtual void DecrementFoodOnFoodSpot();
-	UFUNCTION(Category = "Victory Condition")
-		virtual bool PlayerWon();
 };
