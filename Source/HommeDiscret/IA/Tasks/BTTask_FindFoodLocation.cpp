@@ -16,15 +16,16 @@ UBTTask_FindFoodLocation::UBTTask_FindFoodLocation(FObjectInitializer const& obj
 
 EBTNodeResult::Type UBTTask_FindFoodLocation::ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory)
 {
-	/*TSubclassOf<AActor> ClassToFind = AFood::StaticClass();
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, Foods);*/
+	TSubclassOf<AActor> ClassToFind = AFood::StaticClass();
+	TArray<AActor*> Foods;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, Foods);
 
 	AAIC_Foe* FoeController = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
 	UBlackboardComponent* Blackboard = FoeController->GetBlackboardComponent();
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Overlap %s"),*Foods[0]->GetName()));
-	//FVector NewTargetLocation = Foods[0]->GetActorLocation();
+	FVector NewTargetLocation = Cast<AFood>(Foods[0])->GetRealLocation();
 
-	Blackboard->SetValueAsVector(bb_keys::target_location, Blackboard->GetValueAsVector(bb_keys::LastFoodLocation));
+	Blackboard->SetValueAsVector(bb_keys::LastFoodLocation, NewTargetLocation);
 
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

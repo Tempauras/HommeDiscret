@@ -41,6 +41,14 @@ void AFood::Show(FVector DropActorPos, FVector DropActorForward)
 	this->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));
 }
 
+FVector AFood::GetRealLocation()
+{
+	FVector NewVector;
+	NewVector = this->GetActorLocation();
+	NewVector.X = NewVector.X + SphereCollider->GetScaledSphereRadius() - 5.0f;
+	return NewVector;
+}
+
 /*
 void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

@@ -102,7 +102,7 @@ bool AFoe::PickUpFood()
 	if (FoodRef != nullptr)
 	{
 		IsHoldingFood = true;
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
 		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
 		FoodRef->Hide();
 		Return = true;

@@ -45,7 +45,7 @@ bool AFoodSpot::FillFoodSpot(AFood* NewFood)
 		FoodRef = NewFood;
 		FoodRef->Hide();
 		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fill %s"), *FoodRef->GetName()));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Fill %s"), *FoodRef->GetName()));
 		Return = true;
 	}
 	return Return; 

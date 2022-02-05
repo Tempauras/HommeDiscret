@@ -15,7 +15,6 @@ class HOMMEDISCRET_API UBTTask_FindFoodLocation : public UBTTask_BlackboardBase
 	GENERATED_BODY()
 
 public:
-	//TArray<AActor*> Foods;
 
 	UBTTask_FindFoodLocation(FObjectInitializer const& object_initializer);
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory);

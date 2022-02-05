@@ -22,7 +22,7 @@ EBTNodeResult::Type UBTTask_PickUpFood::ExecuteTask(UBehaviorTreeComponent& owne
 	EBTNodeResult::Type HaveSucceeded = EBTNodeResult::Succeeded;
 	if (HavePickedUpFood == false)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Task have failed !!!"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("PickUp have failed !!!"));
 		HaveSucceeded = EBTNodeResult::Failed;
 	}
 	FinishLatentTask(owner_comp, HaveSucceeded);
