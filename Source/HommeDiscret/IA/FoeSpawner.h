@@ -15,7 +15,14 @@ public:
 	// Sets default values for this actor's properties
 	AFoeSpawner();
 
+	UPROPERTY(VisibleAnywhere)
+		USphereComponent* CollisionSphere;
+
+	UPROPERTY(VisibleAnywhere)
+		float CollisionSphereRadius=100.0f;
+
 private:
+
 	UPROPERTY(VisibleAnywhere)
 		FVector Loc;
 	UPROPERTY(VisibleAnywhere)
@@ -27,10 +34,9 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void SpawnFoe(bool HaveFood);
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	void SpawnFoe(bool HaveFood);
 };

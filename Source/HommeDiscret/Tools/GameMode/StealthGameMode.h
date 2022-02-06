@@ -21,6 +21,7 @@ enum GameStates
 /**
  * 
  */
+class AFoeSpawner;
 UCLASS()
 class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 {
@@ -32,8 +33,10 @@ class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 public:
 	UPROPERTY()
 		ASurvivalGameState* SurvivalGameState;
+	UPROPERTY(EditAnywhere)
+		AFoeSpawner* FoeSpawner;
 
-
+	FTimerHandle TimerHandle;
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerHUDClass;
@@ -65,4 +68,29 @@ public:
 		virtual void DecrementFoodOnFoodSpot();
 	UFUNCTION(Category = "Victory Condition")
 		virtual bool PlayerWon();
+
+	UFUNCTION(Category = "Food")
+		void AddFoodInRoom();
+
+	UFUNCTION(Category = "Food")
+		void RemoveFoodInRoom();
+
+	UFUNCTION(Category = "Foe")
+		void AddFoeInRoom();
+
+	UFUNCTION(Category = "Foe")
+		void RemoveFoeInRoom();
+
+	UFUNCTION(Category = "Foe")
+		void SetFoeCarryFood(bool NewNextFood);
+
+	UFUNCTION(Category = "Foe")
+		void CreateFoe();
+
+	UFUNCTION(Category = "Foe")
+		void LaunchIA();
+
+	UFUNCTION(Category = "Foe")
+		void LaunchTimer(float InRate, bool IsLooping, float Delay);
+
 };

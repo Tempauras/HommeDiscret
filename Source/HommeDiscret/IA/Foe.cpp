@@ -7,6 +7,7 @@
 #include "HommeDiscret/Level/Props/Food.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "AIC_Foe.h"
+#include "FoeSpawner.h"
 
 // Sets default values
 AFoe::AFoe()
@@ -61,7 +62,7 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			AFood* NewFood = Cast<AFood>(OtherActor);
 			if (NewFood != nullptr)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Food is near %s"), *NewFood->GetName()));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Food is near %s"), *NewFood->GetName()));
 				FoodRef = NewFood;
 			}
 		}
@@ -76,6 +77,12 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 				FoodSpotNearby = NewFoodSpot;
 			}
 		}
+	}
+	else if (OtherActor->IsA(AFoeSpawner::StaticClass()))
+	{
+		//Destroy(this);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Collides with %s"), OtherActor->GetName()));
+
 	}
 }
 

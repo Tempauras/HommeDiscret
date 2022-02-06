@@ -27,6 +27,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Food Spot Spec")
 		int32 MaxNumberOfFoodSpotOccupied = 5;
 
+	int MaxFoodsInRoom = 5;
+	int FoodsInRoom = 0;
+	int FoesInRoom = 0;
+	bool FoeCarryFood = true;
+
 	UPROPERTY()
 		TArray<AFoodSpot*> FoodSpotList;
 };

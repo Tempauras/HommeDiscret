@@ -14,6 +14,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "HommeDiscret/IA/Tasks/BB_keys.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
+#include "FoeSpawner.h"
 #include "GameFramework/Character.h"
 
 
@@ -38,11 +39,17 @@ void AAIC_Foe::BeginPlay()
 {       
     Super::BeginPlay();
     TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
-    TArray<AActor*> FoundNavigationP;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundNavigationP);
-    EntranceLocation = FoundNavigationP[0]->GetActorLocation();
-    ExitLocation = FoundNavigationP[2]->GetActorLocation();
-    OriginLocation = FoundNavigationP[1]->GetActorLocation();
+    TArray<AActor*> FoundActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundActors);
+   /* EntranceLocation = FoundNavigationP[0]->GetActorLocation();
+    ExitLocation = FoundNavigationP[2]->GetActorLocation();*/
+    OriginLocation = FoundActors[0]->GetActorLocation();
+    EntranceLocation = OriginLocation;
+    FoundActors.Empty();
+    ClassToFind = AFoeSpawner::StaticClass();
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundActors);
+    ExitLocation = FoundActors[0]->GetActorLocation();
+    FoundActors.Empty();
     FindFoodSpots();
     RunBehaviorTree(Btree);
     BehaviorTreeComponent->StartTree(*Btree);
