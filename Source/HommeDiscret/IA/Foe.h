@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		float CollisionSphereRadius = 200.0f;
 
+	UCharacterMovementComponent* CharacMov;
+
+	float FoeSpeed;
 	//Food Parameters
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Food")
 		UStaticMeshComponent* FoodMesh;

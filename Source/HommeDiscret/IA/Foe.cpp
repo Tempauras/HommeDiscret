@@ -17,6 +17,7 @@ AFoe::AFoe()
 	AIControllerClass = AAIC_Foe::StaticClass();
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	CharacMov = GetCharacterMovement();
 
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
 	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
@@ -25,6 +26,8 @@ AFoe::AFoe()
 	FoodMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("FoodMesh"));
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+
+	FoeSpeed = CharacMov->MaxWalkSpeed;
 	FoodRef = nullptr;
 	FoodSpotNearby = nullptr;
 	HaveToDroppedFood = false;
@@ -106,6 +109,7 @@ bool AFoe::PickUpFood()
 		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
 		FoodRef->Hide();
 		Return = true;
+		CharacMov->MaxWalkSpeed = FoeSpeed / 2;
 	}
 	return Return;
 }
@@ -122,6 +126,7 @@ FVector AFoe::DropFoodOnTheFloor()
 		FoodRef = nullptr;
 		IsHoldingFood = false;
 		FoodMesh->SetStaticMesh(nullptr);
+		CharacMov->MaxWalkSpeed = FoeSpeed;
 	}
 	return NewVector;
 }
@@ -142,6 +147,8 @@ bool AFoe::DropFoodInFoodSpot()
 				FoodMesh->SetStaticMesh(nullptr);
 				FoodRef = nullptr;
 				Return = true;
+				CharacMov->MaxWalkSpeed = FoeSpeed;
+
 			}
 		}
 	}
