@@ -40,6 +40,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		UCameraComponent* FollowCamera;
 
+	UCharacterMovementComponent* CharacMov;
+
 	UPROPERTY(VisibleAnywhere, Category = "Food")
 		UStaticMeshComponent* FoodMesh;
 

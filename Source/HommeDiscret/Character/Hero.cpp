@@ -50,8 +50,8 @@ AHero::AHero()
 	IsHoldingFood = false;
 	ChestNearby = nullptr;
 	bDead = false;
-	HeroSpeed = 400;
-
+	CharacMov = GetCharacterMovement();
+	HeroSpeed = CharacMov->MaxWalkSpeed;
 	SetupStimulus();
 }
 
@@ -218,11 +218,6 @@ void AHero::DropObject()
 	
 	if (ChestNearby==nullptr && FoodSpotNearby==nullptr)
 	{
-		/*
-		FVector newPos = FVector(this->GetActorLocation() + this->GetActorForwardVector() * 100.0f);
-		newPos.Z = 170.0f;
-		FoodRef->SetActorLocation(newPos);
-		FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));*/
 		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
 	}
 	else if (FoodSpotNearby != nullptr && ChestNearby == nullptr)
@@ -239,6 +234,7 @@ void AHero::DropObject()
 	FoodRef = nullptr;
 	IsHoldingFood = false;
 	FoodMesh->SetStaticMesh(nullptr);
+	CharacMov->MaxWalkSpeed = HeroSpeed;
 }
 
 
@@ -259,6 +255,7 @@ void AHero::PickUpObject(AFood* NewFood)
 	FoodRef = NewFood;
 	IsHoldingFood = true;
 	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
+	CharacMov->MaxWalkSpeed = HeroSpeed / 2;
 }
 
 
