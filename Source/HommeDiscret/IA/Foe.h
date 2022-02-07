@@ -11,7 +11,7 @@ class AFood;
 class AFoodSpot;
 class UCapsuleComponent;
 class USphereComponent;
-class StealthGameMode;
+class AStealthGameMode;
 UCLASS()
 class HOMMEDISCRET_API AFoe : public ACharacter
 {

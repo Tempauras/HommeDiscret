@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "FoeSpawner.generated.h"
 
+class USphereComponent;
 UCLASS()
 class HOMMEDISCRET_API AFoeSpawner : public AActor
 {
