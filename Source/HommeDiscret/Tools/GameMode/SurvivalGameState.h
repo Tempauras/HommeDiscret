@@ -18,21 +18,18 @@ public:
 	ASurvivalGameState();
 	virtual ~ASurvivalGameState() = default;
 	//Check the number of food that are present in the chest
-	UPROPERTY(VisibleAnywhere)
-		int32 FoodCountInChest;
-	//Check the number of food that are present on a food spot
-	UPROPERTY(VisibleAnywhere, Category = "Food Spot Spec")
-		int32 FoodCountOnFoodSpot;
-	//The number of food spot that can be occupied at any time. Defaults = 5;
-	UPROPERTY(EditAnywhere, Category = "Food Spot Spec")
-		int32 MaxNumberOfFoodSpotOccupied = 5;
 
-	int MaxFoodsInRoom = 5;
-	int FoodsInRoom = 0;
-	int FoesInRoom = 0;
-	int FoodInChest = 0;
-	int FoodInChestToWin = 5;
-	bool FoeCarryFood = true;
+	UPROPERTY(VisibleAnywhere)
+		int FoodCountInChest = 0;
+
+	UPROPERTY(VisibleAnywhere)
+		int FoodCountInRoom = 0;
+
+	UPROPERTY(VisibleAnywhere)
+		int FoeCountInRoom = 0;
+
+	UPROPERTY(VisibleAnywhere)
+		bool FoeCarryFood = true;
 
 	UPROPERTY()
 		TArray<AFoodSpot*> FoodSpotList;

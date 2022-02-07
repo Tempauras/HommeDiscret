@@ -20,13 +20,14 @@ AChest::AChest()
 	SphereCollision->InitSphereRadius(SphereRadius);
 	SphereCollision->SetupAttachment(RootComponent);
 	//NumberFoodsContained = 0;
-	 GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called when the game starts or when spawned
 void AChest::BeginPlay()
 {
 	Super::BeginPlay();
+	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+
 	MaxFoodsToWin = 5;
 }
 
@@ -39,7 +40,7 @@ void AChest::Tick(float DeltaTime)
 
 void AChest::AddingFood(int FoodValue)
 {
-	//GameMode->AddFoodInChest(FoodValue);
+	GameMode->AddFoodInChest(FoodValue);
 	/*
 	NumberFoodsContained++;
 	if (NumberFoodsContained >= MaxFoodsToWin)
