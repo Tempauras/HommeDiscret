@@ -20,94 +20,35 @@ void AStealthGameMode::BeginPlay()
 			PlayerWidget->AddToViewport();
 		}
 	}
+	LaunchIA();
 }
 
-int32 AStealthGameMode::GetFoodInChest() const
+void AStealthGameMode::PlayerWon()
 {
-	if (SurvivalGameState != nullptr)
-	{
-		return SurvivalGameState->FoodCountInChest;
-	}
-	else
-	{
-		return -1;
-	}
-}
-
-int32 AStealthGameMode::GetFoodOnFoodSpot() const
-{
-	if (SurvivalGameState != nullptr)
-	{
-		return SurvivalGameState->FoodCountOnFoodSpot;
-	}
-	else
-	{
-		return -1;
-	}
-}
-
-void AStealthGameMode::IncreaseFoodInChest(int32 FoodValue)
-{
-	if (SurvivalGameState != nullptr)
-	{
-		SurvivalGameState->FoodCountInChest += FoodValue;
-		DecrementFoodOnFoodSpot();
-		PlayerWon();
-	}
-}
-
-void AStealthGameMode::IncrementFoodOnFoodSpot()
-{
-	if (SurvivalGameState != nullptr)
-	{
-		SurvivalGameState->FoodCountOnFoodSpot++;
-	}
-}
-
-void AStealthGameMode::DecrementFoodOnFoodSpot()
-{
-	if (SurvivalGameState != nullptr)
-	{
-		SurvivalGameState->FoodCountOnFoodSpot--;
-	}
-}
-
-bool AStealthGameMode::PlayerWon()
-{
-	if (SurvivalGameState->FoodCountInChest == NumberOfFoodInChestForVictory)
+	if (SurvivalGameState->FoodCountInChest == FoodInChestToWin)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player Won!"));
-		return true;
-	}
-	else
-	{
-		return false;
 	}
 }
 
-void AStealthGameMode::VictoryTest()
-{
-	if (SurvivalGameState->FoodInChest == FoodInChestToWin)
-	{
-		//Win
-	}
-}
 
 void AStealthGameMode::LostGame()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Player Loose!"));
 }
 
 void AStealthGameMode::AddFoodInChest(int FoodValue)
 {
-	SurvivalGameState->FoodInChest+=FoodValue;
-	VictoryTest();
+	SurvivalGameState->FoodCountInChest += FoodValue;
+	RemoveFoodInRoom();
+	PlayerWon();
 }
 
 void AStealthGameMode::AddFoodInRoom()
 {
-	SurvivalGameState->FoodsInRoom++;
+	SurvivalGameState->FoodCountInRoom++;
 
-	if (SurvivalGameState->FoodsInRoom >= SurvivalGameState->MaxFoodsInRoom)
+	if (SurvivalGameState->FoodCountInRoom >=MaxFoodsInRoom)
 	{
 		SetFoeCarryFood(false);
 	}
@@ -115,24 +56,28 @@ void AStealthGameMode::AddFoodInRoom()
 
 void AStealthGameMode::RemoveFoodInRoom()
 {
-	SurvivalGameState->FoodsInRoom--;
-	if (SurvivalGameState->FoodsInRoom < SurvivalGameState->MaxFoodsInRoom)
+	SurvivalGameState->FoodCountInRoom--;
+	if (SurvivalGameState->FoodCountInRoom < MaxFoodsInRoom)
 	{
 		SetFoeCarryFood(true);
+		if (SurvivalGameState->FoodCountInRoom <= 0)
+		{
+			SurvivalGameState->FoodCountInRoom = 0;
+		}
 	}
 }
 
 void AStealthGameMode::AddFoeInRoom()
 {
-	SurvivalGameState->FoesInRoom++;
+	SurvivalGameState->FoeCountInRoom++;
 }
 
 void AStealthGameMode::RemoveFoeInRoom()
 {
-	SurvivalGameState->FoesInRoom--;
-	//If there's no foe in room : SpawnFoe
+	SurvivalGameState->FoeCountInRoom--;
+	//If there's no foe in room : SpawnFoelos
 	//else : LaunchTimer between 0 et 5
-	if (SurvivalGameState->FoesInRoom <= 0)
+	if (SurvivalGameState->FoeCountInRoom <= 0)
 	{
 		CreateFoe();
 	}
