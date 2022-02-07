@@ -77,6 +77,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AFoeSpawner> FoeSpawner;
 
+	UPROPERTY()
+		AFoeSpawner* SpawnedFoeSpawner;
+
 	float SizeOfMesh = 200.f;
 	float Offset = 100.f;
 	float YawRotation = 90.f;

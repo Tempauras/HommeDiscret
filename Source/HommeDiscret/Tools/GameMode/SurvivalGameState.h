@@ -36,5 +36,5 @@ public:
 		TArray<AFoodSpot*> FoodSpotList;
 
 	UPROPERTY()
-		TSubclassOf<AFoeSpawner> FoeSpawner;
+		AFoeSpawner* FoeSpawner;
 };
