@@ -6,7 +6,9 @@
 #include "Components/CapsuleComponent.h"
 #include "HommeDiscret/Level/Props/Food.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
 #include "AIC_Foe.h"
+#include "FoeSpawner.h"
 
 // Sets default values
 AFoe::AFoe()
@@ -17,6 +19,7 @@ AFoe::AFoe()
 	AIControllerClass = AAIC_Foe::StaticClass();
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	CharacMov = GetCharacterMovement();
 
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
 	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
@@ -26,7 +29,12 @@ AFoe::AFoe()
 	FoodMesh->SetSimulatePhysics(false);
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
+	FoeSpeed = CharacMov->MaxWalkSpeed;
+	FoodRef = nullptr;
+	FoodSpotNearby = nullptr;
+	HaveToDroppedFood = false;
 	IsHoldingFood = false;
+	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 // Called when the game starts or when spawned
 void AFoe::BeginPlay()
@@ -44,7 +52,7 @@ void AFoe::BeginPlay()
 	CurrentWorld=GetWorld();
 	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 300.0f);
 	SpawnRotation = this->GetActorRotation();
-	InstantiateFood();
+	//InstantiateFood();
 }
 
 void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -56,7 +64,7 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			AFood* NewFood = Cast<AFood>(OtherActor);
 			if (NewFood != nullptr)
 			{
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Foe Is near %s"));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Food is near %s"), *NewFood->GetName()));
 				FoodRef = NewFood;
 			}
 		}
@@ -72,6 +80,12 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			}
 		}
 	}
+	else if (OtherActor->IsA(AFoeSpawner::StaticClass()))
+	{
+		//Destroy(this);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Collides with %s"), OtherActor->GetName()));
+		//GameMode->RemoveFoeInRoom();
+	}
 }
 
 void AFoe::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -80,6 +94,7 @@ void AFoe::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		if (!IsHoldingFood)
 		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, TEXT("Food is not here"));
 			FoodRef = nullptr;
 		}
 	}
@@ -98,11 +113,12 @@ bool AFoe::PickUpFood()
 	bool Return = false;
 	if (FoodRef != nullptr)
 	{
+		IsHoldingFood = true;
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
 		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
 		FoodRef->Hide();
-		IsHoldingFood = true;
 		Return = true;
+		CharacMov->MaxWalkSpeed = FoeSpeed / 2;
 	}
 	return Return;
 }
@@ -115,11 +131,11 @@ FVector AFoe::DropFoodOnTheFloor()
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Drops %s"), *FoodRef->GetName()));
 		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("Test foodRef %s"), *FoodRef->GetName()));
-		NewVector = FoodRef->GetActorLocation();
-		NewVector.X=NewVector.X+CollisionSphere->GetScaledSphereRadius() - 5.0f;
+		NewVector = FoodRef->GetRealLocation();
 		FoodRef = nullptr;
 		IsHoldingFood = false;
 		FoodMesh->SetStaticMesh(nullptr);
+		CharacMov->MaxWalkSpeed = FoeSpeed;
 	}
 	return NewVector;
 }
@@ -129,36 +145,50 @@ bool AFoe::DropFoodInFoodSpot()
 	bool Return = false;
 	if (FoodSpotNearby != nullptr)
 	{
-		bool Success = FoodSpotNearby->FillFoodSpot(FoodRef);
-		if (Success == true)
+		if (FoodRef != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
-			IsHoldingFood = false;
-			FoodMesh->SetStaticMesh(nullptr);
-			FoodRef = nullptr;
-			Return = true;
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("FoodRef %s"), *FoodRef->GetName()));
+			bool Success = FoodSpotNearby->FillFoodSpot(FoodRef);
+			if (Success == true)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
+				IsHoldingFood = false;
+				FoodMesh->SetStaticMesh(nullptr);
+				FoodRef = nullptr;
+				Return = true;
+				CharacMov->MaxWalkSpeed = FoeSpeed;
+
+			}
 		}
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %d"), Return));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %d"), Return));
 	return Return;
 }
 
 void AFoe::InstantiateFood()
 {
-	if (!IsHoldingFood)
+	if (FoodClass != nullptr)
 	{
-		AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
-		if (Actor != nullptr)
+		if (!IsHoldingFood)
 		{
-			AFood* NewFood = Cast<AFood>(Actor);
-			if (NewFood != nullptr)
+			AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
+			if (Actor != nullptr)
 			{
-				FoodRef = NewFood;
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
-				PickUpFood();
-				HaveToDroppedFood = true;
+				AFood* NewFood = Cast<AFood>(Actor);
+				if (NewFood != nullptr)
+				{
+					FoodRef = NewFood;
+					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
+					PickUpFood();
+					HaveToDroppedFood = true;
+
+				}
 			}
 		}
+	}
+	else 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("FoodClass is not defined"));
 	}
 }
 

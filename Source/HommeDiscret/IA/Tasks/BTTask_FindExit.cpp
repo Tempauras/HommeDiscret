@@ -3,10 +3,7 @@
 
 #include "BTTask_FindExit.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Runtime/NavigationSystem/Public/NavigationSystem.h"
 #include "HommeDiscret/IA/AIC_Foe.h"
-//#include "BehaviorTree/Blackboard/Blackboard/BlackboardKeyType.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
 #include "HommeDiscret/IA/Tasks/BB_keys.h"
 
 
@@ -23,7 +20,7 @@ EBTNodeResult::Type UBTTask_FindExit::ExecuteTask(UBehaviorTreeComponent& owner_
 
 	if (cont != nullptr)
 	{
-		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, cont->ExitLocation);
+		cont->get_blackboard()->SetValueAsVector(bb_keys::ExitLocation, cont->ExitLocation);
 	}
 	//finish with success
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);

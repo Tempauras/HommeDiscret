@@ -28,6 +28,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		float InFrontPosition = 100.0f;
 
+	UPROPERTY(VisibleAnywhere)
+		int FoodValue = 1;
 
 	//bool bIsAblePickup = false;
 
@@ -38,7 +40,7 @@ protected:
 public:	
 	void Hide();
 	void Show(FVector DropActorPos, FVector DropActorForward);
-	
+	FVector GetRealLocation();
 	/*UFUNCTION()
 		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()

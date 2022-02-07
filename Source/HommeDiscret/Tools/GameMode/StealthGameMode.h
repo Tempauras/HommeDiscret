@@ -19,8 +19,9 @@ enum GameStates
 };
 
 /**
- * 
+ *
  */
+class AFoeSpawner;
 UCLASS()
 class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 {
@@ -32,8 +33,10 @@ class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 public:
 	UPROPERTY()
 		ASurvivalGameState* SurvivalGameState;
+	UPROPERTY(EditAnywhere)
+		AFoeSpawner* FoeSpawner;
 
-
+	FTimerHandle TimerHandle;
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerHUDClass;
@@ -44,12 +47,14 @@ protected:
 	//The number of food that are needed for the player to be declared the winner. Defaults = 5
 	UPROPERTY(EditAnywhere, Category = "Victory Condition")
 		int32 NumberOfFoodInChestForVictory = 5;
+	UPROPERTY(EditAnywhere)
+		int FoodInChestToWin = 5;
 
 public:
 	AStealthGameMode();
 
 	virtual ~AStealthGameMode() = default;
-	
+
 	/*Return the number of food the player has placed in the chest. Return -1 if nullptr*/
 	UFUNCTION(Category = "Food")
 		virtual int32 GetFoodInChest() const;
@@ -66,12 +71,47 @@ public:
 	UFUNCTION(Category = "Food")
 		virtual void DecrementFoodOnFoodSpot();
 
-	//Check if the player has won
 	UFUNCTION(Category = "Victory Condition")
 		virtual bool PlayerWon();
 
+	UFUNCTION(Category = "Victory Condition")
+		void VictoryTest();
+
+	UFUNCTION(Category = "Defeat Condition")
+		void LostGame();
+
+	UFUNCTION(Category = "Food")
+		void AddFoodInChest(int FoodValue);
+
+	UFUNCTION(Category = "Food")
+		void AddFoodInRoom();
+
+	UFUNCTION(Category = "Food")
+		void RemoveFoodInRoom();
+
+	UFUNCTION(Category = "Foe")
+		void AddFoeInRoom();
+
+	UFUNCTION(Category = "Foe")
+		void RemoveFoeInRoom();
+
+	UFUNCTION(Category = "Foe")
+		void SetFoeCarryFood(bool NewNextFood);
+
+	UFUNCTION(Category = "Foe")
+		void CreateFoe();
+
+	UFUNCTION(Category = "Foe")
+		void LaunchIA();
+
+	UFUNCTION(Category = "Foe")
+		void LaunchTimer(float InRate, bool IsLooping, float Delay);
+	//Check if the player has won
+	UFUNCTION(Category = "Victory Condition")
+		virtual bool PlayerWon();
 	UFUNCTION(Category = "UI")
 		virtual void ShowPauseMenu();
 	UFUNCTION(Category = "UI")
 		virtual void ShowNormalHUD();
+
 };

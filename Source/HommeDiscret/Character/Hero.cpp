@@ -52,9 +52,10 @@ AHero::AHero()
 	IsHoldingFood = false;
 	ChestNearby = nullptr;
 	bDead = false;
-	HeroSpeed = 400;
-
+	CharacMov = GetCharacterMovement();
+	HeroSpeed = CharacMov->MaxWalkSpeed;
 	SetupStimulus();
+	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called when the game starts or when spawned
@@ -142,6 +143,11 @@ void AHero::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 			ChestNearby = Chest;
 		}
 	}
+	else if (OtherActor->IsA(AFoe::StaticClass()))
+	{
+		//Lost Game
+		//GameMode->LostGame();
+	}
 }
 
 void AHero::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -227,7 +233,7 @@ void AHero::PauseMenu()
 		if (!(GetWorld()->IsPaused()))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Paused!"));
-			
+
 			GM->ShowPauseMenu();
 		}
 		else
@@ -244,30 +250,26 @@ void AHero::PauseMenu()
 
 void AHero::DropObject()
 {
-	
+
 	if (ChestNearby==nullptr && FoodSpotNearby==nullptr)
 	{
-		/*
-		FVector newPos = FVector(this->GetActorLocation() + this->GetActorForwardVector() * 100.0f);
-		newPos.Z = 170.0f;
-		FoodRef->SetActorLocation(newPos);
-		FoodRef->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));*/
 		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
 	}
 	else if (FoodSpotNearby != nullptr && ChestNearby == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in fs this : %s"), *FoodRef->GetName()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in fs this : %s"), *FoodRef->GetName()));
 		FoodSpotNearby->FillFoodSpot(FoodRef);
 	}
 	else if(FoodSpotNearby == nullptr && ChestNearby != nullptr)
 	{
-		ChestNearby->AddingFood();
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in chest this : %s"), *FoodRef->GetName()));
+		ChestNearby->AddingFood(FoodRef->FoodValue);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in chest this : %s"), *FoodRef->GetName()));
 		FoodRef->Destroy();
 	}
 	FoodRef = nullptr;
 	IsHoldingFood = false;
 	FoodMesh->SetStaticMesh(nullptr);
+	CharacMov->MaxWalkSpeed = HeroSpeed;
 }
 
 
@@ -280,7 +282,7 @@ void AHero::PickUpObject(AFood* NewFood)
 		/*NewFood->StaticMesh->SetSimulatePhysics(false);
 		NewFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 150.0f));*/
 	}
-	else 
+	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to take in fs this : %s"), *FoodRef->GetName()));
 		FoodSpotNearby->EmptyFoodSpot();
@@ -288,12 +290,13 @@ void AHero::PickUpObject(AFood* NewFood)
 	FoodRef = NewFood;
 	IsHoldingFood = true;
 	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
+	CharacMov->MaxWalkSpeed = HeroSpeed / 2;
 }
 
 
 void AHero::Interact()
 {
-	
+
 	if (FoodRef != nullptr)
 	{
 		if (!IsHoldingFood)

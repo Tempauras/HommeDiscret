@@ -18,6 +18,7 @@ EBTNodeResult::Type UMyBTTask_ChangeStatus::ExecuteTask(UBehaviorTreeComponent& 
 	if (status.GetValue() == EFoeStatus::NormalBehavior)
 	{
 		auto const foe = Cast<AFoe>(cont->GetCharacter());
+
 		if (foe->GetHaveToDroppedFood() == true)
 		{
 			if (!foe->GetHoldingFood())
@@ -32,8 +33,10 @@ EBTNodeResult::Type UMyBTTask_ChangeStatus::ExecuteTask(UBehaviorTreeComponent& 
 		else {
 			status = EFoeStatus::Patrolling;
 		}
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, FString::Printf(TEXT("Ennemi : %s"), *foe->GetName()));
 	}
 	newStatus = (uint8)status.GetValue();
+
 	cont->get_blackboard()->SetValueAsEnum(bb_keys::foe_status, newStatus);
 	
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
