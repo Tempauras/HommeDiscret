@@ -37,6 +37,8 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerHUDClass;
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> PauseHUDClass;
 	UPROPERTY()
 		UUserWidget* CurrentWidget;
 	//The number of food that are needed for the player to be declared the winner. Defaults = 5
@@ -63,6 +65,13 @@ public:
 	//Decrement the value of food on food spot
 	UFUNCTION(Category = "Food")
 		virtual void DecrementFoodOnFoodSpot();
+
+	//Check if the player has won
 	UFUNCTION(Category = "Victory Condition")
 		virtual bool PlayerWon();
+
+	UFUNCTION(Category = "UI")
+		virtual void ShowPauseMenu();
+	UFUNCTION(Category = "UI")
+		virtual void ShowNormalHUD();
 };

@@ -83,7 +83,7 @@ AHideout::AHideout()
 void AHideout::BeginPlay()
 {
 	Super::BeginPlay();
-	AChest* SpawnedChest = GetWorld()->SpawnActor<AChest>(Chest, FVector(RootComponent->GetComponentLocation().X, RootComponent->GetComponentLocation().Y - (SizeOfMesh * 2), RootComponent->GetComponentLocation().Z + 40), FRotator::ZeroRotator, Params);
+	AChest* SpawnedChest = GetWorld()->SpawnActor<AChest>(Chest, FVector(RootComponent->GetComponentLocation().X, RootComponent->GetComponentLocation().Y - (SizeOfMesh * 2), RootComponent->GetComponentLocation().Z + 80), FRotator::ZeroRotator, Params);
 	if (SpawnedChest != nullptr)
 	{
 		SpawnedChest->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
