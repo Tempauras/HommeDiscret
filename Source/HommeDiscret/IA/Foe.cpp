@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "HommeDiscret/Level/Props/Food.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
 #include "AIC_Foe.h"
 #include "FoeSpawner.h"
 
@@ -33,6 +34,7 @@ AFoe::AFoe()
 	FoodSpotNearby = nullptr;
 	HaveToDroppedFood = false;
 	IsHoldingFood = false;
+	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 // Called when the game starts or when spawned
 void AFoe::BeginPlay()
@@ -81,8 +83,8 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	else if (OtherActor->IsA(AFoeSpawner::StaticClass()))
 	{
 		//Destroy(this);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Collides with %s"), OtherActor->GetName()));
-
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Collides with %s"), OtherActor->GetName()));
+		//GameMode->RemoveFoeInRoom();
 	}
 }
 

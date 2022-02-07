@@ -28,6 +28,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		float InFrontPosition = 100.0f;
 
+	UPROPERTY(VisibleAnywhere)
+		int FoodValue = 1;
 
 	//bool bIsAblePickup = false;
 

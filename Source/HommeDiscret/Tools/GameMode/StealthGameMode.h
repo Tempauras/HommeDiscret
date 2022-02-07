@@ -45,6 +45,8 @@ protected:
 	//The number of food that are needed for the player to be declared the winner. Defaults = 5
 	UPROPERTY(EditAnywhere, Category = "Victory Condition")
 		int32 NumberOfFoodInChestForVictory = 5;
+	UPROPERTY(EditAnywhere)
+		int FoodInChestToWin = 5;
 
 public:
 	AStealthGameMode();
@@ -66,8 +68,18 @@ public:
 	//Decrement the value of food on food spot
 	UFUNCTION(Category = "Food")
 		virtual void DecrementFoodOnFoodSpot();
+
 	UFUNCTION(Category = "Victory Condition")
 		virtual bool PlayerWon();
+
+	UFUNCTION(Category = "Victory Condition")
+		void VictoryTest();
+
+	UFUNCTION(Category = "Defeat Condition")
+		void LostGame();
+
+	UFUNCTION(Category = "Food")
+		void AddFoodInChest(int FoodValue);
 
 	UFUNCTION(Category = "Food")
 		void AddFoodInRoom();
@@ -92,5 +104,4 @@ public:
 
 	UFUNCTION(Category = "Foe")
 		void LaunchTimer(float InRate, bool IsLooping, float Delay);
-
 };

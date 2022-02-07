@@ -11,6 +11,7 @@ class AFood;
 class AFoodSpot;
 class UCapsuleComponent;
 class USphereComponent;
+class StealthGameMode;
 UCLASS()
 class HOMMEDISCRET_API AFoe : public ACharacter
 {
@@ -20,7 +21,9 @@ public:
 	// Sets default values for this character's properties
 	AFoe();
 
+
 protected:
+	AStealthGameMode* GameMode;
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* CollisionSphere;

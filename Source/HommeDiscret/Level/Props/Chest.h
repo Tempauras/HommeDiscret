@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
-
 #include "Chest.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FHungerBar);
 
+class AStealthGameMode;
 UCLASS()
 class HOMMEDISCRET_API AChest : public AActor
 {
@@ -27,6 +27,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* SphereCollision;
+
+	AStealthGameMode* GameMode;
 
 	/*UPROPERTY(VisibleAnywhere)
 		UHungerBar* Hungerbar;*/
@@ -46,13 +48,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		void AddingFood();
+		void AddingFood(int FoodValue);
 
 	int GetNumberFoodsContained();
 

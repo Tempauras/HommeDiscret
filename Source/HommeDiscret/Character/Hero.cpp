@@ -12,8 +12,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
+
 
 // Sets default values
 AHero::AHero()
@@ -53,6 +54,7 @@ AHero::AHero()
 	CharacMov = GetCharacterMovement();
 	HeroSpeed = CharacMov->MaxWalkSpeed;
 	SetupStimulus();
+	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called when the game starts or when spawned
@@ -138,6 +140,11 @@ void AHero::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 			ChestNearby = Chest;
 		}
 	}
+	else if (OtherActor->IsA(AFoe::StaticClass()))
+	{
+		//Lost Game
+		//GameMode->LostGame();
+	}
 }
 
 void AHero::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -222,13 +229,13 @@ void AHero::DropObject()
 	}
 	else if (FoodSpotNearby != nullptr && ChestNearby == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in fs this : %s"), *FoodRef->GetName()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in fs this : %s"), *FoodRef->GetName()));
 		FoodSpotNearby->FillFoodSpot(FoodRef);
 	}
 	else if(FoodSpotNearby == nullptr && ChestNearby != nullptr)
 	{
-		ChestNearby->AddingFood();
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in chest this : %s"), *FoodRef->GetName()));
+		ChestNearby->AddingFood(FoodRef->FoodValue);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in chest this : %s"), *FoodRef->GetName()));
 		FoodRef->Destroy();
 	}
 	FoodRef = nullptr;

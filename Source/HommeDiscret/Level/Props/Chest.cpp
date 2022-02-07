@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Chest.h"
+#include "Kismet/GameplayStatics.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
 
 // Sets default values
 AChest::AChest()
@@ -17,8 +19,8 @@ AChest::AChest()
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT(" Sphere collision"));
 	SphereCollision->InitSphereRadius(SphereRadius);
 	SphereCollision->SetupAttachment(RootComponent);
-
-	NumberFoodsContained = 0;
+	//NumberFoodsContained = 0;
+	 GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called when the game starts or when spawned
@@ -35,14 +37,16 @@ void AChest::Tick(float DeltaTime)
 	//DrawDebugSphere(GetWorld(),GetActorLocation(), SphereRadius,20,FColor::Purple,false,-1,0,1);
 }
 
-void AChest::AddingFood()
+void AChest::AddingFood(int FoodValue)
 {
+	//GameMode->AddFoodInChest(FoodValue);
+	/*
 	NumberFoodsContained++;
 	if (NumberFoodsContained >= MaxFoodsToWin)
 	{
 		//Win Call GameMode
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("You won !"));
-	}
+	}*/
 	HungerBar_OnFoodStocked.Broadcast();
 }
 

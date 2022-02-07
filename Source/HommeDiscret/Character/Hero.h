@@ -19,10 +19,13 @@ class AChest;
 class USpringArmComponent;
 class USphereComponent;
 class UStaticMeshComponent;
+class AStealthGameMode;
 UCLASS()
 class HOMMEDISCRET_API AHero : public ACharacter
 {
 	GENERATED_BODY()
+private:
+	AStealthGameMode* GameMode;
 
 public:
 	// Sets default values for this character's properties

@@ -30,6 +30,8 @@ public:
 	int MaxFoodsInRoom = 5;
 	int FoodsInRoom = 0;
 	int FoesInRoom = 0;
+	int FoodInChest = 0;
+	int FoodInChestToWin = 5;
 	bool FoeCarryFood = true;
 
 	UPROPERTY()

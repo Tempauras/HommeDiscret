@@ -96,6 +96,24 @@ bool AStealthGameMode::PlayerWon()
 	}
 }
 
+void AStealthGameMode::VictoryTest()
+{
+	if (SurvivalGameState->FoodInChest == FoodInChestToWin)
+	{
+		//Win
+	}
+}
+
+void AStealthGameMode::LostGame()
+{
+}
+
+void AStealthGameMode::AddFoodInChest(int FoodValue)
+{
+	SurvivalGameState->FoodInChest+=FoodValue;
+	VictoryTest();
+}
+
 void AStealthGameMode::AddFoodInRoom()
 {
 	SurvivalGameState->FoodsInRoom++;
@@ -160,5 +178,5 @@ void AStealthGameMode::LaunchIA()
 
 void AStealthGameMode::LaunchTimer(float InRate, bool IsLooping, float Delay)
 {
-	GetWorldTimerManager().SetTimer(TimerHandle, this, AStealthGameMode::CreateFoe, InRate, IsLooping, Delay);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::CreateFoe, InRate, IsLooping, Delay);
 }
