@@ -106,9 +106,7 @@ public:
 
 	UFUNCTION(Category = "Foe")
 		void LaunchTimer(float InRate, bool IsLooping, float Delay);
-	//Check if the player has won
-	UFUNCTION(Category = "Victory Condition")
-		virtual bool PlayerWon();
+
 	UFUNCTION(Category = "UI")
 		virtual void ShowPauseMenu();
 	UFUNCTION(Category = "UI")
