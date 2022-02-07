@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
+#include "HommeDiscret/IA/FoeSpawner.h"
 #include "FoeSpawnerRoom.generated.h"
 
 UCLASS()
@@ -74,6 +74,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* TileArch;
 
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AFoeSpawner> FoeSpawner;
 
 	float SizeOfMesh = 200.f;
 	float Offset = 100.f;

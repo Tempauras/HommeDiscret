@@ -111,12 +111,20 @@ AFoeSpawnerRoom::AFoeSpawnerRoom()
 	TileArch->SetupAttachment(RootComponent);
 	TileArch->SetRelativeLocation(FVector(RootComponent->GetRelativeLocation().X, RootComponent->GetRelativeLocation().Y - Offset, RootComponent->GetRelativeLocation().Z));
 	TileArch->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
+
+	Params.Owner = this;
 }
 
 // Called when the game starts or when spawned
 void AFoeSpawnerRoom::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UE_LOG(LogTemp, Warning, TEXT("Begin play"));
+	AFoeSpawner* SpawnedFoeSpawner = GetWorld()->SpawnActor<AFoeSpawner>(FoeSpawner, FVector(RootComponent->GetComponentLocation().X + (SizeOfMesh * 2), RootComponent->GetComponentLocation().Y + SizeOfMesh, RootComponent->GetComponentLocation().Z), FRotator::ZeroRotator, Params);
+	if (SpawnedFoeSpawner != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SpawnedFoeSpawner != nullptr"));
+		SpawnedFoeSpawner->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+	}
 }
 
