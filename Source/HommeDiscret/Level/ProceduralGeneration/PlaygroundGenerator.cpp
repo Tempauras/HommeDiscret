@@ -100,6 +100,7 @@ void APlaygroundGenerator::SpawnPlayground()
 		if (GS != nullptr)
 		{
 			GS->FoodSpotList = FoodSpotList;
+			GS->FoeSpawner = FoeSpawnerRoomReferences->FoeSpawner;
 		}
 	}
 }
