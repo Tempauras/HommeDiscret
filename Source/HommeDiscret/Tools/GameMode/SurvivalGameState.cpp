@@ -3,9 +3,7 @@
 
 #include "SurvivalGameState.h"
 
-ASurvivalGameState::ASurvivalGameState() :
-	FoodCountInChest(0),
-	FoodCountOnFoodSpot(0)
+ASurvivalGameState::ASurvivalGameState()
 {
 
 }

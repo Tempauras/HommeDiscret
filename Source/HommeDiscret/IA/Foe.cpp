@@ -82,7 +82,7 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	}
 	else if (OtherActor->IsA(AFoeSpawner::StaticClass()))
 	{
-		//Destroy(this);
+		Destroy();
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Collides with %s"), OtherActor->GetName()));
 		//GameMode->RemoveFoeInRoom();
 	}
