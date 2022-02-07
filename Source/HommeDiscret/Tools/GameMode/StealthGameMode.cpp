@@ -12,7 +12,14 @@ void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
-	ShowNormalHUD();
+	if (PlayerHUDClass != nullptr)
+	{
+		PlayerWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		if (PlayerWidget != nullptr)
+		{
+			PlayerWidget->AddToViewport();
+		}
+	}
 }
 
 int32 AStealthGameMode::GetFoodInChest() const
@@ -165,8 +172,9 @@ void AStealthGameMode::LaunchTimer(float InRate, bool IsLooping, float Delay)
 
 void AStealthGameMode::ShowPauseMenu()
 {
+	PlayerWidget->RemoveFromParent();
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
-	FInputModeUIOnly InputType;
+	FInputModeGameAndUI InputType;
 	InputType.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
 	APlayerController* PC = GetWorld()->GetFirstPlayerController();
@@ -179,16 +187,17 @@ void AStealthGameMode::ShowPauseMenu()
 	//Load UI
 	if (PauseHUDClass != nullptr)
 	{
-		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PauseHUDClass);
-		if (CurrentWidget != nullptr)
+		PauseWidget = CreateWidget<UUserWidget>(GetWorld(), PauseHUDClass);
+		if (PauseWidget != nullptr)
 		{
-			CurrentWidget->AddToViewport();
+			PauseWidget->AddToViewport();
 		}
 	}
 }
 
 void AStealthGameMode::ShowNormalHUD()
 {
+	PauseWidget->RemoveFromParent();
 	UGameplayStatics::SetGamePaused(GetWorld(), false);
 	FInputModeGameOnly InputType;
 	InputType.SetConsumeCaptureMouseDown(true);
@@ -203,10 +212,10 @@ void AStealthGameMode::ShowNormalHUD()
 	//Load UI
 	if (PlayerHUDClass != nullptr)
 	{
-		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
-		if (CurrentWidget != nullptr)
+		PlayerWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		if (PlayerWidget != nullptr)
 		{
-			CurrentWidget->AddToViewport();
+			PlayerWidget->AddToViewport();
 		}
 	}
 }

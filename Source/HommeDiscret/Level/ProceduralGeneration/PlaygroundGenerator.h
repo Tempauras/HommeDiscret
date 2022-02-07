@@ -9,6 +9,7 @@
 #include "Hideout.h"
 #include "HommeDiscret/Level/Props/Crate.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
+#include "HommeDiscret/IA/NavigationPoint.h"
 #include "FoeSpawnerRoom.h"
 #include "PlaygroundGenerator.generated.h"
 
@@ -45,6 +46,8 @@ public:
 		TSubclassOf<AHideout> Hideout;
 	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
 		TSubclassOf<AFoeSpawnerRoom> FoeSpawnerRoom;
+	UPROPERTY(EditAnywhere, Category = "PlaygroundGeneration")
+		TSubclassOf<ANavigationPoint> NavigationPoint;
 	/*Size of the tile to align the creation correctly*/
 	UPROPERTY(VisibleAnywhere)
 		float SizeOfTile = 200;
@@ -76,6 +79,7 @@ public:
 	TArray<AFoodSpot*> FoodSpotList;
 	AHideout* HideoutReferences;
 	AFoeSpawnerRoom* FoeSpawnerRoomReferences;
+	ANavigationPoint* NavigationPointReferences;
 
 	int ActualCrateNumber = 0;
 
