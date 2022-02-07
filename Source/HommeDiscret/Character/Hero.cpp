@@ -12,9 +12,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
-
 
 // Sets default values
 AHero::AHero()
@@ -91,6 +92,8 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);*/
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHero::Interact);
+
+	PlayerInputComponent->BindAction("PauseMenu", IE_Pressed, this, &AHero::PauseMenu);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);
@@ -220,9 +223,34 @@ void AHero::Zoom(float value)
 	}
 }
 
+void AHero::PauseMenu()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Beep boop pause menu activated!"));
+	AStealthGameMode* GM = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GM != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GM != nullptr!"));
+		if (!(GetWorld()->IsPaused()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Paused!"));
+
+			GM->ShowPauseMenu();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Not paused!"));
+			GM->ShowNormalHUD();
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GM = nullptr!"));
+	}
+}
+
 void AHero::DropObject()
 {
-	
+
 	if (ChestNearby==nullptr && FoodSpotNearby==nullptr)
 	{
 		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
@@ -254,7 +282,7 @@ void AHero::PickUpObject(AFood* NewFood)
 		/*NewFood->StaticMesh->SetSimulatePhysics(false);
 		NewFood->SetActorLocation(FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 150.0f));*/
 	}
-	else 
+	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to take in fs this : %s"), *FoodRef->GetName()));
 		FoodSpotNearby->EmptyFoodSpot();
@@ -268,7 +296,7 @@ void AHero::PickUpObject(AFood* NewFood)
 
 void AHero::Interact()
 {
-	
+
 	if (FoodRef != nullptr)
 	{
 		if (!IsHoldingFood)

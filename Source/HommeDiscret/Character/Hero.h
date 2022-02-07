@@ -68,6 +68,9 @@ public:
 	void MoveRight(float Axis);
 	void Zoom(float value);
 
+	//Show Pause menu
+	void PauseMenu();
+
 	//PickUp object
 	void DropObject();
 	void PickUpObject(AFood* NewFood);

@@ -19,7 +19,7 @@ enum GameStates
 };
 
 /**
- * 
+ *
  */
 class AFoeSpawner;
 UCLASS()
@@ -40,6 +40,8 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerHUDClass;
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+		TSubclassOf<UUserWidget> PauseHUDClass;
 	UPROPERTY()
 		UUserWidget* CurrentWidget;
 	//The number of food that are needed for the player to be declared the winner. Defaults = 5
@@ -52,7 +54,7 @@ public:
 	AStealthGameMode();
 
 	virtual ~AStealthGameMode() = default;
-	
+
 	/*Return the number of food the player has placed in the chest. Return -1 if nullptr*/
 	UFUNCTION(Category = "Food")
 		virtual int32 GetFoodInChest() const;
@@ -104,4 +106,12 @@ public:
 
 	UFUNCTION(Category = "Foe")
 		void LaunchTimer(float InRate, bool IsLooping, float Delay);
+	//Check if the player has won
+	UFUNCTION(Category = "Victory Condition")
+		virtual bool PlayerWon();
+	UFUNCTION(Category = "UI")
+		virtual void ShowPauseMenu();
+	UFUNCTION(Category = "UI")
+		virtual void ShowNormalHUD();
+
 };
