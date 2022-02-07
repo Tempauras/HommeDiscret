@@ -7,14 +7,6 @@
 void UPauseMenuWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	PC = GetWorld()->GetFirstPlayerController();
-	if (PC)
-	{
-		PC->bShowMouseCursor = true;
-		PC->bEnableClickEvents = true;
-		PC->bEnableMouseOverEvents = true;
-	}
-	GEngine->GameViewport->Viewport->LockMouseToViewport(true);
 	if (RestartGameButton)
 	{
 		RestartGameButton->OnClicked.AddDynamic(this, &UPauseMenuWidget::OnRestartGameClick);

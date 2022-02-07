@@ -92,7 +92,8 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AHero::Interact);
 
-	PlayerInputComponent->BindAction("PauseMenu", IE_Pressed, this, &AHero::PauseMenu);
+	FInputActionBinding& InputActionBiding = PlayerInputComponent->BindAction("PauseMenu", IE_Pressed, this, &AHero::PauseMenu);
+	InputActionBiding.bExecuteWhenPaused = true;
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AHero::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHero::MoveRight);

@@ -70,6 +70,14 @@ void APlaygroundGenerator::SpawnPlayground()
 						TileList.Last()->bIsHoldingFoodSpot = true;
 					}
 				}
+				if (i == 7  && j == 6)
+				{
+					NavigationPointReferences = GetWorld()->SpawnActor<ANavigationPoint>(NavigationPoint, BaseLocation, FRotator::ZeroRotator, Params);
+					if (NavigationPointReferences != nullptr)
+					{
+						NavigationPointReferences->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+					}
+				}
 			}
 			BaseLocation.Y -= SizeOfTile * HorizontalTileNumber;
 			BaseLocation.X += SizeOfTile;
@@ -92,6 +100,7 @@ void APlaygroundGenerator::SpawnPlayground()
 		if (GS != nullptr)
 		{
 			GS->FoodSpotList = FoodSpotList;
+			GS->FoeSpawner = FoeSpawnerRoomReferences->SpawnedFoeSpawner;
 		}
 	}
 }

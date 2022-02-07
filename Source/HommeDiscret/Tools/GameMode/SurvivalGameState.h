@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
+#include "HommeDiscret/IA/FoeSpawner.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "SurvivalGameState.generated.h"
 
@@ -33,4 +34,7 @@ public:
 
 	UPROPERTY()
 		TArray<AFoodSpot*> FoodSpotList;
+
+	UPROPERTY()
+		AFoeSpawner* FoeSpawner;
 };

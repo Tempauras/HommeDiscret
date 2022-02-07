@@ -11,6 +11,7 @@ AStealthGameMode::AStealthGameMode()
 void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+<<<<<<< HEAD
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
 	if (PlayerHUDClass != nullptr)
 	{
@@ -20,7 +21,11 @@ void AStealthGameMode::BeginPlay()
 			PlayerWidget->AddToViewport();
 		}
 	}
+=======
+	SurvivalGameState =GetGameState<ASurvivalGameState>();
+	ShowNormalHUD(); 
 	LaunchIA();
+>>>>>>> main
 }
 
 void AStealthGameMode::PlayerWon()

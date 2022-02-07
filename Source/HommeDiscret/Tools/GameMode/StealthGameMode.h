@@ -44,7 +44,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PauseHUDClass;
 	UPROPERTY()
-		UUserWidget* CurrentWidget;
+		UUserWidget* PlayerWidget;
+	UPROPERTY()
+		UUserWidget* PauseWidget;
 	//The number of food that are needed for the player to be declared the winner. Defaults = 5
 	UPROPERTY(EditAnywhere, Category = "Victory Condition")
 		int32 NumberOfFoodInChestForVictory = 5;
