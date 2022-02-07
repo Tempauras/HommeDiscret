@@ -55,7 +55,6 @@ AHero::AHero()
 	CharacMov = GetCharacterMovement();
 	HeroSpeed = CharacMov->MaxWalkSpeed;
 	SetupStimulus();
-	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 }
 
 // Called when the game starts or when spawned
@@ -145,8 +144,9 @@ void AHero::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	}
 	else if (OtherActor->IsA(AFoe::StaticClass()))
 	{
+		GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
 		//Lost Game
-		//GameMode->LostGame();
+		GameMode->LostGame();
 	}
 }
 

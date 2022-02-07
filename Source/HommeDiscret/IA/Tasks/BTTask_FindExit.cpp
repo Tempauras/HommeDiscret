@@ -16,7 +16,6 @@ UBTTask_FindExit::UBTTask_FindExit(FObjectInitializer const& object_initializer)
 EBTNodeResult::Type UBTTask_FindExit::ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory)
 {
 	auto const cont = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
-	//GEngine->AddOnScreenDebugMessage(0, 5.0f, FColor::Red, cont->ExitLocation.ToString());
 
 	if (cont != nullptr)
 	{

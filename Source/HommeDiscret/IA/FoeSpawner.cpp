@@ -3,6 +3,7 @@
 
 #include "FoeSpawner.h"
 #include "Foe.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AFoeSpawner::AFoeSpawner()
@@ -19,10 +20,10 @@ void AFoeSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	Loc = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z);
-	Loc.X = Loc.X + CollisionSphere->GetScaledSphereRadius()+ 5.0f;
+	Loc.X = Loc.X + CollisionSphere->GetScaledSphereRadius()+ 15.0f;
 	Rot = this->GetActorRotation();
-	/*SpawnFoe(true);
-	SpawnFoe(false);*/
+	//SpawnFoe(true);
+	//SpawnFoe(false);
 }
 
 void AFoeSpawner::SpawnFoe(bool HaveFood)
@@ -34,7 +35,12 @@ void AFoeSpawner::SpawnFoe(bool HaveFood)
 		AFoe* NewFoe = Cast<AFoe>(SpawnedActorRef);
 		if (HaveFood)
 		{
+			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("Foe with food spawned"));
 			NewFoe->InstantiateFood();
+		}
+		else 
+		{
+			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("Foe spawned"));
 		}
 	}
 }
