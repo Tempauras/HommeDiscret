@@ -13,7 +13,7 @@ void AStealthGameMode::BeginPlay()
 	Super::BeginPlay();
 	SurvivalGameState =GetGameState<ASurvivalGameState>();
 	ShowNormalHUD(); 
-	LaunchIA();
+	//LaunchIA();
 }
 
 void AStealthGameMode::PlayerWon()
