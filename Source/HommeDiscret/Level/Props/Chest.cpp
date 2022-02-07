@@ -35,8 +35,6 @@ void AChest::Tick(float DeltaTime)
 	//DrawDebugSphere(GetWorld(),GetActorLocation(), SphereRadius,20,FColor::Purple,false,-1,0,1);
 }
 
-
-
 void AChest::AddingFood()
 {
 	NumberFoodsContained++;
@@ -45,9 +43,8 @@ void AChest::AddingFood()
 		//Win Call GameMode
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("You won !"));
 	}
+	HungerBar_OnFoodStocked.Broadcast();
 }
-
-
 
 int AChest::GetNumberFoodsContained()
 {

@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
+
 #include "Chest.generated.h"
+
+DECLARE_MULTICAST_DELEGATE(FHungerBar);
 
 UCLASS()
 class HOMMEDISCRET_API AChest : public AActor
@@ -37,6 +40,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		int MaxFoodsToWin;
 
+	FHungerBar HungerBar_OnFoodStocked;
 
 protected:
 	// Called when the game starts or when spawned

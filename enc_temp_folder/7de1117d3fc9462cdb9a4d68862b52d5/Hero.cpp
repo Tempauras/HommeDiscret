@@ -226,13 +226,12 @@ void AHero::PauseMenu()
 		UE_LOG(LogTemp, Warning, TEXT("GM != nullptr!"));
 		if (!(GetWorld()->IsPaused()))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Paused!"));
-			
+			UE_LOG(LogTemp, Warning, TEXT("Not paused!"));
 			GM->ShowPauseMenu();
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Not paused!"));
+			UE_LOG(LogTemp, Warning, TEXT("Paused!"));
 			GM->ShowNormalHUD();
 		}
 	}

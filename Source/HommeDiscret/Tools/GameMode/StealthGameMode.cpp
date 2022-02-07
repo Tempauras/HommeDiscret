@@ -11,25 +11,7 @@ void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
-	FInputModeGameOnly InputType;
-	InputType.SetConsumeCaptureMouseDown(true);
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
-	APlayerController* PC = GetWorld()->GetFirstPlayerController();
-	if (PC)
-	{
-		PC->bShowMouseCursor = false;
-		PC->bEnableClickEvents = false;
-		PC->bEnableMouseOverEvents = false;
-	}
-	//Load UI
-	if (PlayerHUDClass != nullptr)
-	{
-		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
-		if (CurrentWidget != nullptr)
-		{
-			CurrentWidget->AddToViewport();
-		}
-	}
+	ShowNormalHUD();
 }
 
 int32 AStealthGameMode::GetFoodInChest() const
@@ -92,6 +74,54 @@ bool AStealthGameMode::PlayerWon()
 	else
 	{
 		return false;
+	}
+}
+
+void AStealthGameMode::ShowPauseMenu()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	FInputModeUIOnly InputType;
+	InputType.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	if (PC)
+	{
+		PC->bShowMouseCursor = true;
+		PC->bEnableClickEvents = true;
+		PC->bEnableMouseOverEvents = true;
+	}
+	//Load UI
+	if (PauseHUDClass != nullptr)
+	{
+		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PauseHUDClass);
+		if (CurrentWidget != nullptr)
+		{
+			CurrentWidget->AddToViewport();
+		}
+	}
+}
+
+void AStealthGameMode::ShowNormalHUD()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
+	FInputModeGameOnly InputType;
+	InputType.SetConsumeCaptureMouseDown(true);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	if (PC)
+	{
+		PC->bShowMouseCursor = false;
+		PC->bEnableClickEvents = false;
+		PC->bEnableMouseOverEvents = false;
+	}
+	//Load UI
+	if (PlayerHUDClass != nullptr)
+	{
+		CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		if (CurrentWidget != nullptr)
+		{
+			CurrentWidget->AddToViewport();
+		}
 	}
 }
 
