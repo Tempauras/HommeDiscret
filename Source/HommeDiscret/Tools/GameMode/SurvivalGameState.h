@@ -37,4 +37,7 @@ public:
 
 	UPROPERTY()
 		AFoeSpawner* FoeSpawner;
+
+	UFUNCTION(Category = "UI")
+		int getCurrentFoodsInChest();
 };

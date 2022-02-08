@@ -21,13 +21,11 @@ public:
 	// Sets default values for this character's properties
 	AFoe();
 
-
 protected:
 	AStealthGameMode* GameMode;
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* CollisionSphere;
-
 	UPROPERTY(VisibleAnywhere)
 		float CollisionSphereRadius = 200.0f;
 
@@ -37,16 +35,12 @@ protected:
 	//Food Parameters
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Food")
 		UStaticMeshComponent* FoodMesh;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		AFood* FoodRef;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		AFoodSpot* FoodSpotNearby;
-
 	UPROPERTY(VisibleAnywhere)
 		bool HaveToDroppedFood;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		bool IsHoldingFood;
 

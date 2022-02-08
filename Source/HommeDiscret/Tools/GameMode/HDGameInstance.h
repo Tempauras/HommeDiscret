@@ -37,7 +37,6 @@ public:
 		void LoadHungerBar();
 
 	void OnStartGamePath();
-
 	void OnStartGame();
 
 	// Interface IInGameMenuInterface

@@ -2,6 +2,7 @@
 
 #include "StealthGameMode.h"
 #include "HommeDiscret/IA/FoeSpawner.h"
+#include "HDGameInstance.h"
 
 AStealthGameMode::AStealthGameMode()
 {
@@ -12,6 +13,7 @@ void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
+
 	if (PlayerHUDClass != nullptr)
 	{
 		PlayerWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
@@ -21,6 +23,10 @@ void AStealthGameMode::BeginPlay()
 		}
 	}
 	LaunchIA();
+
+	ShowNormalHUD();
+	//LaunchIA();
+
 }
 
 void AStealthGameMode::PlayerWon()
@@ -40,6 +46,7 @@ void AStealthGameMode::LostGame()
 void AStealthGameMode::AddFoodInChest(int FoodValue)
 {
 	SurvivalGameState->FoodCountInChest += FoodValue;
+	GameInstance->GetHungerBar()->setCurrentFood();
 	RemoveFoodInRoom();
 	PlayerWon();
 }
@@ -163,4 +170,9 @@ void AStealthGameMode::ShowNormalHUD()
 			PlayerWidget->AddToViewport();
 		}
 	}
+}
+
+int AStealthGameMode::getMaxFoodsInRoom()
+{
+	return MaxFoodsInRoom;
 }

@@ -38,25 +38,34 @@ public:
 		AFoeSpawner* FoeSpawner;
 
 	FTimerHandle TimerHandle;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerHUDClass;
+
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PauseHUDClass;
+
 	UPROPERTY()
 		UUserWidget* PlayerWidget;
+
 	UPROPERTY()
 		UUserWidget* PauseWidget;
+
+		UUserWidget* CurrentWidget;
+
+
 	//The number of food that are needed for the player to be declared the winner. Defaults = 5
 	UPROPERTY(EditAnywhere, Category = "Victory Condition")
 		int32 NumberOfFoodInChestForVictory = 5;
+
 	UPROPERTY(EditAnywhere)
 		int FoodInChestToWin = 5;
-	
+
 	UPROPERTY(EditAnywhere)
 		int MaxFoodsInRoom = 5;
 
-
+	class UHDGameInstance* GameInstance = Cast<UHDGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
 public:
 	AStealthGameMode();
@@ -98,7 +107,11 @@ public:
 
 	UFUNCTION(Category = "UI")
 		virtual void ShowPauseMenu();
+
 	UFUNCTION(Category = "UI")
 		virtual void ShowNormalHUD();
+
+	UFUNCTION(Category = "UI")
+		int getMaxFoodsInRoom();
 
 };
