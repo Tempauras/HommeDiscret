@@ -6,6 +6,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "HommeDiscret/Level/Props/Food.h"
+#include "GameMode/StealthGameMode.h"
+#include "GameMode/SurvivalGameState.h"
 #include "HungerBar.generated.h"
 
 /**
@@ -30,7 +32,14 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		AChest* Chest;
 
+	AStealthGameMode* GameMode;
+	ASurvivalGameState* GameState;
+
 	void NativeOnInitiliazed();
 
 	virtual void NativeConstruct() override;
+
+public:
+	void setMaxFood();
+	void setCurrentFood();
 };

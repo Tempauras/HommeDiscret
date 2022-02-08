@@ -33,4 +33,7 @@ public:
 
 	UPROPERTY()
 		TArray<AFoodSpot*> FoodSpotList;
+
+	UFUNCTION(Category = "UI")
+		int getCurrentFoodsInChest();
 };
