@@ -16,7 +16,7 @@
 #include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "FoeSpawner.h"
 #include "GameFramework/Character.h"
-
+#include "HommeDiscret/Tools/GameMode/SurvivalGameState.h"
 
 
 AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
@@ -100,8 +100,14 @@ void AAIC_Foe::SetupPerceptionSystem()
 
 void AAIC_Foe::FindFoodSpots()
 {
+    /*
     TSubclassOf<AActor> ClassToFind = AFoodSpot::StaticClass();
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoodSpots);
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoodSpots);*/
+    ASurvivalGameState* GS = Cast<ASurvivalGameState>(UGameplayStatics::GetGameState(GetWorld()));
+    if (GS != nullptr)
+    {
+        FoodSpots = GS->FoodSpotList;
+    }
 }
 
 AFoodSpot* AAIC_Foe::GetOneRandomFoodSpot()

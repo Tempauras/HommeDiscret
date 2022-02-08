@@ -12,6 +12,14 @@ void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
+	if (SurvivalGameState != nullptr)
+	{
+		FoeSpawner = SurvivalGameState->FoeSpawner;
+		if (FoeSpawner == nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Fuck"));
+		}
+	}
 	if (PlayerHUDClass != nullptr)
 	{
 		PlayerWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
@@ -20,7 +28,7 @@ void AStealthGameMode::BeginPlay()
 			PlayerWidget->AddToViewport();
 		}
 	}
-	LaunchIA();
+	LaunchAI();
 }
 
 void AStealthGameMode::PlayerWon()
@@ -84,7 +92,7 @@ void AStealthGameMode::RemoveFoeInRoom()
 	else
 	{
 		int RandomTimer = rand() % 6;
-		LaunchTimer((float)RandomTimer, false, 0.0f);
+		LaunchTimer((float)RandomTimer, false);
 	}
 }
 
@@ -95,24 +103,34 @@ void AStealthGameMode::SetFoeCarryFood(bool NewNextFood)
 
 void AStealthGameMode::CreateFoe()
 {
-	FoeSpawner->SpawnFoe(SurvivalGameState->FoeCarryFood);
-	AddFoeInRoom();
-	if (SurvivalGameState->FoeCarryFood)
+	if (SurvivalGameState != nullptr)
 	{
-		AddFoodInRoom();
+		if (FoeSpawner->SpawnFoe(SurvivalGameState->FoeCarryFood))
+		{
+			AddFoeInRoom();
+			if (SurvivalGameState->FoeCarryFood)
+			{
+				AddFoodInRoom();
+			}
+		}
+		else 
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Spawn foe doesn't call"));
+		}
+		
 	}
 }
 
-void AStealthGameMode::LaunchIA()
+void AStealthGameMode::LaunchAI()
 {
 	CreateFoe();
 	CreateFoe();
-	LaunchTimer(60.0f, false, 0.0f);
+	LaunchTimer(60.0f, false);
 }
 
-void AStealthGameMode::LaunchTimer(float InRate, bool IsLooping, float Delay)
+void AStealthGameMode::LaunchTimer(float InRate, bool IsLooping)
 {
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::CreateFoe, InRate, IsLooping, Delay);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::CreateFoe, InRate, IsLooping);
 }
 
 void AStealthGameMode::ShowPauseMenu()

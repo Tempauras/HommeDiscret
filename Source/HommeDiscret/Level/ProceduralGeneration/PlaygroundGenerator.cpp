@@ -96,12 +96,19 @@ void APlaygroundGenerator::SpawnPlayground()
 		SpawnFoodSpot();
 
 		GetWorld()->GetFirstPlayerController()->GetPawn()->SetActorLocation(HideoutReferences->GetActorLocation());
+		
 		ASurvivalGameState* GS = Cast<ASurvivalGameState>(UGameplayStatics::GetGameState(GetWorld()));
 		if (GS != nullptr)
 		{
 			GS->FoodSpotList = FoodSpotList;
 			GS->FoeSpawner = FoeSpawnerRoomReferences->SpawnedFoeSpawner;
 		}
+		/*
+		AStealthGameMode* GM = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (GM != nullptr)
+		{
+			GM->LaunchAI();
+		}*/
 	}
 }
 

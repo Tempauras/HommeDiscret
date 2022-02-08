@@ -119,9 +119,10 @@ AFoeSpawnerRoom::AFoeSpawnerRoom()
 void AFoeSpawnerRoom::BeginPlay()
 {
 	Super::BeginPlay();
-	SpawnedFoeSpawner = GetWorld()->SpawnActor<AFoeSpawner>(FoeSpawner, FVector(RootComponent->GetComponentLocation().X + SizeOfMesh, RootComponent->GetComponentLocation().Y - (SizeOfMesh * 2), RootComponent->GetComponentLocation().Z), FRotator::ZeroRotator, Params);
+	SpawnedFoeSpawner = GetWorld()->SpawnActor<AFoeSpawner>(FoeSpawner, FVector(RootComponent->GetComponentLocation().X, RootComponent->GetComponentLocation().Y - (SizeOfMesh * 2), RootComponent->GetComponentLocation().Z + 20.0f), FRotator::ZeroRotator, Params);
 	if (SpawnedFoeSpawner != nullptr)
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("SpawnedFoe not null"));
 		SpawnedFoeSpawner->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 	}
 }

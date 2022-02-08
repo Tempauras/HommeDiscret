@@ -52,6 +52,7 @@ void AFoe::BeginPlay()
 	CurrentWorld=GetWorld();
 	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 300.0f);
 	SpawnRotation = this->GetActorRotation();
+	FoodClass = AFood::StaticClass();
 	//InstantiateFood();
 }
 
@@ -82,8 +83,8 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	}
 	else if (OtherActor->IsA(AFoeSpawner::StaticClass()))
 	{
-		Destroy();
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Collides with %s"), OtherActor->GetName()));
+		//Destroy();
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple,TEXT("Collides with foe spawner"));
 		//GameMode->RemoveFoeInRoom();
 	}
 }
@@ -181,7 +182,6 @@ void AFoe::InstantiateFood()
 					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
 					PickUpFood();
 					HaveToDroppedFood = true;
-
 				}
 			}
 		}

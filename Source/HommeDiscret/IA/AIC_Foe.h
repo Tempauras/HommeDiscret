@@ -33,7 +33,7 @@ public:
 		FVector OriginLocation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<AActor*> FoodSpots;
+		TArray<AFoodSpot*> FoodSpots;
 
 	AFoodSpot* GetOneRandomFoodSpot();
 

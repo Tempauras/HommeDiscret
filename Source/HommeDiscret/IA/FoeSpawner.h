@@ -20,7 +20,7 @@ public:
 		USphereComponent* CollisionSphere;
 
 	UPROPERTY(VisibleAnywhere)
-		float CollisionSphereRadius=100.0f;
+		float CollisionSphereRadius=10.0f;
 
 private:
 
@@ -39,5 +39,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SpawnFoe(bool HaveFood);
+	bool SpawnFoe(bool HaveFood);
 };

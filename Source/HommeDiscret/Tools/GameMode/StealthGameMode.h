@@ -91,10 +91,10 @@ public:
 		void CreateFoe();
 
 	UFUNCTION(Category = "Foe")
-		void LaunchIA();
+		void LaunchAI();
 
 	UFUNCTION(Category = "Foe")
-		void LaunchTimer(float InRate, bool IsLooping, float Delay);
+		void LaunchTimer(float InRate, bool IsLooping);
 
 	UFUNCTION(Category = "UI")
 		virtual void ShowPauseMenu();
