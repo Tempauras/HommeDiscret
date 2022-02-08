@@ -33,7 +33,7 @@ void UHungerBar::setCurrentFood()
 {
 	int YourInt = GameState->getCurrentFoodsInChest();
 	FText intAsText = FText::AsNumber(YourInt);
-	MaxHungerLabel->SetText(intAsText);
+	CurrentHungerLabel->SetText(intAsText);
 }
 
 void UHungerBar::OnFoodStocked()
