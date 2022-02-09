@@ -11,37 +11,47 @@
  * 
  */
 class AFoodSpot;
+class AStealthGameMode;
 UCLASS()
 class HOMMEDISCRET_API AAIC_Foe : public AAIController
 {
 	GENERATED_BODY()
 	
 public:
-	AAIC_Foe(FObjectInitializer const& object_initializer = FObjectInitializer::Get());
+	//AAIC_Foe(FObjectInitializer const& object_initializer = FObjectInitializer::Get());
+	AAIC_Foe();
+
+	UPROPERTY(VisibleAnywhere)
+	bool HasAlreadyStartedBT;
+
 	void BeginPlay() override;
 	void OnPossess(APawn* const pawn) override;
+	void StartAIBehavior(bool HaveFood);
+	//void RestartAIBehavior();
+	void StopAIBehavior();
 	class UBlackboardComponent* get_blackboard() const;
 
+	bool GetBehaviorTreeIsRunning();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FVector EntranceLocation;
+	FVector GetEnterLocation();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FVector  ExitLocation;
+	FVector  GetExitLocation();
 
-	UPROPERTY(EditAnywhere, BlueprintReadwrite)
-		FVector OriginLocation;
+	FVector GetOriginLocation();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<AActor*> FoodSpots;
+		TArray<AFoodSpot*> FoodSpots;
 
 	AFoodSpot* GetOneRandomFoodSpot();
 
 private:
+	UPROPERTY(VisibleAnywhere)
+		AStealthGameMode* GameMode;
+
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTreeComponent* BehaviorTreeComponent;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTree* Btree;
 
 	class UBlackboardComponent* Blackboard;
@@ -51,5 +61,5 @@ private:
 	UFUNCTION()
 		void OnTargetDetected(AActor* actor, FAIStimulus const stimulus);
 		void SetupPerceptionSystem();
-		void FindFoodSpots();
+		//void FindFoodSpots();
 };

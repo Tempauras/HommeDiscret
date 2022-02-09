@@ -96,11 +96,14 @@ void APlaygroundGenerator::SpawnPlayground()
 		SpawnFoodSpot();
 
 		GetWorld()->GetFirstPlayerController()->GetPawn()->SetActorLocation(HideoutReferences->GetActorLocation());
+		
 		ASurvivalGameState* GS = Cast<ASurvivalGameState>(UGameplayStatics::GetGameState(GetWorld()));
 		if (GS != nullptr)
 		{
 			GS->FoodSpotList = FoodSpotList;
-			GS->FoeSpawner = FoeSpawnerRoomReferences->SpawnedFoeSpawner;
+			GS->OriginLocation = NavigationPointReferences->GetActorLocation();
+			GS->ExitLocation = FoeSpawnerRoomReferences->ExitingPointActor->GetActorLocation();
+			GS->EnterLocation = FoeSpawnerRoomReferences->StartingPointActor->GetActorLocation();
 		}
 	}
 }

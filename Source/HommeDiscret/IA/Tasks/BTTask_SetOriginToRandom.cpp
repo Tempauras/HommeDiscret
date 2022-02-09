@@ -23,7 +23,7 @@ EBTNodeResult::Type UBTTask_SetOriginToRandom::ExecuteTask(UBehaviorTreeComponen
     }
     else 
     {
-        cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, cont->OriginLocation);
+        cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, cont->GetOriginLocation());
     }
 
     FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);

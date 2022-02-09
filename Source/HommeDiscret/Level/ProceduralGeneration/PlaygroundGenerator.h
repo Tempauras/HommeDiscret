@@ -51,6 +51,8 @@ public:
 	/*Size of the tile to align the creation correctly*/
 	UPROPERTY(VisibleAnywhere)
 		float SizeOfTile = 200;
+	UPROPERTY(EditAnywhere)
+		UClass* SpawnActor;
 	/*Set the number of vertical tile to create to fill the playground.*/
 	UPROPERTY(VisibleAnywhere, Category = "PlaygroundGeneration", meta = (UIMin = "10", UIMax = "15"))
 		int VerticalTileNumber = 15;

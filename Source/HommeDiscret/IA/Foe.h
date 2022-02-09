@@ -12,6 +12,7 @@ class AFoodSpot;
 class UCapsuleComponent;
 class USphereComponent;
 class AStealthGameMode;
+class AAIC_Foe;
 UCLASS()
 class HOMMEDISCRET_API AFoe : public ACharacter
 {
@@ -20,9 +21,16 @@ class HOMMEDISCRET_API AFoe : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AFoe();
+	UPROPERTY(VisibleAnywhere)
+		float SpaceBetween;
+	UPROPERTY(VisibleAnywhere)
+	AAIC_Foe* PawnController;
 
 protected:
 	AStealthGameMode* GameMode;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AActor> FoeController;
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* CollisionSphere;
@@ -56,7 +64,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	UFUNCTION()
 		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()

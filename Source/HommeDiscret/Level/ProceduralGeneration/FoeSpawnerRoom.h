@@ -7,6 +7,7 @@
 #include "HommeDiscret/IA/FoeSpawner.h"
 #include "FoeSpawnerRoom.generated.h"
 
+class ANavigationPoint;
 UCLASS()
 class HOMMEDISCRET_API AFoeSpawnerRoom : public AActor
 {
@@ -74,11 +75,22 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* TileArch;
 
+	/*
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<AFoeSpawner> FoeSpawner;
+		TSubclassOf<AFoeSpawner> FoeSpawner;*/
 
-	UPROPERTY()
-		AFoeSpawner* SpawnedFoeSpawner;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ANavigationPoint> StartingPoint;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ANavigationPoint> ExitingPoint;
+
+	UPROPERTY(EditAnywhere)
+		ANavigationPoint* StartingPointActor;
+	UPROPERTY(EditAnywhere)
+		ANavigationPoint* ExitingPointActor;
+
+	/*UPROPERTY()
+		AFoeSpawner* SpawnedFoeSpawner;*/
 
 	float SizeOfMesh = 200.f;
 	float Offset = 100.f;

@@ -15,7 +15,7 @@ UBTTask_SetOriginToRoomCenter::UBTTask_SetOriginToRoomCenter(FObjectInitializer 
 EBTNodeResult::Type UBTTask_SetOriginToRoomCenter::ExecuteTask(UBehaviorTreeComponent& owner_comp, uint8* node_memory)
 {
 	AAIC_Foe* FoeController = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
-	FoeController->GetBlackboardComponent()->SetValueAsVector(bb_keys::target_location, FoeController->OriginLocation);
+	FoeController->GetBlackboardComponent()->SetValueAsVector(bb_keys::target_location, FoeController->GetOriginLocation());
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

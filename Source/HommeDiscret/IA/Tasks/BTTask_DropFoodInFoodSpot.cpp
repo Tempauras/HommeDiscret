@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_DropFoodInFoodSpot::ExecuteTask(UBehaviorTreeCompone
 	EBTNodeResult::Type HaveSucceeded = EBTNodeResult::Succeeded;
 	if (HaveDroppedFood==false)
 	{	
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Task have failed !!!"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Drop Food in Foodspot has failed !!!"));
 		HaveSucceeded = EBTNodeResult::Failed;
 	}
 	FinishLatentTask(owner_comp, HaveSucceeded);

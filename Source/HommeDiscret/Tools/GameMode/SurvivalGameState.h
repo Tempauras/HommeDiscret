@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
 #include "HommeDiscret/IA/FoeSpawner.h"
+#include "HommeDiscret/IA/AIC_Foe.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "SurvivalGameState.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class HOMMEDISCRET_API ASurvivalGameState : public AGameStateBase
@@ -35,8 +36,18 @@ public:
 	UPROPERTY()
 		TArray<AFoodSpot*> FoodSpotList;
 
-	UPROPERTY()
-		AFoeSpawner* FoeSpawner;
+	UPROPERTY(VisibleAnywhere, Category = "NavigationPoint")
+		FVector EnterLocation;
+
+	UPROPERTY(VisibleAnywhere, Category = "NavigationPoint")
+		FVector ExitLocation;
+
+	UPROPERTY(VisibleAnywhere, Category = "NavigationPoint")
+		FVector OriginLocation;
+
+	UPROPERTY(VisibleAnywhere)
+		TArray<AAIC_Foe*> FoeControllerList;
+
 
 	UFUNCTION(Category = "UI")
 		int getCurrentFoodsInChest();

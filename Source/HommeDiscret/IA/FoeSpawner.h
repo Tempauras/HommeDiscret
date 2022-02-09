@@ -23,7 +23,6 @@ public:
 		float CollisionSphereRadius=100.0f;
 
 private:
-
 	UPROPERTY(VisibleAnywhere)
 		FVector Loc;
 	UPROPERTY(VisibleAnywhere)
@@ -39,5 +38,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SpawnFoe(bool HaveFood);
+	bool SpawnFoe(bool HaveFood);
 };

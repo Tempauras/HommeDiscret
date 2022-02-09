@@ -12,7 +12,8 @@ AFoeSpawner::AFoeSpawner()
 	PrimaryActorTick.bCanEverTick = true;
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
 	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
-	CollisionSphere->SetupAttachment(RootComponent);
+	//CollisionSphere->SetupAttachment(RootComponent);
+	RootComponent = CollisionSphere;
 }
 
 // Called when the game starts or when spawned
@@ -20,29 +21,46 @@ void AFoeSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	Loc = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z);
-	Loc.X = Loc.X + CollisionSphere->GetScaledSphereRadius()+ 15.0f;
+	//Loc.X = Loc.X + 200.0f;
 	Rot = this->GetActorRotation();
 	//SpawnFoe(true);
 	//SpawnFoe(false);
 }
 
-void AFoeSpawner::SpawnFoe(bool HaveFood)
+bool AFoeSpawner::SpawnFoe(bool HaveFood)
 {
+	bool Result = false;
 	if (ActorToSpawn != nullptr)
 	{
 		FActorSpawnParameters SpawnParams;
 		AActor* SpawnedActorRef = GetWorld()->SpawnActor<AFoe>(ActorToSpawn, Loc, Rot, SpawnParams);
-		AFoe* NewFoe = Cast<AFoe>(SpawnedActorRef);
-		if (HaveFood)
+		if (SpawnedActorRef != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("Foe with food spawned"));
-			NewFoe->InstantiateFood();
+			AFoe* NewFoe = Cast<AFoe>(SpawnedActorRef);
+			if (NewFoe != nullptr)
+			{
+				if (HaveFood)
+				{
+					GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("Foe with food spawned"));
+					NewFoe->InstantiateFood();
+				}
+				else
+				{
+					GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("Foe spawned"));
+				}
+				Result = true;
+			}
+			else
+			{
+				GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("No Foe spawned : Cast doesn't work"));
+			}
 		}
 		else 
 		{
-			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("Foe spawned"));
+			GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("No Foe spawned : SpawnActor doesn't work"));
 		}
 	}
+	return Result;
 }
 
 // Called every frame

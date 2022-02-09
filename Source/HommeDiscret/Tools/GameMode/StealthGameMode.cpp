@@ -2,12 +2,13 @@
 
 #include "StealthGameMode.h"
 #include "HommeDiscret/IA/FoeSpawner.h"
+#include "HommeDiscret/IA/Foe.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "HDGameInstance.h"
 
 AStealthGameMode::AStealthGameMode()
 {
 }
-
 
 void AStealthGameMode::BeginPlay()
 {
@@ -22,11 +23,12 @@ void AStealthGameMode::BeginPlay()
 			PlayerWidget->AddToViewport();
 		}
 	}
-	LaunchIA();
 
+	if (SpawnAllFoes(3) == 0)
+	{
+		LaunchGameStateAI();
+	}
 	ShowNormalHUD();
-	//LaunchIA();
-
 }
 
 void AStealthGameMode::PlayerWon()
@@ -74,6 +76,88 @@ void AStealthGameMode::RemoveFoodInRoom()
 	}
 }
 
+
+TArray<AAIC_Foe*> AStealthGameMode::GetFoeControllers()
+{
+	return SurvivalGameState->FoeControllerList;
+}
+
+void AStealthGameMode::AddFoeController(AAIC_Foe* NewFoeController)
+{
+	SurvivalGameState->FoeControllerList.Add(NewFoeController);
+}
+
+void AStealthGameMode::RemoveFoeController(AAIC_Foe* OldFoeController)
+{
+	SurvivalGameState->FoeControllerList.Remove(OldFoeController);
+}
+
+AAIC_Foe* AStealthGameMode::FindFreeFoeController()
+{
+	AAIC_Foe* FoeController = nullptr;
+	TArray<AAIC_Foe*> theControllers = GetFoeControllers();
+	bool End = false;
+	int i = 0;
+	int ControllerNumber = theControllers.Num();
+	do
+	{
+		AAIC_Foe* CurrentController = theControllers[i];
+		if (CurrentController->GetBehaviorTreeIsRunning() == false)
+		{
+			FoeController = CurrentController;
+			End = true;
+		}
+		else
+		{
+			i++;
+		}
+	} while (i < ControllerNumber && End == false);
+	return FoeController;
+}
+
+int AStealthGameMode::SpawnFoe(int CurrentIndex)
+{
+	int Result = 1;
+	float NewSpaceBetween = CurrentIndex * 110.0f;
+	FActorSpawnParameters SpawnParams;
+	AActor* SpawnedFoeRef = GetWorld()->SpawnActor<AFoe>(FoeToSpawn, GetRealEnterLocation(NewSpaceBetween), FRotator::ZeroRotator, SpawnParams);
+	if (SpawnedFoeRef != nullptr)
+	{
+		AFoe* NewFoe = Cast<AFoe>(SpawnedFoeRef);
+		if (NewFoe != nullptr)
+		{
+			AAIC_Foe* NewFoeController = Cast<AAIC_Foe>(NewFoe->GetController());
+			if (NewFoeController != nullptr)
+			{
+				AddFoeController(NewFoeController);
+				NewFoe->SpaceBetween= NewSpaceBetween;
+				Result = 0;
+			}
+		}
+	}
+	return Result;
+}
+
+int AStealthGameMode::SpawnAllFoes(int NumberOfFoes)
+{
+	int Result = 0;
+	for (int i = 0;i < NumberOfFoes;i++)
+	{
+		Result+=SpawnFoe(i);
+	}
+	return Result;
+}
+
+void AStealthGameMode::SetAIWaiting(AFoe* Foe)
+{
+	RemoveFoeInRoom();
+	if (Foe != nullptr)
+	{
+		FoeToTeleport = Foe;
+		LaunchTeleportTimer(1.0f, false);
+	}
+}
+
 void AStealthGameMode::AddFoeInRoom()
 {
 	SurvivalGameState->FoeCountInRoom++;
@@ -82,16 +166,16 @@ void AStealthGameMode::AddFoeInRoom()
 void AStealthGameMode::RemoveFoeInRoom()
 {
 	SurvivalGameState->FoeCountInRoom--;
-	//If there's no foe in room : SpawnFoelos
-	//else : LaunchTimer between 0 et 5
+	UE_LOG(LogTemp, Warning, TEXT("One Foe has gone"));
 	if (SurvivalGameState->FoeCountInRoom <= 0)
 	{
-		CreateFoe();
+		LaunchAI();
 	}
 	else
 	{
 		int RandomTimer = rand() % 6;
-		LaunchTimer((float)RandomTimer, false, 0.0f);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Timer %d"),RandomTimer));
+		LaunchSpawnTimer((float)RandomTimer, false);
 	}
 }
 
@@ -100,26 +184,55 @@ void AStealthGameMode::SetFoeCarryFood(bool NewNextFood)
 	SurvivalGameState->FoeCarryFood = NewNextFood;
 }
 
-void AStealthGameMode::CreateFoe()
+bool AStealthGameMode::GetFoeCarryFood()
 {
-	FoeSpawner->SpawnFoe(SurvivalGameState->FoeCarryFood);
-	AddFoeInRoom();
-	if (SurvivalGameState->FoeCarryFood)
+	return SurvivalGameState->FoeCarryFood;
+}
+
+
+void AStealthGameMode::LaunchGameStateAI()
+{
+	LaunchAI();
+	LaunchAI();
+	LaunchSpawnTimer(60.0f, false);
+}
+
+void AStealthGameMode::LaunchAI()
+{
+	AAIC_Foe* FreeFoeController = FindFreeFoeController();
+	if (FreeFoeController == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Doesn't find Foe Controller"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("find Foe Controller"));
+
+	}
+	FreeFoeController->StartAIBehavior(GetFoeCarryFood());
+	if (GetFoeCarryFood())
 	{
 		AddFoodInRoom();
 	}
+	AddFoeInRoom();
 }
 
-void AStealthGameMode::LaunchIA()
+void AStealthGameMode::LaunchSpawnTimer(float InRate, bool IsLooping)
 {
-	CreateFoe();
-	CreateFoe();
-	LaunchTimer(60.0f, false, 0.0f);
+	UE_LOG(LogTemp, Warning, TEXT("Timer Launched"));
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::LaunchAI, InRate, IsLooping);
 }
 
-void AStealthGameMode::LaunchTimer(float InRate, bool IsLooping, float Delay)
+void AStealthGameMode::LaunchTeleportTimer(float InRate, bool IsLooping)
 {
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::CreateFoe, InRate, IsLooping, Delay);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::TeleportFoe, InRate, IsLooping);
+}
+
+void AStealthGameMode::TeleportFoe()
+{
+
+	FoeToTeleport->SetActorLocation(GetRealEnterLocation(FoeToTeleport->SpaceBetween));
+	FoeToTeleport = nullptr;
 }
 
 void AStealthGameMode::ShowPauseMenu()
@@ -172,7 +285,62 @@ void AStealthGameMode::ShowNormalHUD()
 	}
 }
 
+void AStealthGameMode::SetEnterLocation(FVector NewVector)
+{
+
+	SurvivalGameState->EnterLocation=NewVector;
+}
+
+void AStealthGameMode::SetExitLocation(FVector NewVector)
+{
+	SurvivalGameState->ExitLocation = NewVector;
+}
+
+void AStealthGameMode::SetOriginLocation(FVector NewVector)
+{
+	SurvivalGameState->OriginLocation = NewVector;
+}
+
+FVector AStealthGameMode::GetEnterLocation()
+{
+	return SurvivalGameState->EnterLocation;
+}
+
+FVector AStealthGameMode::GetRealEnterLocation(float SpaceBetween)
+{
+	return FVector(GetEnterLocation().X + SpaceBetween, GetEnterLocation().Y, GetEnterLocation().Z);
+}
+
+FVector AStealthGameMode::GetExitLocation()
+{
+	return SurvivalGameState->ExitLocation;
+}
+
+FVector AStealthGameMode::GetOriginLocation()
+{
+	return SurvivalGameState->OriginLocation;
+}
+
+
+TArray<AFoodSpot*> AStealthGameMode::GetFoodSpotList()
+{
+	return SurvivalGameState->FoodSpotList;
+}
+
+AFoodSpot* AStealthGameMode::GetOneRandomFoodSpot()
+{
+	TArray<AFoodSpot*> theFoodSpots = GetFoodSpotList();
+	int RandomIndex = rand() % theFoodSpots.Num();
+	AActor* NewActor = theFoodSpots[RandomIndex];
+	AFoodSpot* NewFoodSpot = Cast<AFoodSpot>(NewActor);
+	if (NewFoodSpot == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No FoodSpot Found"));
+	}
+	return NewFoodSpot;
+
 int AStealthGameMode::getMaxFoodsInRoom()
 {
 	return MaxFoodsInRoom;
+
 }
