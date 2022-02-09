@@ -15,9 +15,12 @@
 #include "HommeDiscret/IA/Tasks/BB_keys.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "FoeSpawner.h"
+#include "Foe.h"
 #include "GameFramework/Character.h"
-#include "HommeDiscret/Tools/GameMode/SurvivalGameState.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
 
+
+/*
 
 AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
 {
@@ -32,27 +35,36 @@ AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
     BehaviorTreeComponent = object_initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorTree"));
     Blackboard = object_initializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
     SetupPerceptionSystem();
+}*/
+
+AAIC_Foe::AAIC_Foe()
+{
+    BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTree"));
+    Blackboard = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComp"));
+    SetupPerceptionSystem();
 }
+
 
 
 void AAIC_Foe::BeginPlay()
 {       
     Super::BeginPlay();
-    TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
+    HasAlreadyStartedBT = false;
+    /*TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
     TArray<AActor*> FoundActors;
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundActors);
-   /* EntranceLocation = FoundNavigationP[0]->GetActorLocation();
+    /*EntranceLocation = FoundNavigationP[0]->GetActorLocation();
     ExitLocation = FoundNavigationP[2]->GetActorLocation();*/
-    OriginLocation = FoundActors[0]->GetActorLocation();
+    /*OriginLocation = FoundActors[0]->GetActorLocation();
     EntranceLocation = OriginLocation;
     FoundActors.Empty();
     ClassToFind = AFoeSpawner::StaticClass();
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundActors);
     ExitLocation = FoundActors[0]->GetActorLocation();
-    FoundActors.Empty();
-    FindFoodSpots();
-    RunBehaviorTree(Btree);
-    BehaviorTreeComponent->StartTree(*Btree);
+    FoundActors.Empty();*/
+    GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+   // FindFoodSpots();
+    //StartAIBehavior();
 }
 
 void AAIC_Foe::OnPossess(APawn* const pawn)
@@ -64,12 +76,48 @@ void AAIC_Foe::OnPossess(APawn* const pawn)
     }
 }
 
+void AAIC_Foe::StartAIBehavior(bool HaveFood)
+{
+    if (HasAlreadyStartedBT)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("RestartLogic"));
+        BehaviorTreeComponent->RestartTree();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("StartLogic"));
+        RunBehaviorTree(Btree);
+        BehaviorTreeComponent->StartTree(*Btree);
+        HasAlreadyStartedBT = true;
+    }
+    if (HaveFood)
+    {
+        AFoe* Foe = Cast<AFoe>(GetPawn());
+        if (Foe != nullptr)
+        {
+            Foe->InstantiateFood();
+        }
+    }
+}
+
+void AAIC_Foe::StopAIBehavior()
+{
+    UE_LOG(LogTemp, Warning, TEXT("StopLogic"));
+    BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+    Blackboard->ClearValue(bb_keys::ExitLocation);
+}
+
+/*
+void AAIC_Foe::RestartAIBehavior()
+{
+    UE_LOG(LogTemp, Warning, TEXT("RestartLogic"));
+    BehaviorTreeComponent->RestartTree();
+}*/
+
 UBlackboardComponent* AAIC_Foe::get_blackboard() const 
 {
     return Blackboard;
 }
-
-
 
 void AAIC_Foe::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
@@ -98,22 +146,35 @@ void AAIC_Foe::SetupPerceptionSystem()
      GetPerceptionComponent()->ConfigureSense(*SightConfig);
 }
 
-void AAIC_Foe::FindFoodSpots()
+
+FVector AAIC_Foe::GetEnterLocation()
 {
-    /*
-    TSubclassOf<AActor> ClassToFind = AFoodSpot::StaticClass();
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoodSpots);*/
-    ASurvivalGameState* GS = Cast<ASurvivalGameState>(UGameplayStatics::GetGameState(GetWorld()));
-    if (GS != nullptr)
-    {
-        FoodSpots = GS->FoodSpotList;
-    }
+
+    return GameMode->GetEnterLocation();
 }
+
+FVector AAIC_Foe::GetExitLocation()
+{
+    return GameMode->GetExitLocation();
+}
+
+bool AAIC_Foe::GetBehaviorTreeIsRunning()
+{
+    bool Result = true;
+    if (BehaviorTreeComponent->IsRunning() == false)
+    {
+        Result = false;
+    }
+    return Result;
+}
+
+FVector AAIC_Foe::GetOriginLocation()
+{
+    return GameMode->GetOriginLocation();
+}
+
 
 AFoodSpot* AAIC_Foe::GetOneRandomFoodSpot()
 {
-    int RandomIndex = rand() % FoodSpots.Num();
-    AActor* NewActor = FoodSpots[RandomIndex];
-    AFoodSpot* NewFoodSpot = Cast<AFoodSpot>(NewActor);
-    return NewFoodSpot;
+    return GameMode->GetOneRandomFoodSpot();
 }

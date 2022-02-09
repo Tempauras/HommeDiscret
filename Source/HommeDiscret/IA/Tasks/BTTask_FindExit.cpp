@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_FindExit::ExecuteTask(UBehaviorTreeComponent& owner_
 
 	if (cont != nullptr)
 	{
-		cont->get_blackboard()->SetValueAsVector(bb_keys::ExitLocation, cont->ExitLocation);
+		cont->get_blackboard()->SetValueAsVector(bb_keys::ExitLocation, cont->GetExitLocation());
 	}
 	//finish with success
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);

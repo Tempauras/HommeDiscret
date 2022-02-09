@@ -8,7 +8,8 @@
 #include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
 #include "AIC_Foe.h"
-#include "FoeSpawner.h"
+//#include "FoeSpawner.h"
+#include "NavigationPoint.h"
 
 // Sets default values
 AFoe::AFoe()
@@ -16,7 +17,7 @@ AFoe::AFoe()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	//HaveToDroppedFood = false;
-	AIControllerClass = AAIC_Foe::StaticClass();
+	AIControllerClass = FoeController;
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	CharacMov = GetCharacterMovement();
@@ -52,7 +53,7 @@ void AFoe::BeginPlay()
 	CurrentWorld=GetWorld();
 	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 300.0f);
 	SpawnRotation = this->GetActorRotation();
-	FoodClass = AFood::StaticClass();
+	PawnController = Cast<AAIC_Foe>(GetController());
 	//InstantiateFood();
 }
 
@@ -81,11 +82,17 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 			}
 		}
 	}
-	else if (OtherActor->IsA(AFoeSpawner::StaticClass()))
+	else if (OtherActor->IsA(ANavigationPoint::StaticClass()))
 	{
-		//Destroy();
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple,TEXT("Collides with foe spawner"));
-		//GameMode->RemoveFoeInRoom();
+		if (PawnController != nullptr)
+		{
+			//GameMode->RemoveFoeInRoom();
+			GameMode->SetAIWaiting(this);
+			//this->SetActorLocation(GameMode->GetNavLocation(0));			
+			HaveToDroppedFood = false;
+			PawnController->StopAIBehavior();
+
+		}
 	}
 }
 
@@ -102,10 +109,6 @@ void AFoe::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	else if (OtherActor->IsA(AFoodSpot::StaticClass()))
 	{
 		FoodSpotNearby = nullptr;
-		/*if (IsHoldingFood)
-		{
-			FoodSpotNearby = nullptr;
-		}*/
 	}
 }
 
@@ -115,7 +118,7 @@ bool AFoe::PickUpFood()
 	if (FoodRef != nullptr)
 	{
 		IsHoldingFood = true;
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
 		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
 		FoodRef->Hide();
 		Return = true;
@@ -148,17 +151,16 @@ bool AFoe::DropFoodInFoodSpot()
 	{
 		if (FoodRef != nullptr)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("FoodRef %s"), *FoodRef->GetName()));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("FoodRef %s"), *FoodRef->GetName()));
 			bool Success = FoodSpotNearby->FillFoodSpot(FoodRef);
 			if (Success == true)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
 				IsHoldingFood = false;
 				FoodMesh->SetStaticMesh(nullptr);
 				FoodRef = nullptr;
 				Return = true;
 				CharacMov->MaxWalkSpeed = FoeSpeed;
-
 			}
 		}
 	}
@@ -172,16 +174,18 @@ void AFoe::InstantiateFood()
 	{
 		if (!IsHoldingFood)
 		{
-			AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Class %s"), *FoodClass->GetName()));
+			//AActor* Actor = CurrentWorld->SpawnActor(FoodClass, &SpawnLocation, &SpawnRotation, SpawnInfo);
+			AActor* Actor = GetWorld()->SpawnActor<AFood>(FoodClass, SpawnLocation, SpawnRotation, SpawnInfo);
 			if (Actor != nullptr)
 			{
 				AFood* NewFood = Cast<AFood>(Actor);
 				if (NewFood != nullptr)
 				{
+					HaveToDroppedFood = true;
 					FoodRef = NewFood;
 					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
 					PickUpFood();
-					HaveToDroppedFood = true;
 				}
 			}
 		}

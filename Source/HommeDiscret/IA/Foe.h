@@ -12,6 +12,7 @@ class AFoodSpot;
 class UCapsuleComponent;
 class USphereComponent;
 class AStealthGameMode;
+class AAIC_Foe;
 UCLASS()
 class HOMMEDISCRET_API AFoe : public ACharacter
 {
@@ -20,10 +21,16 @@ class HOMMEDISCRET_API AFoe : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AFoe();
-
+	UPROPERTY(VisibleAnywhere)
+		float SpaceBetween;
+	UPROPERTY(VisibleAnywhere)
+	AAIC_Foe* PawnController;
 
 protected:
 	AStealthGameMode* GameMode;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AActor> FoeController;
 
 	UPROPERTY(VisibleAnywhere)
 		USphereComponent* CollisionSphere;

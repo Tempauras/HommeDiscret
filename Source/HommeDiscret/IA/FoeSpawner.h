@@ -20,10 +20,9 @@ public:
 		USphereComponent* CollisionSphere;
 
 	UPROPERTY(VisibleAnywhere)
-		float CollisionSphereRadius=10.0f;
+		float CollisionSphereRadius=100.0f;
 
 private:
-
 	UPROPERTY(VisibleAnywhere)
 		FVector Loc;
 	UPROPERTY(VisibleAnywhere)

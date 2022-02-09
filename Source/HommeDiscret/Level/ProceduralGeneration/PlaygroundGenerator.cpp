@@ -101,14 +101,10 @@ void APlaygroundGenerator::SpawnPlayground()
 		if (GS != nullptr)
 		{
 			GS->FoodSpotList = FoodSpotList;
-			GS->FoeSpawner = FoeSpawnerRoomReferences->SpawnedFoeSpawner;
+			GS->OriginLocation = NavigationPointReferences->GetActorLocation();
+			GS->ExitLocation = FoeSpawnerRoomReferences->ExitingPointActor->GetActorLocation();
+			GS->EnterLocation = FoeSpawnerRoomReferences->StartingPointActor->GetActorLocation();
 		}
-		/*
-		AStealthGameMode* GM = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-		if (GM != nullptr)
-		{
-			GM->LaunchAI();
-		}*/
 	}
 }
 

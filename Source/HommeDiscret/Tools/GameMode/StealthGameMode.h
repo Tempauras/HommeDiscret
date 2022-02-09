@@ -21,6 +21,7 @@ enum GameStates
 /**
  *
  */
+class AFoe;
 class AFoeSpawner;
 UCLASS()
 class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
@@ -33,9 +34,6 @@ class HOMMEDISCRET_API AStealthGameMode : public AGameModeBase
 public:
 	UPROPERTY(EditAnywhere)
 		ASurvivalGameState* SurvivalGameState;
-
-	UPROPERTY(EditAnywhere)
-		AFoeSpawner* FoeSpawner;
 
 	FTimerHandle TimerHandle;
 protected:
@@ -55,8 +53,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere)
 		int MaxFoodsInRoom = 5;
-
-
 
 public:
 	AStealthGameMode();
@@ -78,6 +74,29 @@ public:
 	UFUNCTION(Category = "Food")
 		void RemoveFoodInRoom();
 
+	UFUNCTION(Category = "FoeController")
+		TArray<AAIC_Foe*> GetFoeControllers();
+
+	UFUNCTION(Category = "FoeController")
+		void AddFoeController(AAIC_Foe* NewFoeController);
+
+	UFUNCTION(Category = "FoeController")
+		void RemoveFoeController(AAIC_Foe* OldFoeController);
+
+	UFUNCTION(Category = "FoeController")
+		AAIC_Foe* FindFreeFoeController();
+
+	UFUNCTION(Category = "Foe")
+		int SpawnFoe(int CurrentIndex);
+
+	UFUNCTION(Category="Foe")
+	int SpawnAllFoes(int NumberOfFoes);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Foe")
+		UClass*  FoeToSpawn;
+
+	void SetAIWaiting(AFoe* Foe);
+
 	UFUNCTION(Category = "Foe")
 		void AddFoeInRoom();
 
@@ -88,17 +107,58 @@ public:
 		void SetFoeCarryFood(bool NewNextFood);
 
 	UFUNCTION(Category = "Foe")
-		void CreateFoe();
+		bool GetFoeCarryFood();
+
+
+	UFUNCTION(Category = "Foe")
+		void LaunchGameStateAI();
 
 	UFUNCTION(Category = "Foe")
 		void LaunchAI();
 
 	UFUNCTION(Category = "Foe")
-		void LaunchTimer(float InRate, bool IsLooping);
+		void LaunchSpawnTimer(float InRate, bool IsLooping);
+
+	UFUNCTION(Category = "Foe")
+		void LaunchTeleportTimer(float InRate, bool IsLooping);
+	
+	AFoe* FoeToTeleport;
+
+	UFUNCTION(Category = "Foe")
+		void TeleportFoe();
 
 	UFUNCTION(Category = "UI")
 		virtual void ShowPauseMenu();
 	UFUNCTION(Category = "UI")
 		virtual void ShowNormalHUD();
+	
+	UFUNCTION(Category = "Navigation")
+		void SetEnterLocation(FVector NewVector);
 
+	UFUNCTION(Category = "Navigation")
+		void SetExitLocation(FVector NewVector);
+
+	UFUNCTION(Category = "Navigation")
+		void SetOriginLocation(FVector NewVector);
+
+	UFUNCTION(Category = "Navigation")
+		FVector GetEnterLocation();
+
+	UFUNCTION(Category = "Navigation")
+		FVector GetRealEnterLocation(float SpaceBetween);
+
+	UFUNCTION(Category = "Navigation")
+		FVector GetExitLocation();
+
+	UFUNCTION(Category = "Navigation")
+		FVector GetOriginLocation();
+
+	UFUNCTION(Category = "FoodSpot")
+		TArray<AFoodSpot*> GetFoodSpotList();
+
+	UFUNCTION(Category = "FoodSpot")
+		AFoodSpot* GetOneRandomFoodSpot();
+
+	//UFUNCTION(Category = "")
+		
 };
