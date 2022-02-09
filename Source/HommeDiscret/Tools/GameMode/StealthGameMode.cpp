@@ -4,6 +4,7 @@
 #include "HommeDiscret/IA/FoeSpawner.h"
 #include "HommeDiscret/IA/Foe.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
+#include "HDGameInstance.h"
 
 AStealthGameMode::AStealthGameMode()
 {
@@ -13,6 +14,7 @@ void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
+
 	if (PlayerHUDClass != nullptr)
 	{
 		PlayerWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
@@ -21,12 +23,12 @@ void AStealthGameMode::BeginPlay()
 			PlayerWidget->AddToViewport();
 		}
 	}
-	//LaunchAI();
+
 	if (SpawnAllFoes(3) == 0)
 	{
 		LaunchGameStateAI();
 	}
-	//SpawnFoe();
+	ShowNormalHUD();
 }
 
 void AStealthGameMode::PlayerWon()
@@ -46,6 +48,7 @@ void AStealthGameMode::LostGame()
 void AStealthGameMode::AddFoodInChest(int FoodValue)
 {
 	SurvivalGameState->FoodCountInChest += FoodValue;
+	GameInstance->GetHungerBar()->setCurrentFood();
 	RemoveFoodInRoom();
 	PlayerWon();
 }
@@ -201,7 +204,7 @@ void AStealthGameMode::LaunchAI()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Doesn't find Foe Controller"));
 	}
-	else 
+	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("find Foe Controller"));
 
@@ -211,7 +214,7 @@ void AStealthGameMode::LaunchAI()
 	{
 		AddFoodInRoom();
 	}
-	AddFoeInRoom(); 
+	AddFoeInRoom();
 }
 
 void AStealthGameMode::LaunchSpawnTimer(float InRate, bool IsLooping)
@@ -227,7 +230,7 @@ void AStealthGameMode::LaunchTeleportTimer(float InRate, bool IsLooping)
 
 void AStealthGameMode::TeleportFoe()
 {
-	
+
 	FoeToTeleport->SetActorLocation(GetRealEnterLocation(FoeToTeleport->SpaceBetween));
 	FoeToTeleport = nullptr;
 }
@@ -335,4 +338,9 @@ AFoodSpot* AStealthGameMode::GetOneRandomFoodSpot()
 		UE_LOG(LogTemp, Warning, TEXT("No FoodSpot Found"));
 	}
 	return NewFoodSpot;
+
+int AStealthGameMode::getMaxFoodsInRoom()
+{
+	return MaxFoodsInRoom;
+
 }

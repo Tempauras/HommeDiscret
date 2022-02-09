@@ -10,7 +10,7 @@
 #include "SurvivalGameState.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class HOMMEDISCRET_API ASurvivalGameState : public AGameStateBase
@@ -47,4 +47,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 		TArray<AAIC_Foe*> FoeControllerList;
+
+
+	UFUNCTION(Category = "UI")
+		int getCurrentFoodsInChest();
 };

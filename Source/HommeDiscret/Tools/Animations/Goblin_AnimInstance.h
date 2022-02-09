@@ -19,10 +19,19 @@ public:
 	UGoblin_AnimInstance();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
-		float Speed;
-
+		bool IsHolding;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
-		bool IsMovingG;
+		bool IsInHand;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		float Speed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		bool IsMoving;
+
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_End(UAnimNotify* Notify);
+
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_Begin(UAnimNotify* Notify);
 
 
 
