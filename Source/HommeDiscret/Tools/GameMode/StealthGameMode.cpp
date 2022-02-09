@@ -49,6 +49,7 @@ void AStealthGameMode::AddFoodInChest(int FoodValue)
 {
 	SurvivalGameState->FoodCountInChest += FoodValue;
 	GameInstance->GetHungerBar()->setCurrentFood();
+	GameInstance->GetHungerBar()->setProgressBar();
 	RemoveFoodInRoom();
 	PlayerWon();
 }
@@ -338,6 +339,7 @@ AFoodSpot* AStealthGameMode::GetOneRandomFoodSpot()
 		UE_LOG(LogTemp, Warning, TEXT("No FoodSpot Found"));
 	}
 	return NewFoodSpot;
+}
 
 int AStealthGameMode::getMaxFoodsInRoom()
 {

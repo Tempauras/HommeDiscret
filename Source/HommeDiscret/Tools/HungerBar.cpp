@@ -20,20 +20,26 @@ void UHungerBar::NativeConstruct()
 
 	setMaxFood();
 	setCurrentFood();
+	setProgressBar();
 }
 
 void UHungerBar::setMaxFood()
 {
-	int32 YourInt = GameMode->getMaxFoodsInRoom();
-	FText intAsText = FText::AsNumber(YourInt);
+	MaxFood = GameMode->getMaxFoodsInRoom();
+	FText intAsText = FText::AsNumber(MaxFood);
 	MaxHungerLabel->SetText(intAsText);
 }
 
 void UHungerBar::setCurrentFood()
 {
-	int YourInt = GameState->getCurrentFoodsInChest();
-	FText intAsText = FText::AsNumber(YourInt);
+	CurrentFood = GameState->getCurrentFoodsInChest();
+	FText intAsText = FText::AsNumber(CurrentFood);
 	CurrentHungerLabel->SetText(intAsText);
+}
+
+void UHungerBar::setProgressBar()
+{
+	HungerBar->SetPercent(CurrentFood / MaxFood);
 }
 
 void UHungerBar::OnFoodStocked()
