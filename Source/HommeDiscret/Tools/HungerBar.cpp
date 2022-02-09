@@ -39,7 +39,9 @@ void UHungerBar::setCurrentFood()
 
 void UHungerBar::setProgressBar()
 {
-	HungerBar->SetPercent(CurrentFood / MaxFood);
+	float nb = CurrentFood / MaxFood;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("%f"), nb));
+	HungerBar->SetPercent(nb);
 }
 
 void UHungerBar::OnFoodStocked()

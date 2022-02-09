@@ -26,7 +26,6 @@ protected:
 
 public:
 	UHDGameInstance();
-	virtual void Init();
 	FORCEINLINE class UHungerBar* GetHungerBar() const { return HungerBar; }
 
 public:
@@ -36,8 +35,4 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void LoadHungerBar();
 
-	void OnStartGamePath();
-	void OnStartGame();
-
-	// Interface IInGameMenuInterface
 };

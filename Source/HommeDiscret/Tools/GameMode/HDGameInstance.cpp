@@ -29,24 +29,8 @@ void UHDGameInstance::LoadHungerBar()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
 		return;
 	}
-	HungerBar->AddToViewport();
+	//HungerBar->AddToViewport();
 
 	// Set the reference to the interface object
 	//HungerBar->SetMenuInterface(this);
-}
-
-// Handles Start GamePathbutton
-void UHDGameInstance::OnStartGamePath()
-{
-}
-
-// Handles Start StartGame logic from the inGameMenu
-void UHDGameInstance::OnStartGame()
-{
-	//StartGame();
-}
-
-void UHDGameInstance::Init()
-{
-	//UE_LOG(LogTemp, Warning, TEXT("We founded class %s"), *HungerBar->GetName());
 }

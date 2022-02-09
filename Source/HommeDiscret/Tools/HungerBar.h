@@ -34,8 +34,8 @@ protected:
 
 	AStealthGameMode* GameMode;
 	ASurvivalGameState* GameState;
-	int MaxFood;
-	int CurrentFood;
+	float MaxFood;
+	float CurrentFood;
 
 	void NativeOnInitiliazed();
 

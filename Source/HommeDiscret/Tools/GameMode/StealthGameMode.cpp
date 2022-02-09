@@ -14,10 +14,11 @@ void AStealthGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
+	GameInstance->LoadHungerBar();
 
 	if (PlayerHUDClass != nullptr)
 	{
-		PlayerWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDClass);
+		PlayerWidget = GameInstance->GetHungerBar();
 		if (PlayerWidget != nullptr)
 		{
 			PlayerWidget->AddToViewport();
@@ -28,7 +29,7 @@ void AStealthGameMode::BeginPlay()
 	{
 		LaunchGameStateAI();
 	}
-	ShowNormalHUD();
+	//ShowNormalHUD();
 }
 
 void AStealthGameMode::PlayerWon()
