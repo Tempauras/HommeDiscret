@@ -151,7 +151,7 @@ void AStealthGameMode::SetAIWaiting(AFoe* Foe)
 	if (Foe != nullptr)
 	{
 		FoeToTeleport = Foe;
-		LaunchTeleportTimer(3.0f, false);
+		LaunchTeleportTimer(1.0f, false);
 	}
 }
 
@@ -163,6 +163,7 @@ void AStealthGameMode::AddFoeInRoom()
 void AStealthGameMode::RemoveFoeInRoom()
 {
 	SurvivalGameState->FoeCountInRoom--;
+	UE_LOG(LogTemp, Warning, TEXT("One Foe has gone"));
 	if (SurvivalGameState->FoeCountInRoom <= 0)
 	{
 		LaunchAI();
@@ -190,7 +191,7 @@ void AStealthGameMode::LaunchGameStateAI()
 {
 	LaunchAI();
 	LaunchAI();
-	//LaunchSpawnTimer(60.0f, false);
+	LaunchSpawnTimer(60.0f, false);
 }
 
 void AStealthGameMode::LaunchAI()
@@ -210,11 +211,12 @@ void AStealthGameMode::LaunchAI()
 	{
 		AddFoodInRoom();
 	}
-	AddFoeInRoom();
+	AddFoeInRoom(); 
 }
 
 void AStealthGameMode::LaunchSpawnTimer(float InRate, bool IsLooping)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Timer Launched"));
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::LaunchAI, InRate, IsLooping);
 }
 
