@@ -5,36 +5,31 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
-#include "PauseMenuWidget.generated.h"
+#include "DefeatWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class HOMMEDISCRET_API UPauseMenuWidget : public UUserWidget
+class HOMMEDISCRET_API UDefeatWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 protected:
-	UPROPERTY(meta = (BindWidget))
-		UButton* ContinueGameButton;
 	UPROPERTY(meta = (BindWidget))
 		UButton* RestartGameButton;
 	UPROPERTY(meta = (BindWidget))
 		UButton* BackToMenuButton;
 	UPROPERTY(meta = (BindWidget))
-		class UTextBlock* ContinueGameText;
+		class UTextBlock* DefeatText;
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* RestartGameText;
 	UPROPERTY(meta = (BindWidget))
 		class UTextBlock* BackToMenuText;
-	APlayerController* PC;
 
 public:
 	virtual void NativeConstruct() override;
 
-	UFUNCTION()
-		void OnContinueGameClick();
 	UFUNCTION()
 		void OnRestartGameClick();
 	UFUNCTION()

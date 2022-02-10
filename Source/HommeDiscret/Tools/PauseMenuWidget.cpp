@@ -2,11 +2,16 @@
 
 
 #include "PauseMenuWidget.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 void UPauseMenuWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+	if (ContinueGameButton)
+	{
+		ContinueGameButton->OnClicked.AddDynamic(this, &UPauseMenuWidget::OnContinueGameClick);
+	}
 	if (RestartGameButton)
 	{
 		RestartGameButton->OnClicked.AddDynamic(this, &UPauseMenuWidget::OnRestartGameClick);
@@ -17,16 +22,21 @@ void UPauseMenuWidget::NativeConstruct()
 	}
 }
 
+void UPauseMenuWidget::OnContinueGameClick()
+{
+	AStealthGameMode* GM = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GM != nullptr)
+	{
+		GM->ShowNormalHUD();
+	}
+}
+
 void UPauseMenuWidget::OnRestartGameClick()
 {
-	if (PC)
-	{
-		PC->bShowMouseCursor = false;
-		PC->bEnableClickEvents = false;
-		PC->bEnableMouseOverEvents = false;
-	}
+	UGameplayStatics::OpenLevel(GetWorld(), FName("InGameLevel"));
 }
 
 void UPauseMenuWidget::OnBackToMenuClick()
 {
+	UGameplayStatics::OpenLevel(GetWorld(), FName("MainMenu"));
 }
