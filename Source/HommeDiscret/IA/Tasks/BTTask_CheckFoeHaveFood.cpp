@@ -20,8 +20,16 @@ EBTNodeResult::Type UBTTask_CheckFoeHaveFood::ExecuteTask(UBehaviorTreeComponent
 	AAIC_Foe* FoeController = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
 	AFoe* Foe = Cast<AFoe>(FoeController->GetPawn());
 	UBlackboardComponent* Blackboard = FoeController->GetBlackboardComponent();
-	Blackboard->SetValueAsBool(bb_keys::HaveToDroppedFood,Foe->GetHaveToDroppedFood());
+	if (Foe->GetHaveToDroppedFood())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Foe HaveToDroppedFood = true"));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Foe HaveToDroppedFood = false"));
 
+	}
+	Blackboard->SetValueAsBool(bb_keys::HaveToDroppedFood,Foe->GetHaveToDroppedFood());
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }
