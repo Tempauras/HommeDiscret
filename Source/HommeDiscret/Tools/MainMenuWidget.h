@@ -27,6 +27,8 @@ protected:
 		class UTextBlock* CloseButtonText;
 	UPROPERTY(meta = (BindWidget))
 		class UImage* MainMenuImage;
+	UPROPERTY(meta = (BindWidget))
+		class UTextBlock* MainMenuText;
 
 	virtual void NativeConstruct() override;
 public:
