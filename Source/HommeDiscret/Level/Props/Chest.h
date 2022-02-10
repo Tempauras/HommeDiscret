@@ -30,9 +30,6 @@ public:
 
 	AStealthGameMode* GameMode;
 
-	/*UPROPERTY(VisibleAnywhere)
-		UHungerBar* Hungerbar;*/
-
 	UPROPERTY(VisibleAnywhere)
 		float SphereRadius;
 
@@ -52,8 +49,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-		void AddingFood(int FoodValue);
+	void AddingFood(int FoodValue);
 
 	int GetNumberFoodsContained();
 
