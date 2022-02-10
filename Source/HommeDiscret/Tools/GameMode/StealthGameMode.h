@@ -44,7 +44,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PauseHUDClass;
-
 	UPROPERTY()
 		UUserWidget* PlayerWidget;
 
