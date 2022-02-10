@@ -88,8 +88,8 @@ void AFoe::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 		{
 			//GameMode->RemoveFoeInRoom();
 			GameMode->SetAIWaiting(this);
-			//this->SetActorLocation(GameMode->GetNavLocation(0));			
-			HaveToDroppedFood = false;
+			//this->SetActorLocation(GameMode->GetNavLocation(0));	
+			SetHaveToDroppedFood(false);
 			PawnController->StopAIBehavior();
 
 		}
@@ -182,7 +182,8 @@ void AFoe::InstantiateFood()
 				AFood* NewFood = Cast<AFood>(Actor);
 				if (NewFood != nullptr)
 				{
-					HaveToDroppedFood = true;
+					GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Magenta, TEXT("SetHaveToDroppedFood to TRUE"));
+					SetHaveToDroppedFood(true);
 					FoodRef = NewFood;
 					PickUpFood();
 				}
@@ -198,6 +199,12 @@ void AFoe::InstantiateFood()
 bool AFoe::GetHaveToDroppedFood()
 {
 	return HaveToDroppedFood;
+}
+
+void AFoe::SetHaveToDroppedFood(bool Value)
+{
+	HaveToDroppedFood = Value;
+	PawnController->BBHaveToDroppedFood(HaveToDroppedFood);
 }
 
 bool AFoe::GetHoldingFood()

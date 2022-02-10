@@ -87,7 +87,7 @@ void AStealthGameMode::AddFoodInRoom()
 {
 	SurvivalGameState->FoodCountInRoom++;
 
-	if (SurvivalGameState->FoodCountInRoom >=MaxFoodsInRoom)
+	if (SurvivalGameState->FoodCountInRoom >MaxFoodsInRoom)
 	{
 		SurvivalGameState->FoodCountInRoom = 5;
 		SetFoeCarryFood(false);
@@ -105,6 +105,18 @@ void AStealthGameMode::RemoveFoodInRoom()
 			SurvivalGameState->FoodCountInRoom = 0;
 		}
 	}
+}
+
+FTimerHandle AStealthGameMode::GetTimerHandle(AFoe* Foe)
+{
+	FTimerHandle CurrentTimer;
+	AAIC_Foe* FoeController = Cast<AAIC_Foe>(Foe->GetController());
+	int IndexTimer = GetFoeControllers().Find(FoeController);
+	if (Timers.IsValidIndex(IndexTimer))
+	{
+		CurrentTimer = Timers[IndexTimer];
+	}
+	return CurrentTimer;
 }
 
 TArray<AAIC_Foe*> AStealthGameMode::GetFoeControllers()
@@ -160,6 +172,8 @@ int AStealthGameMode::SpawnFoe(int CurrentIndex)
 			if (NewFoeController != nullptr)
 			{
 				AddFoeController(NewFoeController);
+				FTimerHandle TimerHandle;
+				Timers.Add(TimerHandle);
 				NewFoe->SpaceBetween= NewSpaceBetween;
 				Result = 0;
 			}
@@ -180,11 +194,11 @@ int AStealthGameMode::SpawnAllFoes(int NumberOfFoes)
 
 void AStealthGameMode::SetAIWaiting(AFoe* Foe)
 {
-	RemoveFoeInRoom();
+	RemoveFoeInRoom(Foe);
 	if (Foe != nullptr)
 	{
 		FoeToTeleport = Foe;
-		LaunchTeleportTimer(1.0f, false);
+		LaunchTeleportTimer(GetTimerHandle(Foe),1.0f, false);
 	}
 }
 
@@ -193,7 +207,7 @@ void AStealthGameMode::AddFoeInRoom()
 	SurvivalGameState->FoeCountInRoom++;
 }
 
-void AStealthGameMode::RemoveFoeInRoom()
+void AStealthGameMode::RemoveFoeInRoom(AFoe* Foe)
 {
 	SurvivalGameState->FoeCountInRoom--;
 	UE_LOG(LogTemp, Warning, TEXT("One Foe has gone"));
@@ -203,9 +217,17 @@ void AStealthGameMode::RemoveFoeInRoom()
 	}
 	else
 	{
+		FTimerHandle CurrentTimerHandle = GetTimerHandle(Foe);
 		int RandomTimer = rand() % 6;
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Timer %d"),RandomTimer));
-		LaunchSpawnTimer((float)RandomTimer, false);
+		if (RandomTimer>0)
+		{
+			LaunchSpawnTimer(CurrentTimerHandle, (float)RandomTimer, false);
+		}
+		else 
+		{
+			LaunchAI();
+		}
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Timer %d"),RandomTimer));
 	}
 }
 
@@ -223,42 +245,34 @@ void AStealthGameMode::LaunchGameStateAI()
 {
 	LaunchAI();
 	LaunchAI();
-	LaunchSpawnTimer(60.0f, false);
+	LaunchSpawnTimer(Timers[2],60.0f, false);
 }
 
 void AStealthGameMode::LaunchAI()
 {
 	AAIC_Foe* FreeFoeController = FindFreeFoeController();
-	APawn* PawnToLaunched = FreeFoeController->GetPawn();
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Foe launched : %s"), *PawnToLaunched->GetName()));
-	/*if (FreeFoeController == nullptr)
+	if (FreeFoeController != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Doesn't find Foe Controller"));
+		if (GetFoeCarryFood())
+		{
+			AddFoodInRoom();
+			//UE_LOG(LogTemp, Warning, TEXT("Foe with Food"));
+			FreeFoeController->InstantiateFoodToFoe(GetFoeCarryFood());
+		}
+		FreeFoeController->StartAIBehavior();
+		AddFoeInRoom();
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("find Foe Controller"));
-
-	}*/
-	AddFoodInRoom();
-	if (GetFoeCarryFood())
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("Foe with Food"));
-		FreeFoeController->InstantiateFoodToFoe();
-	}
-	FreeFoeController->StartAIBehavior();
-	AddFoeInRoom();
 }
 
-void AStealthGameMode::LaunchSpawnTimer(float InRate, bool IsLooping)
+void AStealthGameMode::LaunchSpawnTimer(FTimerHandle Timer,float InRate, bool IsLooping)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Timer Launched : %f"),InRate));
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::LaunchAI, InRate, IsLooping);
+	GetWorldTimerManager().SetTimer(Timer, this, &AStealthGameMode::LaunchAI, InRate, IsLooping);
 }
 
-void AStealthGameMode::LaunchTeleportTimer(float InRate, bool IsLooping)
+void AStealthGameMode::LaunchTeleportTimer(FTimerHandle Timer, float InRate, bool IsLooping)
 {
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::TeleportFoe, InRate, IsLooping);
+	GetWorldTimerManager().SetTimer(Timer, this, &AStealthGameMode::TeleportFoe, InRate, IsLooping);
 }
 
 void AStealthGameMode::TeleportFoe()

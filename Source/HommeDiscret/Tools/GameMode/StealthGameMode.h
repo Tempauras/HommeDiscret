@@ -35,7 +35,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		ASurvivalGameState* SurvivalGameState;
 
-	FTimerHandle TimerHandle;
+	//FTimerHandle TimerHandle;
+	TArray<FTimerHandle> Timers;
 
 	void SetGameOver(bool value);
 	bool GetGameOver();
@@ -49,7 +50,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PauseHUDClass;
-
 	UPROPERTY()
 		UUserWidget* PlayerWidget;
 
@@ -91,6 +91,9 @@ public:
 	UFUNCTION(Category = "Food")
 		void RemoveFoodInRoom();
 
+	UFUNCTION(Category = "Foe")
+		FTimerHandle GetTimerHandle(AFoe* Foe);
+
 	UFUNCTION(Category = "FoeController")
 		TArray<AAIC_Foe*> GetFoeControllers();
 
@@ -118,7 +121,7 @@ public:
 		void AddFoeInRoom();
 
 	UFUNCTION(Category = "Foe")
-		void RemoveFoeInRoom();
+		void RemoveFoeInRoom(AFoe* Foe);
 
 	UFUNCTION(Category = "Foe")
 		void SetFoeCarryFood(bool NewNextFood);
@@ -133,10 +136,10 @@ public:
 		void LaunchAI();
 
 	UFUNCTION(Category = "Foe")
-		void LaunchSpawnTimer(float InRate, bool IsLooping);
+		void LaunchSpawnTimer(FTimerHandle Timer,float InRate, bool IsLooping);
 
 	UFUNCTION(Category = "Foe")
-		void LaunchTeleportTimer(float InRate, bool IsLooping);
+		void LaunchTeleportTimer(FTimerHandle Timer,float InRate, bool IsLooping);
 
 	AFoe* FoeToTeleport;
 

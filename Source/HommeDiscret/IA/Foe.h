@@ -75,6 +75,7 @@ public:
 	bool DropFoodInFoodSpot();
 	void InstantiateFood();
 	bool GetHaveToDroppedFood();
+	void SetHaveToDroppedFood(bool Value);
 	bool GetHoldingFood();
 
 	virtual void Tick(float DeltaTime) override;

@@ -27,8 +27,9 @@ public:
 	void BeginPlay() override;
 	void OnPossess(APawn* const pawn) override;
 	void StartAIBehavior();
-	void InstantiateFoodToFoe();
+	void InstantiateFoodToFoe(bool HaveFood);
 	void StopAIBehavior();
+	void BBHaveToDroppedFood(bool Value);
 	class UBlackboardComponent* get_blackboard() const;
 
 	bool GetBehaviorTreeIsRunning();
