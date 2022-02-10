@@ -54,6 +54,7 @@ AHero::AHero()
 	bDead = false;
 	CharacMov = GetCharacterMovement();
 	HeroSpeed = CharacMov->MaxWalkSpeed;
+	HeroSpeedHolding = HeroSpeed / 2;
 	SetupStimulus();
 }
 
@@ -291,7 +292,7 @@ void AHero::PickUpObject(AFood* NewFood)
 	FoodRef = NewFood;
 	IsHoldingFood = true;
 	FoodMesh->SetStaticMesh(NewFood->GetStaticMeshUsed());
-	CharacMov->MaxWalkSpeed = HeroSpeed / 2;
+	CharacMov->MaxWalkSpeed = HeroSpeedHolding;
 }
 
 

@@ -31,6 +31,7 @@ AFoe::AFoe()
 	FoodMesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 
 	FoeSpeed = CharacMov->MaxWalkSpeed;
+	FoeSpeedHolding = FoeSpeed/2;
 	FoodRef = nullptr;
 	FoodSpotNearby = nullptr;
 	HaveToDroppedFood = false;
@@ -122,7 +123,7 @@ bool AFoe::PickUpFood()
 		FoodMesh->SetStaticMesh(FoodRef->GetStaticMeshUsed());
 		FoodRef->Hide();
 		Return = true;
-		CharacMov->MaxWalkSpeed = FoeSpeed / 2;
+		CharacMov->MaxWalkSpeed = FoeSpeedHolding;
 	}
 	return Return;
 }
