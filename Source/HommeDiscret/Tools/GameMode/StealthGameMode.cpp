@@ -25,6 +25,7 @@ void AStealthGameMode::BeginPlay()
 		PC->bEnableClickEvents = false;
 		PC->bEnableMouseOverEvents = false;
 	}
+
 	if (PlayerHUDClass != nullptr)
 	{
 		PlayerWidget = GameInstance->GetHungerBar();
