@@ -14,7 +14,6 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "HommeDiscret/IA/Tasks/BB_keys.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
-#include "FoeSpawner.h"
 #include "Foe.h"
 #include "GameFramework/Character.h"
 #include "HommeDiscret/Tools/GameMode/StealthGameMode.h"

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "HommeDiscret/IA/FoeSpawner.h"
 #include "FoeSpawnerRoom.generated.h"
 
 class ANavigationPoint;

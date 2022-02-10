@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "StealthGameMode.h"
-#include "HommeDiscret/IA/FoeSpawner.h"
 #include "HommeDiscret/IA/Foe.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "HDGameInstance.h"

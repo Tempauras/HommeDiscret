@@ -55,7 +55,6 @@ void AFoodSpot::EmptyFoodSpot()
 {
 	FoodMesh->SetStaticMesh(nullptr);
 	FoodRef = nullptr;
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,TEXT("Empty"));
 }
 
 void AFoodSpot::InstantiateFoodSpot()
