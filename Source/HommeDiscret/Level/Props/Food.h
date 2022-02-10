@@ -16,6 +16,9 @@ class HOMMEDISCRET_API AFood : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AFood();
+
+
+protected:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* StaticMesh;
 
@@ -23,7 +26,9 @@ public:
 		USphereComponent* SphereCollider;
 
 	UPROPERTY(VisibleAnywhere)
-		float UnderFloorPosition = 50.0f;
+		float UnderFloorPosition = 100.0f;
+	UPROPERTY(VisibleAnywhere)
+		float DropOnFloorPosition = 60.0f;
 
 	UPROPERTY(VisibleAnywhere)
 		float InFrontPosition = 100.0f;
@@ -31,9 +36,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		int FoodValue = 1;
 
-	//bool bIsAblePickup = false;
+	UPROPERTY(VisibleAnywhere)
+		float InRate = 0.25f;
 
-protected:
+	FTimerHandle Timer;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -41,9 +47,7 @@ public:
 	void Hide();
 	void Show(FVector DropActorPos, FVector DropActorForward);
 	FVector GetRealLocation();
-	/*UFUNCTION()
-		void CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION()
-		void CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	*/
+	void SetPhysics();
+	int GetFoodValue();
+	UStaticMesh* GetStaticMeshUsed();
 };

@@ -119,7 +119,7 @@ bool AFoe::PickUpFood()
 	{
 		IsHoldingFood = true;
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe PickUp %s"),*FoodRef->GetName()));
-		FoodMesh->SetStaticMesh(FoodRef->StaticMesh->GetStaticMesh());
+		FoodMesh->SetStaticMesh(FoodRef->GetStaticMeshUsed());
 		FoodRef->Hide();
 		Return = true;
 		CharacMov->MaxWalkSpeed = FoeSpeed / 2;

@@ -36,9 +36,10 @@ void AFood::Hide()
 void AFood::Show(FVector DropActorPos, FVector DropActorForward)
 {
 	FVector newPos = FVector(DropActorPos + DropActorForward * InFrontPosition);
-	newPos.Z = UnderFloorPosition;
+	newPos.Z = DropOnFloorPosition;
 	this->SetActorLocation(newPos);
 	this->SetActorRotation(FQuat(0.0f, 0.0f, 0.0f, 0.0f));
+	GetWorldTimerManager().SetTimer(Timer, this, &AFood::SetPhysics, InRate, false);
 }
 
 FVector AFood::GetRealLocation()
@@ -49,32 +50,17 @@ FVector AFood::GetRealLocation()
 	return NewVector;
 }
 
-/*
-void AFood::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AFood::SetPhysics()
 {
-	
-	AHero* Hero = Cast<AHero>(OtherActor);
-	if (Hero != nullptr)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
-		if (Hero->FoodRef == nullptr)
-		{
-			Hero->FoodRef = this;
-		}
-	}
-}*/
+	StaticMesh->SetSimulatePhysics(true);
+}
 
-/*
-void AFood::CallbackComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+int AFood::GetFoodValue()
 {
-	
-	AHero* Hero = Cast<AHero>(OtherActor);
-	if (Hero != nullptr)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
-		if (Hero->IsHoldingFood == false)
-		{
-			Hero->FoodRef = nullptr;
-		}
-	}
-}*/
+	return FoodValue;
+}
+
+UStaticMesh* AFood::GetStaticMeshUsed()
+{
+	return StaticMesh->GetStaticMesh();
+}

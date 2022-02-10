@@ -263,7 +263,7 @@ void AHero::DropObject()
 	}
 	else if(FoodSpotNearby == nullptr && ChestNearby != nullptr)
 	{
-		ChestNearby->AddingFood(FoodRef->FoodValue);
+		ChestNearby->AddingFood(FoodRef->GetFoodValue());
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Player Wants to drop in chest this : %s"), *FoodRef->GetName()));
 		FoodRef->Destroy();
 	}
@@ -290,7 +290,7 @@ void AHero::PickUpObject(AFood* NewFood)
 	}
 	FoodRef = NewFood;
 	IsHoldingFood = true;
-	FoodMesh->SetStaticMesh(NewFood->StaticMesh->GetStaticMesh());
+	FoodMesh->SetStaticMesh(NewFood->GetStaticMeshUsed());
 	CharacMov->MaxWalkSpeed = HeroSpeed / 2;
 }
 
