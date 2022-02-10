@@ -43,11 +43,14 @@ void UHDAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (!IsHolding)
 		IsInHand = false;
 
-	if (GameMode->GetGameOver())
-		GameOver = true;
+	if (GameMode != nullptr)
+	{
+		if (GameMode->GetGameOver())
+			GameOver = true;
 
-	if (GameMode->GetWon())
-		Won = true;
+		if (GameMode->GetWon())
+			Won = true;
+	}
 }
 
 void UHDAnimInstance::AnimNotify_End(UAnimNotify* Notify)

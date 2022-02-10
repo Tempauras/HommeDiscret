@@ -21,8 +21,12 @@ class HOMMEDISCRET_API UHDAnimInstance : public UAnimInstance
 public:
 	UCharacterMovementComponent* MovementPtr;
 	AStealthGameMode* GameMode;
+	
+	bool GameOver;
+	bool Won;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
 
 public:
 	UHDAnimInstance();
@@ -39,13 +43,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
 		bool IsInHand;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
-		bool GameOver;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
-		bool Won;
-
 
 	UFUNCTION(BlueprintCallable, Category = "MyAnim")
 		void AnimNotify_End(UAnimNotify* Notify);
