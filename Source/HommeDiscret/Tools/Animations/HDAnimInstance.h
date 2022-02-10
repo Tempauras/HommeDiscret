@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "HommeDiscret/Character/Hero.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
+
 
 #include "HDAnimInstance.generated.h"
 
@@ -15,6 +17,16 @@ UCLASS(transient, Blueprintable, hideCategories = AnimInstance, BlueprintType)
 class HOMMEDISCRET_API UHDAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
+
+public:
+	UCharacterMovementComponent* MovementPtr;
+	AStealthGameMode* GameMode;
+	
+	bool GameOver;
+	bool Won;
+
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
 
 public:
 	UHDAnimInstance();
@@ -38,8 +50,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "MyAnim")
 		void AnimNotify_Begin(UAnimNotify* Notify);
 
-	UCharacterMovementComponent* MovementPtr;
-	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	
 
 protected:
 	virtual void NativeBeginPlay() override;

@@ -29,8 +29,4 @@ void UHDGameInstance::LoadHungerBar()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Overlap"));
 		return;
 	}
-	//HungerBar->AddToViewport();
-
-	// Set the reference to the interface object
-	//HungerBar->SetMenuInterface(this);
 }

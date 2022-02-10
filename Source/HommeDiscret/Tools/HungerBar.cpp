@@ -16,7 +16,6 @@ void UHungerBar::NativeConstruct()
 	Chest->HungerBar_OnFoodStocked.AddUObject(this, &UHungerBar::OnFoodStocked); //see above in wiki
 
 	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-	GameState = Cast<ASurvivalGameState>(UGameplayStatics::GetGameState(GetWorld()));
 
 	setMaxFood();
 	setCurrentFood();
@@ -32,7 +31,7 @@ void UHungerBar::setMaxFood()
 
 void UHungerBar::setCurrentFood()
 {
-	CurrentFood = GameState->getCurrentFoodsInChest();
+	CurrentFood = GameMode->getCurrentFoodsInChest();
 	FText intAsText = FText::AsNumber(CurrentFood);
 	CurrentHungerLabel->SetText(intAsText);
 }
