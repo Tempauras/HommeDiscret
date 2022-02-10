@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
-#include "HommeDiscret/IA/FoeSpawner.h"
 #include "HommeDiscret/IA/AIC_Foe.h"
 #include "HommeDiscret/Level/Props/FoodSpot.h"
 #include "SurvivalGameState.generated.h"

@@ -17,7 +17,6 @@ public:
 	// Sets default values for this actor's properties
 	AFood();
 
-
 protected:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* StaticMesh;

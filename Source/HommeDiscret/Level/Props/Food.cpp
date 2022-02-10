@@ -7,7 +7,6 @@
 // Sets default values
 AFood::AFood()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Static Mesh"));
@@ -23,8 +22,6 @@ AFood::AFood()
 void AFood::BeginPlay()
 {
 	Super::BeginPlay();
-	/*SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &AFood::CallbackComponentBeginOverlap);
-	SphereCollider->OnComponentEndOverlap.AddDynamic(this, &AFood::CallbackComponentEndOverlap);*/
 }
 
 void AFood::Hide()

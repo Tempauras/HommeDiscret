@@ -29,13 +29,12 @@ EBTNodeResult::Type UBTTask_FindPlayerLocation::ExecuteTask(UBehaviorTreeCompone
 	if (first)
 	{
 		cont->get_blackboard()->SetValueAsVector(bb_keys::LastPlayerLocation, playerLocation);
-		DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Red, false, 5.0f);
+		//DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Red, false, 5.0f);
 	}
 	else 
 	{
 		cont->get_blackboard()->SetValueAsVector(bb_keys::target_location, playerLocation);
-		DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Orange, false, 5.0f);
-
+		//DrawDebugSphere(GetWorld(), player->GetActorLocation(), 50.0f, 32, FColor::Orange, false, 5.0f);
 	}
 
 
