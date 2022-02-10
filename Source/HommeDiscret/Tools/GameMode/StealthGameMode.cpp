@@ -68,12 +68,50 @@ void AStealthGameMode::PlayerWon()
 	if (SurvivalGameState->FoodCountInChest == FoodInChestToWin)
 	{
 		SetWon(true);
+		PlayerWidget->RemoveFromViewport();
+		FInputModeGameAndUI InputType;
+		InputType.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
+		APlayerController* PC = GetWorld()->GetFirstPlayerController();
+		if (PC)
+		{
+			PC->bShowMouseCursor = true;
+			PC->bEnableClickEvents = true;
+			PC->bEnableMouseOverEvents = true;
+		}
+		if (VictoryHUDclass != nullptr)
+		{
+			EndingWidget = CreateWidget(GetWorld(), VictoryHUDclass);
+			if (EndingWidget != nullptr)
+			{
+				EndingWidget->AddToViewport();
+			}
+		}
 	}
 }
 
 void AStealthGameMode::LostGame()
 {
 	SetGameOver(true);
+	PlayerWidget->RemoveFromViewport();
+	FInputModeGameAndUI InputType;
+	InputType.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	if (PC)
+	{
+		PC->bShowMouseCursor = true;
+		PC->bEnableClickEvents = true;
+		PC->bEnableMouseOverEvents = true;
+	}
+	if (DefeatHUDClass != nullptr)
+	{
+		EndingWidget = CreateWidget(GetWorld(), DefeatHUDClass);
+		if (EndingWidget != nullptr)
+		{
+			EndingWidget->AddToViewport();
+		}
+	}
 }
 
 void AStealthGameMode::AddFoodInChest(int FoodValue)
