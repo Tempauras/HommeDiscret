@@ -15,6 +15,16 @@ void AStealthGameMode::BeginPlay()
 	SurvivalGameState = GetGameState<ASurvivalGameState>();
 	GameInstance->LoadHungerBar();
 
+	FInputModeGameOnly InputType;
+	InputType.SetConsumeCaptureMouseDown(true);
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(InputType);
+	APlayerController* PC = GetWorld()->GetFirstPlayerController();
+	if (PC)
+	{
+		PC->bShowMouseCursor = false;
+		PC->bEnableClickEvents = false;
+		PC->bEnableMouseOverEvents = false;
+	}
 	if (PlayerHUDClass != nullptr)
 	{
 		PlayerWidget = GameInstance->GetHungerBar();
