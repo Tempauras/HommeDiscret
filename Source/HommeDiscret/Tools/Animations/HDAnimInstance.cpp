@@ -62,7 +62,7 @@ void UHDAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UHDAnimInstance::AnimNotify_End(UAnimNotify* Notify)
 {
-	MovementPtr->MaxWalkSpeed = Hero->HeroSpeed / 2;
+	MovementPtr->MaxWalkSpeed = Hero->HeroSpeedHolding;
 	IsInHand = true;
 }
 

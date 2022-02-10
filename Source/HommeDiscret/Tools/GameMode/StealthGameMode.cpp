@@ -30,6 +30,8 @@ void AStealthGameMode::BeginPlay()
 		LaunchGameStateAI();
 	}
 	//ShowNormalHUD();
+	/*SpawnFoe(0);
+	LaunchAI();*/
 }
 
 void AStealthGameMode::SetGameOver(bool value)
