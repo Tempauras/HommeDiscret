@@ -5,6 +5,7 @@
 #include "HommeDiscret/IA/AIC_Foe.h"
 #include "HommeDiscret/IA/Foe.h"
 #include "HommeDiscret/IA/Tasks/BB_keys.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 
 
@@ -19,11 +20,7 @@ EBTNodeResult::Type UBTTask_CheckFoeHaveFood::ExecuteTask(UBehaviorTreeComponent
 	AAIC_Foe* FoeController = Cast<AAIC_Foe>(owner_comp.GetAIOwner());
 	AFoe* Foe = Cast<AFoe>(FoeController->GetPawn());
 	UBlackboardComponent* Blackboard = FoeController->GetBlackboardComponent();
-	bool HaveToDropped = Foe->GetHaveToDroppedFood();
-	if (HaveToDropped != Blackboard->GetValueAsBool(bb_keys::HaveToDroppedFood))
-	{
-		Blackboard->SetValueAsBool(bb_keys::HaveToDroppedFood,Foe->GetHaveToDroppedFood());
-	}
+	Blackboard->SetValueAsBool(bb_keys::HaveToDroppedFood,Foe->GetHaveToDroppedFood());
 
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

@@ -203,6 +203,8 @@ void AStealthGameMode::LaunchGameStateAI()
 void AStealthGameMode::LaunchAI()
 {
 	AAIC_Foe* FreeFoeController = FindFreeFoeController();
+	APawn* PawnToLaunched = FreeFoeController->GetPawn();
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Foe launched : %s"), *PawnToLaunched->GetName()));
 	/*if (FreeFoeController == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Doesn't find Foe Controller"));
@@ -212,10 +214,10 @@ void AStealthGameMode::LaunchAI()
 		UE_LOG(LogTemp, Warning, TEXT("find Foe Controller"));
 
 	}*/
+	AddFoodInRoom();
 	if (GetFoeCarryFood())
 	{
-		AddFoodInRoom();
-		UE_LOG(LogTemp, Warning, TEXT("Foe with Food"));
+		//UE_LOG(LogTemp, Warning, TEXT("Foe with Food"));
 		FreeFoeController->InstantiateFoodToFoe();
 	}
 	FreeFoeController->StartAIBehavior();
@@ -224,7 +226,7 @@ void AStealthGameMode::LaunchAI()
 
 void AStealthGameMode::LaunchSpawnTimer(float InRate, bool IsLooping)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Timer Launched"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("Timer Launched : %f"),InRate));
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AStealthGameMode::LaunchAI, InRate, IsLooping);
 }
 

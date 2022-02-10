@@ -184,7 +184,6 @@ void AFoe::InstantiateFood()
 				{
 					HaveToDroppedFood = true;
 					FoodRef = NewFood;
-					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
 					PickUpFood();
 				}
 			}

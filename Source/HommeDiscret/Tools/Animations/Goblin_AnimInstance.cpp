@@ -34,13 +34,13 @@ void UGoblin_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UGoblin_AnimInstance::AnimNotify_End(UAnimNotify* Notify)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("end"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("end"));
 	//MovementPtr->MaxWalkSpeed = Hero->HeroSpeed;
 	IsInHand = true;
 }
 
 void UGoblin_AnimInstance::AnimNotify_Begin(UAnimNotify* Notify)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("begin"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("begin"));
 	//MovementPtr->MaxWalkSpeed = 0;
 }
