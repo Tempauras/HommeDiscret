@@ -747,6 +747,11 @@ void APlaygroundGenerator::SpawnFoodSpotActor(UClass* Actor, AFloorTile* Tile, F
 	{
 		SpawnedActor->AttachToActor(Tile, FAttachmentTransformRules::KeepWorldTransform);
 		FoodSpotList.Add(SpawnedActor);
+		if (CurrentFoodSpotSpawned == 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("blabla"));
+			SpawnedActor->InstantiateFoodSpot();
+		}
 	}
 	CurrentFoodSpotSpawned++;
 }

@@ -30,11 +30,6 @@ void AFoodSpot::BeginPlay()
 	CurrentWorld = GetWorld();
 	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 150.0f);
     SpawnRotation = this->GetActorRotation();
-	if (FoodClass != nullptr)
-	{
-		InstantiateFoodSpot();
-	}
-
 }
 
 bool AFoodSpot::FillFoodSpot(AFood* NewFood)
