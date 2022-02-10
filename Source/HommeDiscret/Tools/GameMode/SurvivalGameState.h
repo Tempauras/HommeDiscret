@@ -49,6 +49,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		TArray<AAIC_Foe*> FoeControllerList;
 
-	bool GameOver;
-	bool Won;
+	UPROPERTY(VisibleAnywhere)
+		bool GameOver;
+
+	UPROPERTY(VisibleAnywhere)
+		bool Won;
 };

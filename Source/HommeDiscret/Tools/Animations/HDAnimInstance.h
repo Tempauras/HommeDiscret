@@ -41,6 +41,9 @@ public:
 		bool IsInHand;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		bool IsHitted;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
 		bool GameOver;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
@@ -52,6 +55,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "MyAnim")
 		void AnimNotify_Begin(UAnimNotify* Notify);
+
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_HitBegin(UAnimNotify* Notify);
+
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_HitEnd(UAnimNotify* Notify);
 
 	
 

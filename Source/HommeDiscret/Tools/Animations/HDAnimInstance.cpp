@@ -14,6 +14,7 @@ UHDAnimInstance::UHDAnimInstance()
 	IsMoving = false;
 	IsHolding = false;
 	IsInHand = false;
+	IsHitted = false;
 }
 
 void UHDAnimInstance::NativeBeginPlay()
@@ -46,10 +47,16 @@ void UHDAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (GameMode != nullptr)
 	{
 		if (GameMode->GetGameOver())
+		{
 			GameOver = true;
+			MovementPtr->MaxWalkSpeed = 0;
+		}
 
 		if (GameMode->GetWon())
+		{
 			Won = true;
+			MovementPtr->MaxWalkSpeed = 0;
+		}
 	}
 }
 
@@ -60,6 +67,17 @@ void UHDAnimInstance::AnimNotify_End(UAnimNotify* Notify)
 }
 
 void UHDAnimInstance::AnimNotify_Begin(UAnimNotify* Notify)
+{
+	MovementPtr->MaxWalkSpeed = 0;
+}
+
+void UHDAnimInstance::AnimNotify_HitEnd(UAnimNotify* Notify)
+{
+	MovementPtr->MaxWalkSpeed = Hero->HeroSpeed / 2;
+	IsHitted = true;
+}
+
+void UHDAnimInstance::AnimNotify_HitBegin(UAnimNotify* Notify)
 {
 	MovementPtr->MaxWalkSpeed = 0;
 }

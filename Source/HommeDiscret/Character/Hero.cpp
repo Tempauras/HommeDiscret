@@ -146,7 +146,6 @@ void AHero::CallbackComponentBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	else if (OtherActor->IsA(AFoe::StaticClass()))
 	{
 		GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-		//Lost Game
 		GameMode->LostGame();
 	}
 }

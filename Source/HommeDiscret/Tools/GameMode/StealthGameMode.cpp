@@ -71,7 +71,7 @@ void AStealthGameMode::PlayerWon()
 
 void AStealthGameMode::LostGame()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Player Loose!"));
+	SetGameOver(true);
 }
 
 void AStealthGameMode::AddFoodInChest(int FoodValue)
