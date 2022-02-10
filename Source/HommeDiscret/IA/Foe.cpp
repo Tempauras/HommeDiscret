@@ -137,9 +137,7 @@ FVector AFoe::DropFoodOnTheFloor()
 	FVector NewVector = FVector(0, 0, 0);
 	if (FoodRef != nullptr)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Drops %s"), *FoodRef->GetName()));
 		FoodRef->Show(this->GetActorLocation(), this->GetActorForwardVector());
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("Test foodRef %s"), *FoodRef->GetName()));
 		NewVector = FoodRef->GetRealLocation();
 		FoodRef = nullptr;
 		IsHoldingFood = false;
@@ -169,7 +167,6 @@ bool AFoe::DropFoodInFoodSpot()
 			}
 		}
 	}
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %d"), Return));
 	return Return;
 }
 
