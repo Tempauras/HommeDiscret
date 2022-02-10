@@ -46,7 +46,7 @@ FVector AFood::GetRealLocation()
 {
 	FVector NewVector;
 	NewVector = this->GetActorLocation();
-	NewVector.X = NewVector.X + SphereCollider->GetScaledSphereRadius() - 5.0f;
+	NewVector.X = NewVector.X + SphereCollider->GetScaledSphereRadius()-5.0f;
 	return NewVector;
 }
 
