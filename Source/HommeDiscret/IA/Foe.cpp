@@ -22,6 +22,10 @@ AFoe::AFoe()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	CharacMov = GetCharacterMovement();
 
+	InteractionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionSphere"));
+	InteractionSphere->SetSphereRadius(InteractionSphereRadius);
+	InteractionSphere->SetupAttachment(RootComponent);
+
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
 	CollisionSphere->SetSphereRadius(CollisionSphereRadius);
 	CollisionSphere->SetupAttachment(RootComponent);
@@ -49,8 +53,8 @@ void AFoe::BeginPlay()
 		FoodMesh->SetRelativeScale3D(FVector(0.05f, 0.05f, 0.05f));
 		//SetupSphereTrace();
 	}
-	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AFoe::CallbackComponentBeginOverlap);
-	CollisionSphere->OnComponentEndOverlap.AddDynamic(this, &AFoe::CallbackComponentEndOverlap);
+	InteractionSphere->OnComponentBeginOverlap.AddDynamic(this, &AFoe::CallbackComponentBeginOverlap);
+	InteractionSphere->OnComponentEndOverlap.AddDynamic(this, &AFoe::CallbackComponentEndOverlap);
 	CurrentWorld=GetWorld();
 	SpawnLocation = FVector(this->GetActorLocation().X, this->GetActorLocation().Y, this->GetActorLocation().Z - 300.0f);
 	SpawnRotation = this->GetActorRotation();

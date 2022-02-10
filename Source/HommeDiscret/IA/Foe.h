@@ -33,9 +33,14 @@ protected:
 		TSubclassOf<AActor> FoeController;
 
 	UPROPERTY(VisibleAnywhere)
+		USphereComponent* InteractionSphere;
+	UPROPERTY(VisibleAnywhere)
+		float InteractionSphereRadius = 200.0f;
+
+	UPROPERTY(VisibleAnywhere)
 		USphereComponent* CollisionSphere;
 	UPROPERTY(VisibleAnywhere)
-		float CollisionSphereRadius = 200.0f;
+		float CollisionSphereRadius = 150.0f;
 
 	UCharacterMovementComponent* CharacMov;
 	UPROPERTY(VisibleAnywhere)

@@ -30,11 +30,8 @@ EBTNodeResult::Type UBTTask_FindPlayerDirection::ExecuteTask(UBehaviorTreeCompon
 
 	//Adding origin location and distance
 	newLocation += FoePawn->GetActorLocation();
-	//newLocation = newLocation.GetSafeNormal();
-	DrawDebugSphere(GetWorld(), newLocation, 50.0f, 32, FColor::Magenta, false, 5.0f);
+	//DrawDebugSphere(GetWorld(), newLocation, 50.0f, 32, FColor::Magenta, false, 5.0f);
 
-
-	//DrawDebugLine(GetWorld(), FoePawn->GetActorLocation(), newLocation, FColor::Purple, true, 1.0f);
 	Blackboard->SetValueAsVector(bb_keys::target_location, newLocation);
 	FinishLatentTask(owner_comp, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
