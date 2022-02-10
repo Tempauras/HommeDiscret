@@ -5,10 +5,4 @@
 
 ASurvivalGameState::ASurvivalGameState()
 {
-
-}
-
-int ASurvivalGameState::getCurrentFoodsInChest()
-{
-	return FoodCountInChest;
 }

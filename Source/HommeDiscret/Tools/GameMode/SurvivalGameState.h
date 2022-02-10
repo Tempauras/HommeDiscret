@@ -16,6 +16,7 @@ UCLASS()
 class HOMMEDISCRET_API ASurvivalGameState : public AGameStateBase
 {
 	GENERATED_BODY()
+
 public:
 	ASurvivalGameState();
 	virtual ~ASurvivalGameState() = default;
@@ -48,7 +49,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 		TArray<AAIC_Foe*> FoeControllerList;
 
+	UPROPERTY(VisibleAnywhere)
+		bool GameOver;
 
-	UFUNCTION(Category = "UI")
-		int getCurrentFoodsInChest();
+	UPROPERTY(VisibleAnywhere)
+		bool Won;
 };

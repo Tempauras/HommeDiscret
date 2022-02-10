@@ -33,7 +33,6 @@ protected:
 		AChest* Chest;
 
 	AStealthGameMode* GameMode;
-	ASurvivalGameState* GameState;
 	float MaxFood;
 	float CurrentFood;
 
