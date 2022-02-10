@@ -60,12 +60,16 @@ void AAIC_Foe::StartAIBehavior()
     }
 }
 
-void AAIC_Foe::InstantiateFoodToFoe()
+void AAIC_Foe::InstantiateFoodToFoe(bool HaveFood)
 {
-    AFoe* Foe = Cast<AFoe>(GetPawn());
-    if (Foe != nullptr)
+    if (HaveFood)
     {
-        Foe->InstantiateFood();
+        AFoe* Foe = Cast<AFoe>(GetPawn());
+        if (Foe != nullptr)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Foe with Food"));
+            Foe->InstantiateFood();
+        }
     }
 }
 
@@ -74,6 +78,11 @@ void AAIC_Foe::StopAIBehavior()
     UE_LOG(LogTemp, Warning, TEXT("StopLogic"));
     BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
     Blackboard->ClearValue(bb_keys::ExitLocation);
+}
+
+void AAIC_Foe::BBHaveToDroppedFood(bool Value)
+{
+    Blackboard->SetValueAsBool(bb_keys::HaveToDroppedFood, Value);
 }
 
 UBlackboardComponent* AAIC_Foe::get_blackboard() const 
