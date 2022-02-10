@@ -23,7 +23,7 @@ public:
 		USphereComponent* SphereCollider;
 
 	UPROPERTY(VisibleAnywhere)
-		float UnderFloorPosition = 170.0f;
+		float UnderFloorPosition = 50.0f;
 
 	UPROPERTY(VisibleAnywhere)
 		float InFrontPosition = 100.0f;

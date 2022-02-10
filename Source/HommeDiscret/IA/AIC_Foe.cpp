@@ -19,24 +19,6 @@
 #include "GameFramework/Character.h"
 #include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
 
-
-/*
-
-AAIC_Foe::AAIC_Foe(FObjectInitializer const& object_initializer)
-{
-   //Find the behavior tree with its relative path
-    static ConstructorHelpers::FObjectFinder<UBehaviorTree> obj((TEXT("BehaviorTree'/Game/Blueprints/Characters/IA/BT_Foe.BT_Foe'")));
-    //If the searching is succeessed then btree take its object value
-    if (obj.Succeeded())
-    {
-        Btree = obj.Object;
-    }
-    //Adding behavior tree component and blackboard component to our object 
-    BehaviorTreeComponent = object_initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorTree"));
-    Blackboard = object_initializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
-    SetupPerceptionSystem();
-}*/
-
 AAIC_Foe::AAIC_Foe()
 {
     BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTree"));
@@ -50,21 +32,7 @@ void AAIC_Foe::BeginPlay()
 {       
     Super::BeginPlay();
     HasAlreadyStartedBT = false;
-    /*TSubclassOf<AActor> ClassToFind = ANavigationPoint::StaticClass();
-    TArray<AActor*> FoundActors;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundActors);
-    /*EntranceLocation = FoundNavigationP[0]->GetActorLocation();
-    ExitLocation = FoundNavigationP[2]->GetActorLocation();*/
-    /*OriginLocation = FoundActors[0]->GetActorLocation();
-    EntranceLocation = OriginLocation;
-    FoundActors.Empty();
-    ClassToFind = AFoeSpawner::StaticClass();
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ClassToFind, FoundActors);
-    ExitLocation = FoundActors[0]->GetActorLocation();
-    FoundActors.Empty();*/
     GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
-   // FindFoodSpots();
-    //StartAIBehavior();
 }
 
 void AAIC_Foe::OnPossess(APawn* const pawn)
@@ -76,7 +44,7 @@ void AAIC_Foe::OnPossess(APawn* const pawn)
     }
 }
 
-void AAIC_Foe::StartAIBehavior(bool HaveFood)
+void AAIC_Foe::StartAIBehavior()
 {
     if (HasAlreadyStartedBT)
     {
@@ -90,13 +58,14 @@ void AAIC_Foe::StartAIBehavior(bool HaveFood)
         BehaviorTreeComponent->StartTree(*Btree);
         HasAlreadyStartedBT = true;
     }
-    if (HaveFood)
+}
+
+void AAIC_Foe::InstantiateFoodToFoe()
+{
+    AFoe* Foe = Cast<AFoe>(GetPawn());
+    if (Foe != nullptr)
     {
-        AFoe* Foe = Cast<AFoe>(GetPawn());
-        if (Foe != nullptr)
-        {
-            Foe->InstantiateFood();
-        }
+        Foe->InstantiateFood();
     }
 }
 
@@ -106,13 +75,6 @@ void AAIC_Foe::StopAIBehavior()
     BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
     Blackboard->ClearValue(bb_keys::ExitLocation);
 }
-
-/*
-void AAIC_Foe::RestartAIBehavior()
-{
-    UE_LOG(LogTemp, Warning, TEXT("RestartLogic"));
-    BehaviorTreeComponent->RestartTree();
-}*/
 
 UBlackboardComponent* AAIC_Foe::get_blackboard() const 
 {

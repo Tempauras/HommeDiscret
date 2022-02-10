@@ -26,8 +26,8 @@ public:
 
 	void BeginPlay() override;
 	void OnPossess(APawn* const pawn) override;
-	void StartAIBehavior(bool HaveFood);
-	//void RestartAIBehavior();
+	void StartAIBehavior();
+	void InstantiateFoodToFoe();
 	void StopAIBehavior();
 	class UBlackboardComponent* get_blackboard() const;
 

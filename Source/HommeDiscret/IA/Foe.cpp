@@ -151,11 +151,11 @@ bool AFoe::DropFoodInFoodSpot()
 	{
 		if (FoodRef != nullptr)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("FoodRef %s"), *FoodRef->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("FoodRef %s"), *FoodRef->GetName()));
 			bool Success = FoodSpotNearby->FillFoodSpot(FoodRef);
 			if (Success == true)
 			{
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("Foe have filled the spot with  %s"), *FoodRef->GetName()));
 				IsHoldingFood = false;
 				FoodMesh->SetStaticMesh(nullptr);
 				FoodRef = nullptr;
@@ -184,7 +184,6 @@ void AFoe::InstantiateFood()
 				{
 					HaveToDroppedFood = true;
 					FoodRef = NewFood;
-					//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Foe Wants to Pick Up  %s"), *FoodRef->GetName()));
 					PickUpFood();
 				}
 			}
