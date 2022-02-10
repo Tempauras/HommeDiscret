@@ -38,6 +38,12 @@ public:
 	//FTimerHandle TimerHandle;
 	TArray<FTimerHandle> Timers;
 
+	void SetGameOver(bool value);
+	bool GetGameOver();
+	void SetWon(bool value);
+	bool GetWon();
+	int getCurrentFoodsInChest();
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 		TSubclassOf<UUserWidget> PlayerHUDClass;
@@ -122,7 +128,6 @@ public:
 
 	UFUNCTION(Category = "Foe")
 		bool GetFoeCarryFood();
-
 
 	UFUNCTION(Category = "Foe")
 		void LaunchGameStateAI();

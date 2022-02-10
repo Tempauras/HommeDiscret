@@ -34,18 +34,46 @@ void AStealthGameMode::BeginPlay()
 	LaunchAI();*/
 }
 
+void AStealthGameMode::SetGameOver(bool value)
+{
+	SurvivalGameState->GameOver = true;
+}
+
+bool AStealthGameMode::GetGameOver()
+{
+	if(SurvivalGameState != nullptr)
+		return SurvivalGameState->GameOver;
+	return false;
+}
+
+void AStealthGameMode::SetWon(bool value)
+{
+	SurvivalGameState->Won = true;
+}
+
+bool AStealthGameMode::GetWon()
+{
+	if (SurvivalGameState != nullptr)
+		return SurvivalGameState->Won;
+	return false;
+}
+
+int AStealthGameMode::getCurrentFoodsInChest()
+{
+	return SurvivalGameState->FoodCountInChest;
+}
+
 void AStealthGameMode::PlayerWon()
 {
 	if (SurvivalGameState->FoodCountInChest == FoodInChestToWin)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Won!"));
+		SetWon(true);
 	}
 }
 
-
 void AStealthGameMode::LostGame()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Player Loose!"));
+	SetGameOver(true);
 }
 
 void AStealthGameMode::AddFoodInChest(int FoodValue)
@@ -92,7 +120,6 @@ FTimerHandle AStealthGameMode::GetTimerHandle(AFoe* Foe)
 	}
 	return CurrentTimer;
 }
-
 
 TArray<AAIC_Foe*> AStealthGameMode::GetFoeControllers()
 {
@@ -215,7 +242,6 @@ bool AStealthGameMode::GetFoeCarryFood()
 {
 	return SurvivalGameState->FoeCarryFood;
 }
-
 
 void AStealthGameMode::LaunchGameStateAI()
 {
@@ -343,7 +369,6 @@ FVector AStealthGameMode::GetOriginLocation()
 {
 	return SurvivalGameState->OriginLocation;
 }
-
 
 TArray<AFoodSpot*> AStealthGameMode::GetFoodSpotList()
 {

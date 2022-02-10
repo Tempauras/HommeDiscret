@@ -6,10 +6,15 @@
 
 UHDAnimInstance::UHDAnimInstance()
 {
+	GameMode = Cast<AStealthGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameOver = false;
+	Won = false;
+	Speed = 0;
 	Speed = 0;
 	IsMoving = false;
 	IsHolding = false;
 	IsInHand = false;
+	IsHitted = false;
 }
 
 void UHDAnimInstance::NativeBeginPlay()
@@ -38,17 +43,41 @@ void UHDAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (!IsHolding)
 		IsInHand = false;
+
+	if (GameMode != nullptr)
+	{
+		if (GameMode->GetGameOver())
+		{
+			GameOver = true;
+			MovementPtr->MaxWalkSpeed = 0;
+		}
+
+		if (GameMode->GetWon())
+		{
+			Won = true;
+			MovementPtr->MaxWalkSpeed = 0;
+		}
+	}
 }
 
 void UHDAnimInstance::AnimNotify_End(UAnimNotify* Notify)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("end"));
 	MovementPtr->MaxWalkSpeed = Hero->HeroSpeedHolding;
 	IsInHand = true;
 }
 
 void UHDAnimInstance::AnimNotify_Begin(UAnimNotify* Notify)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("begin"));
+	MovementPtr->MaxWalkSpeed = 0;
+}
+
+void UHDAnimInstance::AnimNotify_HitEnd(UAnimNotify* Notify)
+{
+	MovementPtr->MaxWalkSpeed = Hero->HeroSpeed / 2;
+	IsHitted = true;
+}
+
+void UHDAnimInstance::AnimNotify_HitBegin(UAnimNotify* Notify)
+{
 	MovementPtr->MaxWalkSpeed = 0;
 }

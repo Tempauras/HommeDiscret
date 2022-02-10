@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "HommeDiscret/Character/Hero.h"
+#include "HommeDiscret/Tools/GameMode/StealthGameMode.h"
+
 
 #include "HDAnimInstance.generated.h"
 
@@ -15,6 +17,12 @@ UCLASS(transient, Blueprintable, hideCategories = AnimInstance, BlueprintType)
 class HOMMEDISCRET_API UHDAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
+
+public:
+	UCharacterMovementComponent* MovementPtr;
+	AStealthGameMode* GameMode;
+
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 public:
 	UHDAnimInstance();
@@ -32,14 +40,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
 		bool IsInHand;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		bool IsHitted;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		bool GameOver;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generic")
+		bool Won;
+
+
 	UFUNCTION(BlueprintCallable, Category = "MyAnim")
 		void AnimNotify_End(UAnimNotify* Notify);
 
 	UFUNCTION(BlueprintCallable, Category = "MyAnim")
 		void AnimNotify_Begin(UAnimNotify* Notify);
 
-	UCharacterMovementComponent* MovementPtr;
-	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_HitBegin(UAnimNotify* Notify);
+
+	UFUNCTION(BlueprintCallable, Category = "MyAnim")
+		void AnimNotify_HitEnd(UAnimNotify* Notify);
+
+	
 
 protected:
 	virtual void NativeBeginPlay() override;
