@@ -212,9 +212,9 @@ void AStealthGameMode::LaunchAI()
 		UE_LOG(LogTemp, Warning, TEXT("find Foe Controller"));
 
 	}*/
-	if (GetFoeCarryFood())
+	AddFoodInRoom();
+	if (GetFoeCarryFood()==true)
 	{
-		AddFoodInRoom();
 		UE_LOG(LogTemp, Warning, TEXT("Foe with Food"));
 		FreeFoeController->InstantiateFoodToFoe();
 	}
